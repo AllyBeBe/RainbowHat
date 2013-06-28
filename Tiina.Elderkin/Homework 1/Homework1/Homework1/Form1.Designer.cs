@@ -38,7 +38,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(174, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Change this to get a passing grade.";
+            this.label1.Text = "Watch for trucks passing on steep grades";
             // 
             // Form1
             // 
