@@ -16,15 +16,13 @@ namespace Homework1
         {
             InitializeComponent();
         }
-
         private void Form1_Load(object sender, EventArgs e)
         {
-            //
-            //Show a message box.
-            //
-            MessageBox.Show("Want to click this useless message box?");
-            //
+        }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Want to click this useless box?");
         }
     }
 }
