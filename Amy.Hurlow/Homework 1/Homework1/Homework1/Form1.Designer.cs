@@ -34,11 +34,17 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 13);
+            this.label1.Location = new System.Drawing.Point(1, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(174, 13);
+            this.label1.Size = new System.Drawing.Size(632, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "I was looking for myself and asking everyone except myself questions which I, and only I, could answer. - Ralph Ellison, Invisible Man";
+            this.label1.Text = "I was looking for myself and asking" +
+                "\r\n" +
+                "everyone except myself questions which I," +
+                "\r\n" +
+                "and only I, could answer." +
+                "\r\n" +
+                "- Ralph Ellison, Invisible Man";
             // 
             // Form1
             // 
@@ -48,6 +54,7 @@
             this.Controls.Add(this.label1);
             this.Name = "Form1";
             this.Text = "Homework 1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
