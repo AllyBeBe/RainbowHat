@@ -16,5 +16,10 @@ namespace Homework1
         {
             InitializeComponent();
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Program Written by\n Mike Futala", "About");
+        }
     }
 }

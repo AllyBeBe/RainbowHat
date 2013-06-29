@@ -36,9 +36,10 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(174, 13);
+            this.label1.Size = new System.Drawing.Size(190, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Change this to get a passing grade.";
+            this.label1.Text = "Hello World!!!!  Click me for a Message";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // Form1
             // 
