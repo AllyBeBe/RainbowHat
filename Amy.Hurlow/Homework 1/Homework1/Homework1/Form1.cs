@@ -19,10 +19,14 @@ namespace Homework1
         private void Form1_Load(object sender, EventArgs e)
         {
         }
-
+        //
+        // On button click, show a messagebox with my message, plus the text the user entered.
+        //
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Want to click this useless box?");
+            MessageBox.Show("This is what you typed:" +
+                "\r\n" +
+                textBox1.Text);
         }
     }
 }
