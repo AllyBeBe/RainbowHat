@@ -15,6 +15,13 @@ namespace Homework1
         public Form1()
         {
             InitializeComponent();
+            {
+            
+            }
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {   
+            MessageBox.Show(textBox1.Text,"Here is the text you entered...");
         }
     }
 }
