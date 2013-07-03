@@ -16,5 +16,11 @@ namespace Homework1
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string msg = "Todo";
+            MessageBox.Show(msg);
+        }
     }
 }
