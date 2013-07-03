@@ -38,9 +38,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 13);
+            this.label1.Size = new System.Drawing.Size(148, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Changed";
+            this.label1.Text = "Please enter some text below:";
             // 
             // button1
             // 
@@ -55,6 +55,7 @@
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(16, 46);
+            this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 2;
