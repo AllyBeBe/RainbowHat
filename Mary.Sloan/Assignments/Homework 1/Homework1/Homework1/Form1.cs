@@ -19,7 +19,8 @@ namespace Homework1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string msg = "Todo";
+            // decided to add the text as a variable - could add error checking
+            string msg = textBox1.Text;
             MessageBox.Show(msg);
         }
     }
