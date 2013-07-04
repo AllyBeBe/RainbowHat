@@ -20,7 +20,9 @@ namespace Homework1
         {
         }
         //
-        // On button click, show a messagebox with my message, plus the text the user entered.
+        // On button click, show a message box with my message, plus the text the user entered and an OK button.
+        // Note to self (Amy): text box comes with "OK" button 
+        // and automtic output of a message box with no additional text if user doesn't type in text box
         //
         private void button1_Click(object sender, EventArgs e)
         {

@@ -28,13 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            // This code seems to create the form and all the other objects?
+            //
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // label1
+            // label1 -- display some text in the form1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(28, 26);
@@ -44,7 +46,7 @@
             this.label1.Text = "I was looking for myself and asking\r\neveryone except myself questions which I,\r\na" +
     "nd only I, could answer.\r\n- Ralph Ellison, Invisible Man";
             // 
-            // button1
+            // button1 - creates "OK" button inside  the form1
             // 
             this.button1.Location = new System.Drawing.Point(94, 184);
             this.button1.Name = "button1";
@@ -52,9 +54,12 @@
             this.button1.TabIndex = 1;
             this.button1.Text = "OK";
             this.button1.UseVisualStyleBackColor = true;
+            //
+            // On button1 click, displays message box with another OK button 
+            //
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // textBox1
+            // textBox1 - creates user-input textbox in form1
             // 
             this.textBox1.ForeColor = System.Drawing.Color.Black;
             this.textBox1.HideSelection = false;
@@ -63,7 +68,7 @@
             this.textBox1.Size = new System.Drawing.Size(211, 20);
             this.textBox1.TabIndex = 2;
             // 
-            // label2
+            // label2 - asks user to type in text box
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(28, 142);
@@ -72,7 +77,7 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Type something below, then click OK:";
             // 
-            // Form1
+            // Form1 -- Mickey's creation of the original homework form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
