@@ -36,9 +36,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(174, 13);
+            this.label1.Size = new System.Drawing.Size(74, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Change this to get a passing grade.";
+            this.label1.Text = "Happy Fourth!";
             // 
             // Form1
             // 
@@ -47,7 +47,7 @@
             this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
-            this.Text = "Homework 1";
+            this.Text = "Homework1";
             this.ResumeLayout(false);
             this.PerformLayout();
 
