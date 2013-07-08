@@ -17,9 +17,20 @@ namespace Homework1
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+   
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            MessageBox.Show("Test Message");
+            this.Text = txtInput.Text;
+        }
+
+        private void textBox1_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnFinish_Click(object sender, EventArgs e)
+        {
+            lblBegin.Text = "Hello " + txtInput.Text;
         }
     }
 }

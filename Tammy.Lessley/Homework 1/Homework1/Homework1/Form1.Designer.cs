@@ -28,38 +28,59 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.labelName = new System.Windows.Forms.Label();
+            this.txtInput = new System.Windows.Forms.TextBox();
+            this.btnFinish = new System.Windows.Forms.Button();
+            this.lblBegin = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // label1
+            // labelName
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(172, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Change the code as \"appropriate\".";
+            this.labelName.AutoSize = true;
+            this.labelName.Location = new System.Drawing.Point(13, 13);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(63, 13);
+            this.labelName.TabIndex = 0;
+            this.labelName.Text = "Enter Name";
             // 
-            // button1
+            // txtInput
             // 
-            this.button1.Location = new System.Drawing.Point(21, 54);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "TestButton";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.txtInput.Location = new System.Drawing.Point(16, 52);
+            this.txtInput.Name = "txtInput";
+            this.txtInput.Size = new System.Drawing.Size(100, 20);
+            this.txtInput.TabIndex = 2;
+            this.txtInput.TextChanged += new System.EventHandler(this.textBox1_TextChanged_1);
+            // 
+            // btnFinish
+            // 
+            this.btnFinish.Location = new System.Drawing.Point(16, 94);
+            this.btnFinish.Name = "btnFinish";
+            this.btnFinish.Size = new System.Drawing.Size(75, 23);
+            this.btnFinish.TabIndex = 3;
+            this.btnFinish.Text = "Ok";
+            this.btnFinish.UseVisualStyleBackColor = true;
+            this.btnFinish.Click += new System.EventHandler(this.btnFinish_Click);
+            // 
+            // lblBegin
+            // 
+            this.lblBegin.AutoSize = true;
+            this.lblBegin.Location = new System.Drawing.Point(16, 143);
+            this.lblBegin.Name = "lblBegin";
+            this.lblBegin.Size = new System.Drawing.Size(0, 13);
+            this.lblBegin.TabIndex = 4;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblBegin);
+            this.Controls.Add(this.btnFinish);
+            this.Controls.Add(this.txtInput);
+            this.Controls.Add(this.labelName);
             this.Name = "Form1";
             this.Text = "Homework 1";
+            this.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -67,8 +88,10 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label labelName;
+        private System.Windows.Forms.TextBox txtInput;
+        private System.Windows.Forms.Button btnFinish;
+        private System.Windows.Forms.Label lblBegin;
     }
 }
 
