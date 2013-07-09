@@ -19,7 +19,7 @@ namespace Homework1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Hello you have clicked the button.");
+            MessageBox.Show(textBox1.Text);
         }
 
     }
