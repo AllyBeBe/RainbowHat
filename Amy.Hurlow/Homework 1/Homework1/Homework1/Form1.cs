@@ -16,15 +16,19 @@ namespace Homework1
         {
             InitializeComponent();
         }
-
         private void Form1_Load(object sender, EventArgs e)
         {
-            //
-            //Show a message box.
-            //
-            MessageBox.Show("Want to click this useless message box?");
-            //
-
+        }
+        //
+        // On button click, show a message box with my message, plus the text the user entered and an OK button.
+        // Note to self (Amy): text box comes with "OK" button 
+        // and automtic output of a message box with no additional text if user doesn't type in text box
+        //
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("This is what you typed:" +
+                "\r\n" +
+                textBox1.Text);
         }
     }
 }

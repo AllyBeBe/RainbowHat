@@ -16,5 +16,12 @@ namespace Homework1
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // decided to add the text as a variable - could add error checking
+            string msg = textBox1.Text;
+            MessageBox.Show(msg);
+        }
     }
 }

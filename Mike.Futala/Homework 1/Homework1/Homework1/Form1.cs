@@ -21,5 +21,18 @@ namespace Homework1
         {
             MessageBox.Show("Program Written by\n Mike Futala", "About");
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+           if (textBox1.Text == "") 
+            {
+               MessageBox.Show("Input Box Empty", "About");
+            }
+            else
+            {
+            MessageBox.Show(textBox1.Text, "About");
+            }
+            }
+        }
     }
-}
+;
