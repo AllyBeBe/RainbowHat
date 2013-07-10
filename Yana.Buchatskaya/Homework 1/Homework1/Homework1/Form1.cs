@@ -15,6 +15,12 @@ namespace Homework1
         public Form1()
         {
             InitializeComponent();
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            MessageBox.Show("Do you want some ice cream?");
         }
     }
 }
