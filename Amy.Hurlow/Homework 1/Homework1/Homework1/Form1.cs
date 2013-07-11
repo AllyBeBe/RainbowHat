@@ -24,11 +24,23 @@ namespace Homework1
         // Note to self (Amy): text box comes with "OK" button 
         // and automtic output of a message box with no additional text if user doesn't type in text box
         //
+        //
+
+        //
         private void button1_Click(object sender, EventArgs e)
         {
             MessageBox.Show("This is what you typed:" +
                 "\r\n" +
                 textBox1.Text);
+        }
+        // 
+        // Amy's attempt at getting the textbox1.text to disappear on click
+        // I need to find out the name of what I'm looking for
+        // in order to look up what it does (or is)!
+        //
+        private void textBox1_Click(object sender, EventArgs e)
+        {
+            TextBox.
         }
     }
 }
