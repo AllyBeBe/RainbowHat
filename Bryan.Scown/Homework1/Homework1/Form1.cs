@@ -22,7 +22,7 @@ namespace Homework1
         {
             string comments = null;
             string inputText = textBox1.Text;
-            string answer = "Your Response: ";
+            const string answer = "Your Response: ";
 
             if (textBox1.Text == string.Empty)
             {
