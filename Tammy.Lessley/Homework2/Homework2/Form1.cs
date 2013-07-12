@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1
+namespace Homework2
 {
-    public partial class frmGoldStandard : Form
+    public partial class Homework2 : Form
     {
-        public frmGoldStandard()
+        public Homework2()
         {
             InitializeComponent();
         }

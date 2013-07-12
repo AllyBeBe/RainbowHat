@@ -1,6 +1,6 @@
-﻿namespace WindowsFormsApplication1
+﻿namespace Homework2
 {
-    partial class frmGoldStandard
+    partial class Homework2
     {
         /// <summary>
         /// Required designer variable.
@@ -30,19 +30,18 @@
         {
             this.SuspendLayout();
             // 
-            // frmGoldStandard
+            // Homework2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(400, 253);
-            this.Name = "frmGoldStandard";
-            this.Text = "Gold Standard";
+            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Name = "Homework2";
+            this.Text = "Form1";
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
     }
 }
 
