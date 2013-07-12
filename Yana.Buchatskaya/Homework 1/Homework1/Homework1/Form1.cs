@@ -22,5 +22,10 @@ namespace Homework1
         {
             MessageBox.Show("Do you want some ice cream?");
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
