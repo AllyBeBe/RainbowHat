@@ -15,17 +15,6 @@ namespace Homework1
         public Form1()
         {
             InitializeComponent();
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            MessageBox.Show("Do you want some ice cream?");
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

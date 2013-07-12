@@ -34,12 +34,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 5);
+            this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(144, 13);
+            this.label1.Size = new System.Drawing.Size(157, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "I finally learned how to do it!!!";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.label1.Text = "This text has been changed!  :-)\r\n";
             // 
             // Form1
             // 
