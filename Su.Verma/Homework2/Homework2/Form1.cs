@@ -15,6 +15,14 @@ namespace Homework2
         public Form1()
         {
             InitializeComponent();
+            System.Windows.Forms.ToolTip ToolTip1 = new System.Windows.Forms.ToolTip();
+            //toolTip1.SetToolTip(toolTipFirstName, "Hello");
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(firstNameTextBox.Text);
+        }
+        
     }
 }
