@@ -16,12 +16,12 @@ namespace Homework2
         {
             InitializeComponent();
             System.Windows.Forms.ToolTip ToolTip1 = new System.Windows.Forms.ToolTip();
-            //toolTip1.SetToolTip(toolTipFirstName, "Hello");
+          
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(firstNameTextBox.Text);
+            MessageBox.Show("Thanks!!! " + firstNameTextBox.Text + " " + lastNameTextBox.Text + " has agreed to give Su Verma A+  in this class :)");
         }
         
     }
