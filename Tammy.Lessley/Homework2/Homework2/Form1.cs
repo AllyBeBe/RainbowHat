@@ -16,5 +16,10 @@ namespace Homework2
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Answer.Text = "Your guess: " + Guess.Text + '\r' + '\r' + "The answer: A Cock-A-Poodle-Do!"; 
+               }
     }
 }
