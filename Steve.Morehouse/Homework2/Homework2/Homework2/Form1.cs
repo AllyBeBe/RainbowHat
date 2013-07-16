@@ -16,5 +16,13 @@ namespace Homework2
         {
             InitializeComponent();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            //
+            // The simplest overload of MessageBox.Show. [1]
+            //
+            MessageBox.Show("Dot Net Perls is awesome.");
+        }
     }
 }
