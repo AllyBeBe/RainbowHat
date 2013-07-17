@@ -40,7 +40,7 @@ namespace Homework1
         //
         private void textBox1_Click(object sender, EventArgs e)
         {
-            TextBox.
+            textBox1.Text = " ";
         }
     }
 }
