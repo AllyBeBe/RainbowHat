@@ -29,8 +29,9 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.nameTextBox = new System.Windows.Forms.TextBox();
+            this.greetingButton = new System.Windows.Forms.Button();
+            this.laughCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -45,32 +46,44 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(85, 10);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 1;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.nameTextBox.Location = new System.Drawing.Point(85, 10);
+            this.nameTextBox.Name = "textBox1";
+            this.nameTextBox.Size = new System.Drawing.Size(100, 20);
+            this.nameTextBox.TabIndex = 1;
+            this.nameTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
-            // button1
+            // GreetingButton
             // 
-            this.button1.Location = new System.Drawing.Point(60, 36);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Greet Me";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.greetingButton.Location = new System.Drawing.Point(59, 111);
+            this.greetingButton.Name = "GreetingButton";
+            this.greetingButton.Size = new System.Drawing.Size(75, 23);
+            this.greetingButton.TabIndex = 2;
+            this.greetingButton.Text = "Greet Me";
+            this.greetingButton.UseVisualStyleBackColor = true;
+            this.greetingButton.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // laughCheckBox
+            // 
+            this.laughCheckBox.AutoSize = true;
+            this.laughCheckBox.Location = new System.Drawing.Point(16, 36);
+            this.laughCheckBox.Name = "laughCheckBox";
+            this.laughCheckBox.Size = new System.Drawing.Size(123, 17);
+            this.laughCheckBox.TabIndex = 3;
+            this.laughCheckBox.Text = "Make Mickey Laugh";
+            this.laughCheckBox.UseVisualStyleBackColor = true;
+            this.laughCheckBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(204, 67);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
+            this.ClientSize = new System.Drawing.Size(204, 146);
+            this.Controls.Add(this.laughCheckBox);
+            this.Controls.Add(this.greetingButton);
+            this.Controls.Add(this.nameTextBox);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Homework 2";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -79,8 +92,9 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox nameTextBox;
+        private System.Windows.Forms.Button greetingButton;
+        private System.Windows.Forms.CheckBox laughCheckBox;
     }
 }
 

@@ -42,7 +42,27 @@ namespace Homework2
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            this.userName = textBox1.Text;
+            this.userName = nameTextBox.Text;
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckState state = laughCheckBox.CheckState;
+
+            switch (state)
+            {
+                case CheckState.Checked:
+                    {
+                        MessageBox.Show("Mickey is now laughing!");
+                        break;
+                    }
+                case CheckState.Indeterminate:
+                case CheckState.Unchecked:
+                    {
+                        MessageBox.Show("Mickey is no longer laughing");
+                        break;
+                    }
+            }
         }
     }
 }
