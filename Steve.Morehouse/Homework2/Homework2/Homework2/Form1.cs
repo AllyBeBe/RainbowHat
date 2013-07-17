@@ -19,10 +19,12 @@ namespace Homework2
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //
-            // The simplest overload of MessageBox.Show. [1]
-            //
-            MessageBox.Show("Dot Net Perls is awesome.");
+            MessageBox.Show("this is a test");
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Dot Net Perls says hello.", "How is your day going?");
         }
     }
 }
