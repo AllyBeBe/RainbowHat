@@ -13,30 +13,35 @@ namespace Homework2
     public partial class Form1 : Form
     {
         private String userName;
-        
+
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             String message;
-            
-            if (userName == null || userName.Equals(""))
+
+            maskedTextBox1.TextMaskFormat = MaskFormat.ExcludePromptAndLiterals;
+
+            String rawPhoneNumber = maskedTextBox1.Text;
+
+            maskedTextBox1.TextMaskFormat = MaskFormat.IncludeLiterals;
+
+            if (userName == null || userName.Length == 0)
             {
                 message = "Please enter your name for a proper greeting";
             }
+            else if (rawPhoneNumber == null || rawPhoneNumber.Length == 0)
+            {
+                message = "Please enter your phone number";
+            }
             else
             {
-                message = "Hello " + userName + "!";
+                message = "Hello " + userName + ", we've gone fishing so we'll call you later at " + maskedTextBox1.Text + "!";
             }
-            
+
             MessageBox.Show(message);
         }
 
@@ -63,6 +68,11 @@ namespace Homework2
                         break;
                     }
             }
+        }
+
+        private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+            MessageBox.Show("Invalid value for a phone number!");
         }
     }
 }
