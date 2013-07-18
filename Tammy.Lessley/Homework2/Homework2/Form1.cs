@@ -19,7 +19,22 @@ namespace Homework2
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Answer.Text = "Your guess: " + Guess.Text + '\r' + '\r' + "The answer: A Cock-A-Poodle-Do!"; 
-               }
+            Answer.Text = "Your guess: " + Guess.Text + '\r' + '\r' + "The answer: A Cock-A-Poodle-Do!";
+            MessageBox.Show("You clicked on the 'OK button', good for you!");      
+        }
+
+        private void question_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            MessageBox.Show("Thanks for rating my joke.");
+        }
+
+     
+
+      
     }
 }
