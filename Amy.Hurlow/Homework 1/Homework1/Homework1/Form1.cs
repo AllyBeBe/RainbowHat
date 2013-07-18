@@ -24,9 +24,6 @@ namespace Homework1
         // Note to self (Amy): text box comes with "OK" button 
         // and automtic output of a message box with no additional text if user doesn't type in text box
         //
-        //
-
-        //
         private void button1_Click(object sender, EventArgs e)
         {
             MessageBox.Show("This is what you typed:" +
