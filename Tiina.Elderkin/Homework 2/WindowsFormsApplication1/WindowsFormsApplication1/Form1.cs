@@ -16,5 +16,20 @@ namespace WindowsFormsApplication1
         {
             InitializeComponent();
         }
+
+    
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            UpdateComponent();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        { // this module is thanks to a Google Search....
+   string path;
+   path = System.IO.Path.GetDirectoryName( 
+      System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase );
+   MessageBox.Show( path );
+        }
     }
 }
