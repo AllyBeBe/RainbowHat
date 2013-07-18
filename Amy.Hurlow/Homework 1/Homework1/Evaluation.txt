@@ -1,0 +1,15 @@
+Great work, Amy!  I'm pleased to see that you got the extra credit
+done, as well as the base assignment.
+
+The use of "\r\n" to add a newline to your message box works fine,
+but it's not as readable, or as reliable, as another option -- 
+the Environment.NewLine constant.  Environment.NewLine is always set 
+to whatever will create a carriage return and line feed (the standard 
+"new line" behavior) in the environment where the code is executing.  
+You use it like this:
+
+            MessageBox.Show("This is what you typed:" +
+                Environment.NewLine +
+                textBox1.Text);
+
+				

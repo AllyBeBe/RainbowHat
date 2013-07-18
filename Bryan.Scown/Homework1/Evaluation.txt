@@ -1,0 +1,70 @@
+Good job, Bryan.  I'm glad to see you using local variables ("comments" and 
+"inputText").  And it's great to see conditionals (if/then): you're about 
+two classes ahead at the moment.
+
+Also, you used the correct C# idiom when you compared textBox1.Text to the
+special constant string.Empty, rather than to a classic empty-sring ("").
+
+I do have a few suggestions:
+
+1) You have made "answer" a constant, thus always starting the dialog
+with "Your Response: ".  This is fine, until you hit the empty TextBox
+case, and display "Your Response: You didn't enter any text".  I'd suggest
+making "answer" another local variable, and setting it to either "You didn't
+enter any text" or "Your Response: " + textBox1.Text, depending on whether
+textBox1 is empty:
+
+            string answer;
+
+            if (textBox1.Text == string.Empty)
+            {
+                answer = "You didn't enter any text";
+            }
+            else
+            {
+                answer = "Your Response: " + textBox1.Text;
+            }
+
+Next class, we'll look at "?:" (also called the "conditional operator"
+or the "ternary operator"), which provides a more concise way of expressing
+the same thing.
+
+2) You get some interesting results if you provide inputs like 
+"Sittsburg Pteelers" or "Pittsburg Seahawks" (try them out!).  Or, for
+that matter, "Seahawk Seattles".  Looking at your code, I think you may
+actually want something more like this:
+
+            string lowerCaseInput = textBox1.Text.ToLower().Trim();
+
+            if (lowerCaseInput.Equals("seahawks") || lowerCaseInput.Equals("seattle seahawks"))
+            {
+                comments = "The Seattle Seahawks are my favorite team too!";
+            }
+            if (lowerCaseInput.Equals("steelers") || lowerCaseInput.Equals("pittsburg steelers"))
+            {
+                comments = "The Steelers SUCK!!!!!!!";
+            }
+
+ToLower() converts a string to lower case.  Trim() removes "white space"
+(spaces, tabs, and other non-displayed characters) from the beginning and
+end of a string.  By using ToLower() and Trim() before comparing the input
+to the test values, we avoid the need to skip the first letter, and make
+our application more robust.
+
+Of course, another alternative would be to provide a dropdown control
+containing the names of all of the NFL teams.  This would solve the whole
+problem of spelling and typos and capitalization, and arguably provide
+a more helpful user interface to boot.
+
+
+3) Rather than using "\n" + "\n", you can either concatenate the two
+strings and use "\n\n", or (preferably) replace both "\n"s with 
+Environment.NewLine:
+
+            MessageBox.Show(answer + Environment.NewLine + Environment.NewLine + comments);
+
+			
+			
+In a future class, we will discuss how we might simplify the code by
+pulling out the "comments" logic into a separate method, and invoking
+(calling) that method from the final line of button1_Click().

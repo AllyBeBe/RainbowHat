@@ -1,0 +1,198 @@
+Nice work, Alex!  Fun to play with, and has some clever touches.  You're 
+about four weeks ahead of the class content at this point, so I can see I'm
+going to be kept busy keeping you busy.  :-)
+
+Things your fellow students may want to notice:
+
+1) In lines 23-34 of AlexHomework1ExtraCredit.cs, you use the switch
+statement to choose between three options.  You've chosen to list only
+two of them explicitly, instead of including an explicit "default:" 
+option.  That's normally poor form, but since there's no actual action
+to take in the "Cancel" case, I won't chide you for it.
+
+I do think, though, that I might prefer an if...else if... construct here,
+rather than a switch statement.  I'll probably use this situation as
+an in-class example when we're talking about conditionals, actually.
+
+2) You use the Show() and Hide() methods to create a more dynamic UI.  
+They're good methods to be aware of, but I do tend to be cautious about 
+using them in "real" programs, as they can startle the user 
+(thus violating the Principle of Least Astonishment).
+
+You reduce this risk in AlexHomework1ExtraCredit.cs, by having the second
+button appear at the same location from which the first button disappears.
+This gives the visual effect of a morph, rather than a blink-out/blink-in.
+
+3) On line 18 of Form2.cs, you use the MaxLength property of the TextBox
+control to constrain the number of characters the user can input.  Microsoft's
+controls often provide helpful features that replace after-the-fact validation
+with up-front constraints on behavior.  This is a good use of the features
+of the .NET libraries.
+
+MaxLength is one of the properties which can be configured in the Properties
+inspector in the Design view (under "Behavior").  I'd specify it there,
+moving the ".MaxLength = 50" to Form2.Designer.cs, and keep the Form2.cs 
+code as simple as possible.
+
+4) I really like the dynamic feedback provided to the user by your UI, 
+where the number of characters of input still remaining is constantly 
+updated.
+
+
+
+I do have a few changes I'd suggest:
+
+1) On line 30 of AlexHomework1ExtraCredit.cs, rather than setting the 
+button's location to a constant position, instead set it to the position
+of the button it is visually replacing:
+
+	superDuperExtraCreditButton.Location = extraCreditButton.Location;
+	
+If some future programmer (possibly your future self) moves the extraCreditButton,
+the UI will still behave correctly.
+
+2) On lines 44 & 45 of AlexHomework1ExtraCredit.cs, I would inline the
+creation of the new form, replacing both lines with:
+
+new AlexHomework1SuperDuperExtraCreditForm().ShowDialog();
+
+Same with lines 22 & 23 of Form1.cs.
+
+3) In Form2.cs, it looks like you debated whether to update the UI
+based on the TextChanged or KeyUp events.  I'd recommend using the
+TextChanged event, because it removes two subtle bugs in your code.
+Can you identify them?  We'll discuss this one in class as well, I
+think, because it's a good example of how to find and fix software
+defects.
+
+4) In Form2.cs, you have a number of UI elements whose visibility is
+set to true and false in a relatively complex pattern, across several 
+sections of the code.  I would add some semantic structure to the code
+by creating helper methods that implicitly define semantically meaningful
+sub-sets of the UI.  For example:
+
+        private void ShowResults(bool shouldShow)
+        {
+            blackArtLabel.Visible = shouldShow;
+            blackArtServiceLabel.Visible = shouldShow;
+            spellResultLabel.Visible = shouldShow;
+        }
+
+        private void ShowSupplementalInstructions(bool shouldShow)
+        {
+            spellServiceLabel.Visible = shouldShow;
+        }
+
+        private void UpdateResultsText()
+        {
+            spellResultLabel.Text = textSpellInput.Text;
+        }
+
+The other methods then become:
+
+        private void magicButton_Click(object sender, EventArgs e)
+        {
+            UpdateResultsText();
+            ShowResults(true);
+        }
+
+        private void textSpellInput_TextChanged(object sender, EventArgs e)
+        {
+            int charactersLeftForLabel;
+            int currentValueLength;
+            int maxTextFieldLength = this.textSpellInput.MaxLength;
+
+            currentValueLength = this.textSpellInput.Text.Length;
+
+            if (currentValueLength == 0)
+            {
+                spellInputLabel.Text = "Enter your spell (50 characters limit per spell):";
+                ShowSupplementalInstructions(false);
+                UpdateResultsText();
+                ShowResults(false);
+            }
+            else
+            {
+                charactersLeftForLabel = maxTextFieldLength - currentValueLength;
+                spellInputLabel.Text = "Enter you spell (" + charactersLeftForLabel.ToString() + " characters left):";
+                ShowSupplementalInstructions(true);
+            }
+        }
+
+This has several advantages:
+
+A) If the controls used to display the results ever change, the code will
+only need to change in one place rather than two.
+B) The other methods are now more readable (closer to "literate code", code
+that reads "like English").
+C) Because of (B), it's easier to catch logical inconsistentcies in the
+code.  For example, notice that we UpdateResultsText() before the only
+location where we call ShowResults(true) -- but we also call UpdateResultsText()
+immediately before calling ShowResults(false).  
+
+There's no reason to update the results text if we're not going to be 
+showing the results, but by the same token, we should always update them
+before we show the results (to make sure they are consistent with the
+state of the user input).
+
+So, we can remove the UpdateResultsText() before ShowResults(false), and
+put a conditional UpdateResultsText() call into ShowResults() itself:
+
+        private void ShowResults(bool shouldShow)
+        {
+            if (shouldShow) {
+                UpdateResultsText();
+            }
+            blackArtLabel.Visible = shouldShow;
+            blackArtServiceLabel.Visible = shouldShow;
+            spellResultLabel.Visible = shouldShow;
+        }
+
+        private void ShowSupplementalInstructions(bool shouldShow)
+        {
+            spellServiceLabel.Visible = shouldShow;
+        }
+
+        private void UpdateResultsText()
+        {
+            spellResultLabel.Text = textSpellInput.Text;
+        }
+
+And the other two methods become:
+
+        private void magicButton_Click(object sender, EventArgs e)
+        {
+            ShowResults(true);
+        }
+
+        private void textSpellInput_TextChanged(object sender, EventArgs e)
+        {
+            int charactersLeftForLabel;
+            int currentValueLength;
+            int maxTextFieldLength = this.textSpellInput.MaxLength;
+
+            currentValueLength = this.textSpellInput.Text.Length;
+
+            if (currentValueLength == 0)
+            {
+                spellInputLabel.Text = "Enter your spell (50 characters limit per spell):";
+                ShowSupplementalInstructions(false);
+                ShowResults(false);
+            }
+            else
+            {
+                charactersLeftForLabel = maxTextFieldLength - currentValueLength;
+                spellInputLabel.Text = "Enter you spell (" + charactersLeftForLabel.ToString() + " characters left):";
+                ShowSupplementalInstructions(true);
+            }
+        }
+
+We can now more easily see, reading the code, that:
+A) Clicking the Magic Button shows the results, 
+B) Deleting all of the characters hides the supplemental instructions and
+the results, and
+C) Typing characters shows the supplemental instructions, but does *not* 
+show or update the results.
+
+We'll probably go through the above changes step-by-step in class, 
+when we get to the section on refactoring.
