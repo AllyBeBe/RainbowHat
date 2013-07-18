@@ -1,0 +1,20 @@
+﻿Revert "Unsuccessful attempt at changing textBox behavior"
+
+This reverts commit 396568e9672dd74b531127acbbc217e037ddcd5e.
+
+Conflicts:
+	Amy.Hurlow/Homework 1/Homework1/Homework1/Form1.cs
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# You are currently reverting commit 396568e.
+#   (all conflicts fixed: run "git revert --continue")
+#   (use "git revert --abort" to cancel the revert operation)
+#
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   Amy.Hurlow/Homework 1/Homework1/Homework1/Form1.cs
+#
+

@@ -30,14 +30,5 @@ namespace Homework1
                 "\r\n" +
                 textBox1.Text);
         }
-        // 
-        // Amy's attempt at getting the textbox1.text to disappear on click
-        // I need to find out the name of what I'm looking for
-        // in order to look up what it does (or is)!
-        //
-        private void textBox1_Click(object sender, EventArgs e)
-        {
-            textBox1.Text = " ";
-        }
     }
 }
