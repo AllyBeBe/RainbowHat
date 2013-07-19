@@ -27,7 +27,7 @@ namespace Playground
             while (index < 10)
             {
                 Console.WriteLine(10 - index);
-                index = index - 1;
+                index = index + 1;
             }
 
 //            for (int val = 10; val > 0; val--)
