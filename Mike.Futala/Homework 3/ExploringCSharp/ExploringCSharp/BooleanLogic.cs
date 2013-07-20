@@ -1,4 +1,6 @@
-﻿namespace ExploringCSharp
+﻿using System;
+
+namespace ExploringCSharp
 {
     public class BooleanLogic
     {
@@ -89,7 +91,23 @@
             // Implement this one from scratch so that all tests pass.  
             // Age is a whole number.  The intended values and meanings of the string "gender"
             // can be inferred from the tests.
-            return false;
+            var myGender = gender;
+            var myAge = age;
+
+            switch (myGender)
+            {
+                case "M":
+                    if (myAge >= 25)
+                   return false;
+                    break;
+                case "F":
+                    return false;
+                    break;
+                default:
+                    return true;
+                    
+            }
+            return true;
         }
     }
 }
