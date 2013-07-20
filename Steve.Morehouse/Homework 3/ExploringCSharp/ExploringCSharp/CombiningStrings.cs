@@ -11,8 +11,7 @@ namespace ExploringCSharp
 
         public string GreetsByCombiningStringsWithFormats(string name)
         {
-            // try googling "string formatting in C#"
-            return null;
+            return "Hello, " + name;
         }
 
         public string GreetsByCombiningStringsWithStringBuilder(string name)
