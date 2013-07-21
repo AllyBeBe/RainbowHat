@@ -31,11 +31,28 @@ namespace ExploringCSharp
             // Try googling "C# exponents and logarithms".  Or just "exponents and logarithms",
             // if college math was too long ago for you (I had to look it up the last time I needed
             // to do this, so don't feel bad if you do, too).
-            var x = (Math.Exp(number));
+            var x = number.ToString();
+            var l = x.Length;
+
+
+          /*  if (number%10 != 0)
+            {
+                return number * (int)Math.Pow(10,l ); 
+                
+            }*/
             
-
-
-            return (int) Math.Pow(number, x + 2);
+            if (number == 1)
+            {
+                return number;
+            }
+            if (number % 10 == 0)
+            {
+                return number * (int)Math.Pow(10, l-1);
+            }
+           
+          return number * (int)Math.Pow(10, l); 
+                
+            
         }
     }
 }
