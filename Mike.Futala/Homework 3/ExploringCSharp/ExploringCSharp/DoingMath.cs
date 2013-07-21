@@ -35,11 +35,6 @@ namespace ExploringCSharp
             var l = x.Length;
 
 
-          /*  if (number%10 != 0)
-            {
-                return number * (int)Math.Pow(10,l ); 
-                
-            }*/
             
             if (number == 1)
             {
