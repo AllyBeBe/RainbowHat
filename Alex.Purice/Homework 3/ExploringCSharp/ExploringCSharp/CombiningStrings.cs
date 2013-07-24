@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace ExploringCSharp
 {
@@ -12,7 +13,15 @@ namespace ExploringCSharp
         public string GreetsByCombiningStringsWithFormats(string name)
         {
             // try googling "string formatting in C#"
-            return null;
+            const string hello = "Hello";
+            if (name == null)
+            {
+                return "Please provide a name to proceed";
+            }
+            else
+            {
+                return string.Format("{0}, {1}", hello, name);
+            }
         }
 
         public string GreetsByCombiningStringsWithStringBuilder(string name)
