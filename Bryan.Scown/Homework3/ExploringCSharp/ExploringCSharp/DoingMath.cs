@@ -27,24 +27,19 @@ namespace ExploringCSharp
             // if college math was too long ago for you (I had to look it up the last time I needed
             // to do this, so don't feel bad if you do, too).
 
+            // Finally realized I needed to count number of digits
+            long numDigits = number.ToString().Length;
+
             if (number == 1)
             {
-                return (int) (Math.Pow(number, 1));
+                return number;
             }
-
-            if (number <= 10)
+            // checking if number is divisble by 10
+            if (number % 10 == 0)
             {
-                return (int) (Math.Pow(number, 1)*10);
+                return number * (int)Math.Pow(10, numDigits - 1);
             }
-            if (number > 10 && number <= 100)
-            {
-                return (int) (Math.Pow(number, 1)*100);
-            }
-            return (int) (Math.Pow(number, 1)*1000);
-
-            // All tests pass now, but there's obviously a bug in my logic.
-            // I need to identify a better solution, but I don't want to look at my classmate's answer
-            // quite yet.
+            return number * (int)Math.Pow(10, numDigits);
         }
     }
 }
