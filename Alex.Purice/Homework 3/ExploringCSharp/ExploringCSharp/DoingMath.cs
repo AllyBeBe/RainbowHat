@@ -27,7 +27,7 @@ namespace ExploringCSharp
             // if college math was too long ago for you (I had to look it up the last time I needed
             // to do this, so don't feel bad if you do, too).
 
-            return number * Convert.ToInt32(Math.Pow(10, Math.Floor(Math.Log10(number))+1));
+            return (int) (number * Math.Pow(10, Math.Ceiling(Math.Log10(number))));
         }
     }
 }
