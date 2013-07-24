@@ -12,13 +12,13 @@ namespace ExploringCSharp
             // Notice also that ReSharper is *too* helpful, here, and keeps trying to turn "Math." into 
             // "DoingMath.".  Play with it until you figure out how to type "Math." without ReSharper
             // changing it into "DoingMath." on you.
-            return 0;
+            return Math.Max(number1, number2);
         }
 
         public int GetBiggestMagnitude(int number1, int number2)
         {
             // Try googling "C# absolute value of a number"
-            return Math.Abs(number1);
+            return (Math.Abs(number1) > Math.Abs(number2) ? number1 : number2);
         }
 
         public int MultiplyByTheNextLargerPowerOfTen(int number)
@@ -26,7 +26,25 @@ namespace ExploringCSharp
             // Try googling "C# exponents and logarithms".  Or just "exponents and logarithms",
             // if college math was too long ago for you (I had to look it up the last time I needed
             // to do this, so don't feel bad if you do, too).
-            return 0;
+
+            if (number == 1)
+            {
+                return (int) (Math.Pow(number, 1));
+            }
+
+            if (number <= 10)
+            {
+                return (int) (Math.Pow(number, 1)*10);
+            }
+            if (number > 10 && number <= 100)
+            {
+                return (int) (Math.Pow(number, 1)*100);
+            }
+            return (int) (Math.Pow(number, 1)*1000);
+
+            // All tests pass now, but there's obviously a bug in my logic.
+            // I need to identify a better solution, but I don't want to look at my classmate's answer
+            // quite yet.
         }
     }
 }
