@@ -13,7 +13,7 @@ namespace ExploringCSharpTest
         }
 
         [Test]
-        public void MenOver25AndWomenRegardlessOfAgeDoNotPayExtraSurchargeToRentACar()
+        public void Men25AndOlderAndWomenRegardlessOfAgeDoNotPayExtraSurchargeToRentACar()
         {
             Assert.That(new BooleanLogic().MustPayExtraSurchargeToRentACar("F", 19), Is.False);
             Assert.That(new BooleanLogic().MustPayExtraSurchargeToRentACar("F", 30), Is.False);
