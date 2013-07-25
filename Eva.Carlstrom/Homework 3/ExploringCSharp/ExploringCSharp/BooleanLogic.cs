@@ -65,7 +65,25 @@
             // Implement this one from scratch so that all tests pass.  
             // Age is a whole number.  The intended values and meanings of the string "gender"
             // can be inferred from the tests.
-            return false;
+
+            // Men under 25 pay surcharge.
+
+            if (gender == "M" && age < 25)
+            {
+                return true;
+            }
+
+            // People of nontraditional or unspecified gender pay surcharge.
+
+            if (gender == "P" || gender == "O")
+            {
+                return true;
+            }
+
+            // Men 25 & over, & women of any age, do not pay surcharge.
+
+         return false;
+        }
+           
         }
     }
-}
