@@ -78,6 +78,14 @@
             // Implement this one from scratch so that all tests pass.  
             // Age is a whole number.  The intended values and meanings of the string "gender"
             // can be inferred from the tests.
+
+            if ("M".Equals(gender) && age < 25)
+                return true;
+            if ("O".Equals(gender))
+                return true;
+            if ("P".Equals(gender))
+                return true;
+
             return false;
         }
     }

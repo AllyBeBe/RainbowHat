@@ -1,4 +1,6 @@
-﻿namespace ExploringCSharp
+﻿using System;
+
+namespace ExploringCSharp
 {
     public class DoingMath
     {
@@ -10,13 +12,20 @@
             // Notice also that ReSharper is *too* helpful, here, and keeps trying to turn "Math." into 
             // "DoingMath.".  Play with it until you figure out how to type "Math." without ReSharper
             // changing it into "DoingMath." on you.
-            return 0;
+            return Math.Max(number1, number2);
         }
 
         public int GetBiggestMagnitude(int number1, int number2)
         {
             // Try googling "C# absolute value of a number"
-            return 0;
+
+            int numberAbs1 = Math.Abs(number1);
+            int numberAbs2 = Math.Abs(number2);
+
+            if (numberAbs1 > numberAbs2)
+                return number1;
+            
+            return number2;
         }
 
         public int MultiplyByTheNextLargerPowerOfTen(int number)
@@ -24,7 +33,8 @@
             // Try googling "C# exponents and logarithms".  Or just "exponents and logarithms",
             // if college math was too long ago for you (I had to look it up the last time I needed
             // to do this, so don't feel bad if you do, too).
-            return 0;
+            //return number * (int) Math.Pow(number, Math.Ceiling(Math.Log10(number)));
+            return number* (int) Math.Pow(10, Math.Ceiling(Math.Log10(number)));
         }
     }
 }
