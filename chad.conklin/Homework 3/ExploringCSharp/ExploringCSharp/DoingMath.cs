@@ -19,7 +19,7 @@ namespace ExploringCSharp
         public int GetBiggestMagnitude(int number1, int number2)
         {
             // Try googling "C# absolute value of a number"
-            return Math.Max(Math.Abs(number1),Math.Abs(number2));
+            return Math.Abs(number1) > Math.Abs(number2) ? number1 : number2;
         }
 
         public int MultiplyByTheNextLargerPowerOfTen(int number)
