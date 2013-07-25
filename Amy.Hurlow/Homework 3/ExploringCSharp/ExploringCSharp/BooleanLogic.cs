@@ -4,7 +4,14 @@
     {
         public bool NegatesItsInput(bool input)
         {
-            return !input;
+            if (input == true)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public bool NegatesItsInputSingleLine(bool input)
@@ -15,7 +22,28 @@
 
         public bool TrueIfBothInputsAreTrue(bool input1, bool input2)
         {
-            return input1 && input2;
+            if (input1 == true)
+            {
+                if (input2 == true)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (input1 == true)
+                {
+                    return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
 
         public bool TrueIfBothInputsAreTrueSingleLine(bool input1, bool input2)
@@ -27,7 +55,28 @@
         public bool TrueIfEitherInputIsTrue(bool input1, bool input2)
         {
             // Use resharper on this to reduce it to a single line.
-            return input1 || input2;
+            if (input1 == true)
+            {
+                if (input2 == true)
+                {
+                    return true;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (input2 == true)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
 
         public bool TrueIfEitherInputIsTrueSingleLine(bool input1, bool input2)
