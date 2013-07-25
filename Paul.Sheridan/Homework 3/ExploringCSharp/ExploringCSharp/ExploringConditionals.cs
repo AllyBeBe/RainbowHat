@@ -4,14 +4,7 @@
     {
         public string ConvertsBoolToYesOrNo(bool value)
         {
-            if (value)
-            {
-                return "Yes";
-            }
-            else
-            {
-                return "No";
-            }
+            return value ? "Yes" : "No";
         }
 
         public string ConvertsBoolToYesOrNoSingleLine(bool value)
@@ -29,10 +22,7 @@
             {
                 return null;
             }
-            else
-            {
-                return stringToDouble + stringToDouble;
-            }            
+            return stringToDouble + stringToDouble;
         }
 
         public string DoubleStringWithInputValidationPattern(string stringToDouble)
@@ -47,25 +37,18 @@
 
         public string ComplexConditionUsingElseIf(int value)
         {
-            if (value == 0)
+            switch (value)
             {
-                return "Free!";
-            }
-            else if (value == 1)
-            {
-                return "Cheap as dirt!";
-            }
-            else if (value == 2)
-            {
-                return "Twice as expensive as dirt...";
-            }
-            else if (value == 3)
-            {
-                return "TANSTAAFL: There ain't no such thing as a free lunch.";
-            }
-            else
-            {
-                return "Too rich for my blood!";
+                case 0:
+                    return "Free!";
+                case 1:
+                    return "Cheap as dirt!";
+                case 2:
+                    return "Twice as expensive as dirt...";
+                case 3:
+                    return "TANSTAAFL: There ain't no such thing as a free lunch.";
+                default:
+                    return "Too rich for my blood!";
             }
         }
 
