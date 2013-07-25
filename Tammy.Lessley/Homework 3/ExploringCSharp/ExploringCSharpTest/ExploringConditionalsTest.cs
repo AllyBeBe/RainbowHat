@@ -53,7 +53,7 @@ namespace ExploringCSharpTest
             Assert.That(_exploringConditionals.DoubleStringWithInputValidationPattern(null), Is.Null);
         }
 
-        private static readonly Dictionary<int, string> _EXPECTED_STRINGS = new Dictionary<int, string>
+        private static readonly Dictionary<int, string> ExpectedStrings = new Dictionary<int, string>
         {
             {0, "Free!"},
             {1, "Cheap as dirt!"},
@@ -63,13 +63,13 @@ namespace ExploringCSharpTest
         
         private string getExpectedStringFor(int value)
         {
-            return _EXPECTED_STRINGS.ContainsKey(value) ? _EXPECTED_STRINGS[value] : "Too rich for my blood!";
+            return ExpectedStrings.ContainsKey(value) ? ExpectedStrings[value] : "Too rich for my blood!";
         }
 
         [Test]
         public void ComplexConditionUsingElseIfReturnsExpectedStrings()
         {
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 Assert.That(_exploringConditionals.ComplexConditionUsingElseIf(i), Is.EqualTo(getExpectedStringFor(i)));
             }
@@ -78,7 +78,7 @@ namespace ExploringCSharpTest
         [Test]
         public void ComplexConditionUsingReturnsAndIfsReturnsExpectedStrings()
         {
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 Assert.That(_exploringConditionals.ComplexConditionUsingReturnsAndIfs(i), Is.EqualTo(getExpectedStringFor(i)));
             }
@@ -87,7 +87,7 @@ namespace ExploringCSharpTest
         [Test]
         public void ComplexConditionUsingSwitchReturnsExpectedStrings()
         {
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 Assert.That(_exploringConditionals.ComplexConditionUsingReturnsAndIfs(i), Is.EqualTo(getExpectedStringFor(i)));
             }
