@@ -96,10 +96,27 @@
 
         public bool MustPayExtraSurchargeToRentACar(string gender, int age)
         {
-            // Implement this one from scratch so that all tests pass.  
-            // Age is a whole number.  The intended values and meanings of the string "gender"
-            // can be inferred from the tests.
-            return false;
+            bool isUnknownGender = (gender == "P" || gender == "O");
+            bool isYoungMan = (gender == "M" && age < 25);
+
+            return isUnknownGender || isYoungMan;
         }
+
+        // Use the "Boolean or" operator ("||") to combine the two halves of the logical expression.
+        //            if (gender == "P" || gender == "O")
+        //            {
+        //                return true;
+        //            }
+
+        // Use the "Boolean and" operator ("&&") to combine the two halves of the logical expression.
+        //            if (gender == "M" && age < 25)
+        //            {
+        //                return true;
+        //            }
+        //            else
+        //            {
+        //                return false;
+        //            }
+
     }
 }
