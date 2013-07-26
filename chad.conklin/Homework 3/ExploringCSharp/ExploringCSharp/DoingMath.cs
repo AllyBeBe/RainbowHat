@@ -24,11 +24,14 @@ namespace ExploringCSharp
 
         public int MultiplyByTheNextLargerPowerOfTen(int number)
         {
-            // SWITCHED TO DOUBLE??? May need to switch back to int
+        
             // Try googling "C# exponents and logarithms".  Or just "exponents and logarithms",
             // if college math was too long ago for you (I had to look it up the last time I needed
             // to do this, so don't feel bad if you do, too).
-            return number;
+            //Thanks to Alex...you rock!
+
+            return (int) (number*Math.Pow(10, Math.Ceiling(Math.Log10(number))));
+            // copyrights - Alex Purice
         }
     }
 }
