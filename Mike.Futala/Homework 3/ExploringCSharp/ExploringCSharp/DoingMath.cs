@@ -33,19 +33,18 @@ namespace ExploringCSharp
             // to do this, so don't feel bad if you do, too).
             var x = number.ToString();
             var l = x.Length;
-
-
-            
-            if (number == 1)
-            {
-                return number;
-            }
-            if (number % 10 == 0)
-            {
-                return number * (int)Math.Pow(10, l-1);
-            }
+            var z = Math.Ceiling(Math.Log10(number));
+//
+//            if (number == 1)
+//            {
+//                return number;
+//            }
+//           if (number % 10 == 0)
+//            {
+//               return number * (int)Math.Pow(10, z);
+//           }
            
-          return number * (int)Math.Pow(10, l); 
+          return number * (int)Math.Pow(10, z); 
                 
             
         }
