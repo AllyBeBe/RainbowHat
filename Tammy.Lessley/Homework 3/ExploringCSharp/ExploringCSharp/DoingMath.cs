@@ -26,7 +26,7 @@ namespace ExploringCSharp
             // Try googling "C# exponents and logarithms".  Or just "exponents and logarithms",
             // if college math was too long ago for you (I had to look it up the last time I needed
             // to do this, so don't feel bad if you do, too).
-            return (int) (number * Math.Pow(10, (++y)));
+            return number * (int)Math.Pow(10, Math.Ceiling(Math.Log10(number)));
         }
     }
 }
