@@ -57,15 +57,15 @@ namespace ExploringCSharp
             // Age is a whole number.  The intended values and meanings of the string "gender"
             // can be inferred from the tests.
 
-            switch (gender)
-            {
-                case "O":
-                case "P":
-                case "M" :
-                    return true;
-                default:
-                    return false;
+            if ("M".Equals(gender) && age < 25)
+                return true;
+            if ("O".Equals(gender))
+                return true;
+            if ("P".Equals(gender))
+                return true;
+
+            return false;
             }
         }
     } 
-}
+
