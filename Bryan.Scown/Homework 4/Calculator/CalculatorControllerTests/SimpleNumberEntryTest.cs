@@ -36,5 +36,45 @@ namespace CalculatorControllerTests
 
             Assert.That(_controller.GetOutput(), Is.EqualTo("13"));
         }
+        [Test]
+        public void CanClearCurrentDisplay()
+        {
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('3');
+            _controller.Clear();
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo(string.Empty));
+        }
+        [Test]
+        public void CanAddSingleDigits()
+        {
+            _controller.AcceptCharacter('1');
+            _controller.AddOperator();
+            _controller.AcceptCharacter('3');
+            _controller.Equals();
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("4"));
+
+        }
+        [Test]
+        public void CanSubtractSingleDigits()
+        {
+            _controller.AcceptCharacter('1');
+            _controller.SubtractOperator();
+            _controller.AcceptCharacter('3');
+            _controller.Equals();
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("-2"));
+        }
+        [Test]
+        public void CanMultiplySingleDigits()
+        {
+            _controller.AcceptCharacter('1');
+            _controller.MultiplyOperator();
+            _controller.AcceptCharacter('3');
+            _controller.Equals();
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("3"));
+        }
     }
 }

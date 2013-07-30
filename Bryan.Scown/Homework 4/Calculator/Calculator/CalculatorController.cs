@@ -30,5 +30,25 @@
             // can share a CalculatorController instance -- they just need to call "Clear" before 
             // each test.
         }
+
+        public void AddOperator()
+        {
+            // Do something
+        }
+
+        public void SubtractOperator()
+        {
+            // Do something
+        }
+
+        public void MultiplyOperator()
+        {
+            // Do something
+        }
+
+        public void Equals()
+        {
+            // Do something
+        }
     }
 }
