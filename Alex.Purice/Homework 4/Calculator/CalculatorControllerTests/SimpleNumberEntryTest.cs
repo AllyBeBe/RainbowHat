@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Calculator;
 
 namespace CalculatorControllerTests
@@ -20,21 +21,41 @@ namespace CalculatorControllerTests
         [Test]
         public void CanEnterSingleDigit()
         {
-            Assert.That(_controller.AcceptCharacter('1'), Is.EqualTo("1"));
+            for (int i = 0; i < 9; i++)
+            {
+                Assert.That(_controller.AcceptCharacter((char) i), Is.EqualTo(i.ToString()));   
+            }
         }
 
         [Test]
         public void CanEnterMultipleDigits()
         {
-            _controller.AcceptCharacter('1');
-            _controller.AcceptCharacter('3');
-
-            // An example of a constraint other than "Is"  In this case, the Substring() method of the
-            // "Contains" class returns a constraint that requires that the value being tested contain the
-            // substring "3".
-            Assert.That(_controller.GetOutput(), Contains.Substring("3"));
-
-            Assert.That(_controller.GetOutput(), Is.EqualTo("13"));
+            Random random = new Random();
+            var aNumber = random.Next(0, int.MaxValue).ToString();//as a string
+            foreach (char thisCharacter in aNumber)
+            {
+                _controller.AcceptCharacter(thisCharacter);
+                Assert.That(_controller.GetOutput(), Is.EqualTo(aNumber));
+            }
         }
+
+
+        
+        
+//        
+//        public void CanEnterMultipleDigitsOriginal()
+//        {
+//            _controller.AcceptCharacter('1');
+//            _controller.AcceptCharacter('3');
+//
+//            // An example of a constraint other than "Is"  In this case, the Substring() method of the
+//            // "Contains" class returns a constraint that requires that the value being tested contain the
+//            // substring "3".
+//            Assert.That(_controller.GetOutput(), Contains.Substring("3"));
+//
+//            Assert.That(_controller.GetOutput(), Is.EqualTo("13"));
+//        }
+
+    
     }
 }
