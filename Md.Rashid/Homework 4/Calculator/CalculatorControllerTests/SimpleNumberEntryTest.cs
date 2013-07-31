@@ -36,5 +36,157 @@ namespace CalculatorControllerTests
 
             Assert.That(_controller.GetOutput(), Is.EqualTo("13"));
         }
+
+        [Test]
+        public void DoesClearWork()
+        {
+            _controller.AcceptCharacter('1');
+            _controller.Clear();
+
+            Assert.That(_controller.GetOutput(),Is.EqualTo(""));
+        }
+
+
+        [Test]
+        public void DoesSingleDigitAdditionWork()
+        {
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('+');
+            _controller.AcceptCharacter('8');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
+        }
+
+        [Test]
+        public void DoesMultipleDigitAdditionWork()
+        {
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('+');
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('9');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("110"));
+        }
+
+        [Test]
+        public void DoesStartingZeroAdditionWork()
+        {
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('+');
+            _controller.AcceptCharacter('0');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("11"));
+        }
+
+        [Test]
+        public void DoesEndingZeroAdditionWork()
+        {
+            _controller.AcceptCharacter('0');
+            _controller.AcceptCharacter('+');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('0');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("10"));
+        }
+
+        [Test]
+        public void DoesMultipleDigitSubtractionWork()
+        {
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('0');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('9');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("82"));
+        }
+
+        [Test]
+        public void DoesSingleDigitSubtractionWork()
+        {
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('6');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("3"));
+        }
+
+        [Test]
+        public void DoesFirstZeroDigitSubtractionWork()
+        {
+            _controller.AcceptCharacter('0');
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('9');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("-19"));
+        }
+
+        [Test]
+        public void DoesLastZeroDigitSubtractionWork()
+        {
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('0');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("91"));
+        }
+
+
+        [Test]
+        public void DoesNegativeFirstDigitSubtractionWork()
+        {
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('8');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("-17"));
+        }
+
+        [Test]
+        public void DoesNegativeLastDigitSubtractionWork()
+        {
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('8');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("99"));
+        }
+
+
+        [Test]
+        public void DoesNegativeLastDigitAdditionWork()
+        {
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('+');
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('8');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("83"));
+        }
+
+        [Test]
+        public void DoesNegativeFirstDigitAdditionWork()
+        {
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('+');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('8');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
+        }
+
+
+        
+
     }
 }
