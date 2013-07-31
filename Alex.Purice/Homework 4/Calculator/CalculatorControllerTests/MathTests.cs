@@ -57,6 +57,135 @@ namespace CalculatorControllerTests
 //            return Math.Ceiling(number*presicionMultiplier)/presicionMultiplier;
 //        }
 
+
+        [Test]
+        public void DigitsAreAddedToTheRightOfTheCurrentValue()
+        {
+            // Abstract idea in English:
+            // When I enter "1" and then "3" and then "7", the calculator displays "1" and then "13" and then "137".
+
+            // Psedocode, often following the "when I/then" paradigm
+            // When I: enter "1"
+            // Then: the calculator should say "1"
+            // When I: enter "3"
+            // Then: the calculator should say "13"
+            // When I: enter "7"
+            // Then: the calculator should say "137"
+
+            // Actual test code, where each line (approximately) corresponds to a line of the pseudocode
+            EnterNumber(1);
+            Assert.That(_controller.GetOutput(), Is.EqualTo("1"));
+            EnterNumber(3);
+            Assert.That(_controller.GetOutput(), Is.EqualTo("13"));
+            EnterNumber(7);
+            Assert.That(_controller.GetOutput(), Is.EqualTo("137"));
+        }
+
+        [Test]
+        public void CanAddSmallNumbers()
+        {
+            EnterNumber(7);
+            AcceptCharacters("+");
+            EnterNumber(3);
+            AcceptCharacters("=");
+            
+            Assert.AreEqual("10", _controller.GetOutput());
+        }
+
+        [Test]
+        public void PlusDisplaysIntermediateResultsLikeEquals()
+        {
+            EnterNumber(10);
+            AcceptCharacters("+");
+            EnterNumber(3);
+            AcceptCharacters("+");
+
+            Assert.AreEqual("13", _controller.GetOutput());
+
+            EnterNumber(15);
+
+            Assert.AreEqual("15", _controller.GetOutput());
+
+            AcceptCharacters("=");
+
+            Assert.AreEqual("28", _controller.GetOutput());
+        }
+
+        [Test]
+        public void CanExceedMaxInt()
+        {
+            EnterNumber(int.MaxValue);
+            AcceptCharacters("+");
+            EnterNumber(int.MaxValue);
+            AcceptCharacters("=");
+
+            long expectedResult = (long)int.MaxValue + int.MaxValue;
+
+            Assert.AreEqual(expectedResult.ToString(), _controller.GetOutput());
+        }
+
+        [Test]
+        public void CanExceedMaxLong()
+        {
+            EnterNumber(long.MaxValue);
+            AcceptCharacters("+");
+            EnterNumber(long.MaxValue);
+            AcceptCharacters("=");
+
+            Decimal expectedResult = new Decimal(long.MaxValue) + new decimal(long.MaxValue);
+
+            Assert.AreEqual(expectedResult.ToString(), _controller.GetOutput());
+        }
+
+        // These helper functions make it easier to express simple interactions with the calculator, without having to
+        // have ten or fifteen lines of "_controller.AcceptCharacter('7');" and so on
+        private void EnterNumber(Decimal input)
+        {
+            AcceptCharacters(input.ToString());
+        }
+
+        private void AcceptCharacters(string inputString)
+        {
+            foreach (char expressionChar in inputString)
+            {
+                _controller.AcceptCharacter(expressionChar);
+            }
+        }
+
+        [Test]
+        public void CanAddMaxIntToMaxInt()
+        {
+            // Enter Int.MaxValue
+            _controller.AcceptCharacter('2');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('4');
+            _controller.AcceptCharacter('7');
+            _controller.AcceptCharacter('4');
+            _controller.AcceptCharacter('8');
+            _controller.AcceptCharacter('3');
+            _controller.AcceptCharacter('6');
+            _controller.AcceptCharacter('4');
+            _controller.AcceptCharacter('7');
+
+            // Addition
+            _controller.AcceptCharacter('+');
+
+            // Enter Int.MaxValue again
+            _controller.AcceptCharacter('2');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('4');
+            _controller.AcceptCharacter('7');
+            _controller.AcceptCharacter('4');
+            _controller.AcceptCharacter('8');
+            _controller.AcceptCharacter('3');
+            _controller.AcceptCharacter('6');
+            _controller.AcceptCharacter('4');
+            _controller.AcceptCharacter('7');
+
+            long expectedResult = (long)int.MaxValue + int.MaxValue;
+            Assert.AreEqual(expectedResult.ToString(), _controller.GetOutput());
+        }
+
         [Test]
         public void CanDoAddition()
         {
