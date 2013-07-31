@@ -1,0 +1,32 @@
+I've written individual evaluations for all of Homework 1.  As I was reading
+the assignments, and writing the evaluations, it occurred to me more than
+once that the code and/or evaluations might be useful to the whole class.
+
+Thus, I have provided a brief index to the code and evaluations.  I 
+encourage you all to read the evaluations and code listed below, as you
+will probably find useful ideas in most or all of them.
+
+Index to the Homework 1 code and evaluations:
+	
+	a) Alex: for several interesting code constructs and some good 
+	dynamic UI behavior, as well as an introduction to refactoring.
+	b) Amy: for a discussion of the "Environment.NewLine" constant.
+	c) Bryan Scown: for the use of local variables and constants, 
+	and a discussion of string manipulation functions and user interface.
+	d) Eva: because it addresses important concepts in the UX (User 
+	Experience) problem space.
+	e) Gordon: for use of an instance variable and the TextChanged
+	event on TextBox.
+	f) Jay: for use of DateTime.Now to display the current date and
+	time.
+	g) Mary: for a good point about why one might want to use a local 
+	variable to hold the value to be displayed, rather than just displaying 
+	the TextBox's value directly.
+	h) Mike (Futala): for error handling, and responding to clicks on a label.
+	i) Su: for modifying properties of the Controls other than the text,
+	position, and size.  In specific, changing the color of the label text.
+	j) Tiina: for handling click events from two different controls with
+	the same event-handler method, and for a link to a really valuable 
+	educational philosophy article.
+	
+	

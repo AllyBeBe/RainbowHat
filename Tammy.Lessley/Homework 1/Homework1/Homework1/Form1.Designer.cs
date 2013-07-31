@@ -79,7 +79,7 @@
             this.Controls.Add(this.txtInput);
             this.Controls.Add(this.labelName);
             this.Name = "Form1";
-            this.Text = "Homework 1";
+            this.Text = "Homework 1asf";
             this.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             this.ResumeLayout(false);
             this.PerformLayout();

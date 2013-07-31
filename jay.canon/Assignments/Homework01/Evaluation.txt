@@ -1,0 +1,5 @@
+Nicely done!  I like that you extended the assignment to include the use
+of DateTime.Now.
+
+Do keep in mind that Environment.NewLine is a generally safer option than
+using "\n" in a string.

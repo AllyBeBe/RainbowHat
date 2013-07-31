@@ -1,0 +1,4 @@
+Great job on the assignment and the extra credit!
+
+I particularly liked that you played around with some of the other 
+properties of the label (e.g. ForeColor).

@@ -24,7 +24,7 @@ namespace Homework1
 
         private void button1_Click(object sender, EventArgs e)
         {
-           if (textBox1.Text == "") 
+           if (textBox1.Text.Trim() == String.Empty) 
             {
                MessageBox.Show("Input Box Empty", "About");
             }
