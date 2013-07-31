@@ -3,6 +3,18 @@ using Calculator;
 
 namespace CalculatorControllerTests
 {
+    /*
+     * Thoughts on testing:
+     * 
+     * 1. Nothing related to BODMAS (or priority rules)
+     * 2. No mix and match of operators
+     * 3. assuming positive and negative numbers
+     * 4. No decimal numbers (that is no 0.5 ... everything we test needs to be whole number)
+     * 5. Assuming division by zero genrates Error string
+     * 6. Assuming decimal numbers (not octal or hexa)
+     */
+
+
     [TestFixture]
     public class SimpleNumberEntryTest
     {
