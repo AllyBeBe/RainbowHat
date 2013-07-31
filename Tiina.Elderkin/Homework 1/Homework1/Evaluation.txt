@@ -1,0 +1,8 @@
+Very nice work, Tiina!  I particularly like that you have two different
+controls (the "Homework #10 reworded" button and the top label) that call
+the same event handler method.  That's tricky, and a great way to 
+demonstrate how code can be re-used by calling a method from different
+places.  
+
+I also really like the link on educational philosophy.  I recommend it
+to everyone in the class.

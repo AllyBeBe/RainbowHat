@@ -1,0 +1,2 @@
+Not exactly the intended homework assignment, but since you created your
+own console application, I'll call that good.  :-)

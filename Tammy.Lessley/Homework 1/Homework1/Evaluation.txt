@@ -1,0 +1,9 @@
+Nice work.  I like that you added a separate label to display the 
+greeting, rather than just popping it up in a MessageBox.Show().
+
+There are a few pieces of "dead code" in your application that you might
+want to clean up.  I notice that the textBox1_TextChanged_1() method doesn't
+actually do anything, and that the textBox1_TextChanged() method, which does
+do something, is only being called by Form1's TextChanged event, not by 
+txtInput's TextChanged event.  These don't do any harm to the function of
+the code, but they do make it harder to understand what the code is doing.

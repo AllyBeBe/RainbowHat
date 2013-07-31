@@ -1,0 +1,5 @@
+Nicely done.  I notice that you used an instance variable (InputText), 
+or (as C# would describe it) a "field", which you update whenever the 
+text box's contents change.  You could also simply have accessed
+textBox1.Text on line 24, but I'm guessing you wanted to explore
+features of the language more than you wanted to optimize your code.  :-)

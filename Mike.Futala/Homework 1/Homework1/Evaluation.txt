@@ -1,0 +1,10 @@
+Lots of good stuff to say about this one, Mike!  I like the "about" message
+that you display when the label is clicked.  I like that you have error 
+handling, and display a different message when the input box is empty.  I
+like that you specify a title for your message boxes.
+
+About the only thing I'd suggest is that you might want to use Trim() on
+the value of the TextBox, and that you might want to compare against
+String.Empty instead of "".  You probably still want to display the error
+message if someone enters white space in the TextBox.
+
