@@ -45,6 +45,14 @@ namespace CalculatorControllerTests
 
             Assert.That(_controller.GetOutput(), Is.Empty);
         }
+        [Test]
+        public void CanEnterAnyDigitConsecutively()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                Assert.That(_controller.AcceptCharacter((char) i), Is.EqualTo(i.ToString()));
+            }
+        }
         
     }
 }

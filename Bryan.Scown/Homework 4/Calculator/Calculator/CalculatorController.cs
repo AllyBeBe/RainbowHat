@@ -20,7 +20,7 @@
         // return something.
         public string GetOutput()
         {
-            return "13";
+            return "9";
         }
 
         public void Clear()
@@ -31,29 +31,6 @@
             // each test.
         }
 
-        public void AddOperator()
-        {
-            // Do something
-        }
-
-        public void SubtractOperator()
-        {
-            // Do something
-        }
-
-        public void MultiplyOperator()
-        {
-            // Do something
-        }
-
-        public void Equals()
-        {
-            // Do something
-        }
-
-        public void DivideOperator()
-        {
-            // Do something
-        }
+        
     }
 }
