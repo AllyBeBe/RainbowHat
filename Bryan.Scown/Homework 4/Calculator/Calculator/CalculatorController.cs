@@ -50,5 +50,10 @@
         {
             // Do something
         }
+
+        public void DivideOperator()
+        {
+            // Do something
+        }
     }
 }
