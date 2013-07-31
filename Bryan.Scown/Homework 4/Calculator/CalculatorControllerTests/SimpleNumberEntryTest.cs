@@ -53,6 +53,16 @@ namespace CalculatorControllerTests
                 Assert.That(_controller.AcceptCharacter((char) i), Is.EqualTo(i.ToString()));
             }
         }
+        [Test]
+        public void CanNotDivideByZero()
+        {
+            _controller.AcceptCharacter('3');
+            _controller.AcceptCharacter('/');
+            _controller.AcceptCharacter('0');
+            _controller.AcceptCharacter('=');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("Cannot divide by zero"));
+        }
         
     }
 }
