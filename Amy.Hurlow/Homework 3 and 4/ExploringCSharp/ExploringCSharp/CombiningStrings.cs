@@ -15,8 +15,8 @@ namespace ExploringCSharp
             string string1;
             string string2;
             string combinedstring;
-            string1 = "Hello,";
-            string2 = "world";
+            string1 = "Hello, ";
+            string2 = "Mickey";
             
             combinedstring = string.Format("{0}{1:}", string1, string2);
             return combinedstring;
