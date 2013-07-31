@@ -34,10 +34,17 @@
 
         public bool MustPayExtraSurchargeToRentACar(string gender, int age)
         {
-            // Implement this one from scratch so that all tests pass.  
-            // Age is a whole number.  The intended values and meanings of the string "gender"
-            // can be inferred from the tests.
-            return false;
+                       switch (gender)
+           {
+               case "F":
+                   return false;
+                case "M":
+                   return age < 25 ? true : false;
+               default:
+                  return true;
+        }
+             return false;
+
         }
     }
 }
