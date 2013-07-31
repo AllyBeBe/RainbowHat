@@ -311,5 +311,142 @@ namespace CalculatorControllerTests
 
             Assert.That(_controller.GetOutput(), Is.EqualTo("111998888001"));
         }
+
+        // 
+        [Test]
+        public void DoesNegativePositiveDigitDivisionWork()
+        {
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('/');
+            _controller.AcceptCharacter('3');
+            _controller.AcceptCharacter('3');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("-3"));
+        }
+
+        [Test]
+        public void DoesNegativeNegativeDigitDivisionWork()
+        {
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('/');
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('1');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
+        }
+
+        [Test]
+        public void DoesPositiveNegativeDigitDivisionWork()
+        {
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('/');
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('3');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("-3"));
+        }
+
+        [Test]
+        public void DoesMultipleDigitDivisionWork()
+        {
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('0');
+            _controller.AcceptCharacter('/');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('8');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("180"));
+        }
+
+        [Test]
+        public void DoesFirstZeroDigitDivisionWork()
+        {
+            _controller.AcceptCharacter('0');
+            _controller.AcceptCharacter('/');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('8');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
+        }
+
+
+        [Test]
+        public void DoesLastZeroDigitDivisionWork()
+        {
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('0');
+            _controller.AcceptCharacter('/');
+            _controller.AcceptCharacter('0');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("ERROR"));
+        }
+
+        [Test]
+        public void DoesLastOneDigitDivisionWork()
+        {
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('0');
+            _controller.AcceptCharacter('/');
+            _controller.AcceptCharacter('1');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("1"));
+        }
+
+        [Test]
+        public void DoesFirstOneDigitDivisionWork()
+        {
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('/');
+            _controller.AcceptCharacter('1');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("1"));
+        }
+
+
+        [Test]
+        public void DoesLargeDigitDivisionWork()
+        {
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('/');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('1');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
+        }
+
+        [Test]
+        public void DoesVeryLargeDigitDivisionWork()
+        {
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('8');
+            _controller.AcceptCharacter('8');
+            _controller.AcceptCharacter('8');
+            _controller.AcceptCharacter('8');
+            _controller.AcceptCharacter('0');
+            _controller.AcceptCharacter('0');
+            _controller.AcceptCharacter('1');
+            _controller.AcceptCharacter('/');
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('9');
+            _controller.AcceptCharacter('9');
+     
+            Assert.That(_controller.GetOutput(), Is.EqualTo("111999"));
+        }
+
+
+
     }
 }
