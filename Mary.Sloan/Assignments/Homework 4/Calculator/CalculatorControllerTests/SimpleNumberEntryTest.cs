@@ -21,6 +21,11 @@ namespace CalculatorControllerTests
         public void CanEnterSingleDigit()
         {
             Assert.That(_controller.AcceptCharacter('1'), Is.EqualTo("1"));
+            // There are several approaches - this is a small app, and you could easily create tests
+            // for each button.  Otherwise 1 and 0, a symbol, equals, and "C" would be the minimum.
+            // A happy medium would also include 5 and 9 to cover postioning, midline, and near a boundry.
+
+            Assert.That(_controller.AcceptCharacter('C'), Is.EqualTo("")); // I'm assuming that pressing 'C;' should return nothing as it should clear the textbox.
         }
 
         [Test]
