@@ -36,5 +36,111 @@ namespace CalculatorControllerTests
 
             Assert.That(_controller.GetOutput(), Is.EqualTo("13"));
         }
+
+        [Test]
+        public void CanClearCurrentDisplay()
+        {
+            _controller.AcceptCharacter('5');
+            _controller.AcceptCharacter('4');
+            _controller.Clear();
+
+            Assert.That(_controller.GetOutput(), Is.Empty);
+        }
+        
+        [Test]
+        public void CanNotDivideByZero()
+        {
+            _controller.AcceptCharacter('5');
+            _controller.AcceptCharacter('/');
+            _controller.AcceptCharacter('0');
+            _controller.AcceptCharacter('=');
+
+            Assert.That(_controller.GetOutput(), Is.EqualTo("Cannot be divided by zero"));
+        }
+
+        [Test]
+        public void CanMultiplyByZero()
+        {
+            _controller.AcceptCharacter('5');
+            _controller.AcceptCharacter('*');
+            _controller.AcceptCharacter('0');
+            _controller.AcceptCharacter('=');
+
+            Assert.That(_controller.GetOuput(),Is.EqualTo('0'));
+        }
+
+        [Test]
+        public void CanMultiplyByNegativeNumber()
+        {
+            _controller.AcceptCharacter('5');
+            _controller.AcceptCharacter('*');
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('4');
+            _controller.AcceptCharacter('=');
+            
+            Assert.That(_controller.GetOuput(), Is.EqualTo("-20"));
+        }
+
+        [Test]
+        public void CanDivideByNegativeNumber()
+        {
+            _controller.AcceptCharacter('2');
+            _controller.AcceptCharacter('0');
+            _controller.AcceptCharacter('/');
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('5');
+            _controller.AcceptCharacter('=');
+
+            Assert.That(_controller.GetOuput(), Is.EqualTo("-4"));
+        }
+
+        [Test]
+        public void CanAddTwoNegativeNumbers()
+        {
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('5');
+            _controller.AcceptCharacter('+');
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('5');
+            _controller.AcceptCharacter('=');
+
+            Assert.That(_controller.GetOuput(), Is.EqualTo("-10"));
+        }
+
+        [Test]
+        public void CanAddOneNegativeAndAnotherPositiveNumber()
+        {
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('5');
+            _controller.AcceptCharacter('+');
+            _controller.AcceptCharacter('8');
+            _controller.AcceptCharacter('=');
+           
+            Assert.That(_controller.GetOuput(), Is.EqualTo("3"));
+        }
+
+        [Test]
+        public void CanSubtractTwoNegativeNumbers()
+        {
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('5');
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('-');
+            _controller.AcceptCharacter('5');
+            _controller.AcceptCharacter('=');
+
+            Assert.That(_controller.GetOuput(), Is.EqualTo("-10"));
+        }
+
+        [Test]
+        public void CanEnterDigitsOneAfterAnother()
+        {
+            _controller.AcceptCharacter('5');
+            _controller.AcceptCharacter('0');
+            _controller.AcceptCharacter('5');
+            _controller.AcceptCharacter('=');
+
+            Assert.That(_controller.GetOuput(), Is.EqualTo("505"));
+        }
     }
 }
