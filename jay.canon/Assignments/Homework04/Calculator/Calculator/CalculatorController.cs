@@ -11,7 +11,7 @@
             // Your code will eventually go here, to make all of the tests pass.
 
             // DO NOT WRITE THIS CODE YET!  WRITING THIS CODE WILL BE HOMEWORK 5!
-
+            
             return GetOutput();
         }
 
