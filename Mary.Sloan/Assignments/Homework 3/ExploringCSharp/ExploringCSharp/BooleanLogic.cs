@@ -92,7 +92,8 @@
             // Implement this one from scratch so that all tests pass.  
             // Age is a whole number.  The intended values and meanings of the string "gender"
             // can be inferred from the tests.
-            return false;  // I don't see tests for this to infer from.  All tests are passing at this point.
+            
+            return gender != "F" && (gender != "M" || age < 25);
         }
     }
 }
