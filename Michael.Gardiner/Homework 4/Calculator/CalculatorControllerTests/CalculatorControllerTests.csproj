@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SimpleMultiplicationDevisionTests.cs" />
+    <Compile Include="SimpleAdditionSubtractionTests.cs" />
     <Compile Include="SimpleNumberEntryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
