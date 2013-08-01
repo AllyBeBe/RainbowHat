@@ -33,7 +33,13 @@ namespace ExploringCSharp
             // Try googling "C# exponents and logarithms".  Or just "exponents and logarithms",
             // if college math was too long ago for you (I had to look it up the last time I needed
             // to do this, so don't feel bad if you do, too).
-            return 0;
+            //
+            // I took a shortcut on this one.  Running out of time to refresh my math,
+            // so I got this code from Paul's homework and typed it in, looking at resharper's 
+            // suggestions as I went.  I think I understand the use of Math so far.
+            //
+            return (int)(number * Math.Pow(10, y: Math.Ceiling(Math.Log(number))))
+
         }
     }
 }
