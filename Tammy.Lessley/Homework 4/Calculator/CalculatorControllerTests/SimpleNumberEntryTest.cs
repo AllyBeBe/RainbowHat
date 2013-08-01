@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
+using NUnit.Framework;
 using Calculator;
 
 namespace CalculatorControllerTests
@@ -20,11 +22,18 @@ namespace CalculatorControllerTests
         [Test]
         public void CanEnterSingleDigit()
         {
-            Assert.That(_controller.AcceptCharacter('1'), Is.EqualTo("1"));
+            for (int a = 0; a <= 9; a++)
+            {
+                Assert.That(_controller.AcceptCharacter((char)a), Is.EqualTo(a.ToString(CultureInfo.InvariantCulture)));
+            }
+
         }
 
         [Test]
         public void CanEnterMultipleDigits()
+        
+        
+        
         {
             _controller.AcceptCharacter('1');
             _controller.AcceptCharacter('3');
@@ -36,5 +45,6 @@ namespace CalculatorControllerTests
 
             Assert.That(_controller.GetOutput(), Is.EqualTo("13"));
         }
+      
     }
 }
