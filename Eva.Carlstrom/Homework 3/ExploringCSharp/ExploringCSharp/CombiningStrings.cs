@@ -37,7 +37,7 @@ namespace ExploringCSharp
             // Okay, I'm thinking Equals is applicable.  In NetHack, if you get caught in the vault, the guard asks your name, and kicks you out unless you answer "Croesus", in which case the guard says, "Oh, of course, sir.  So sorry to have disturbed you."
             // So I could do that--check if the name equals a particular value & respond accordingly.  But I still don't see how to use it.  It's not letting me just grab options from the dropdown menu like I expected, and the syntax it seems to be showing me doesn't match the bit I've already done.
 
-            builder.Equals()
+            builder.Equals();
             return builder.ToString();
         }
     }
