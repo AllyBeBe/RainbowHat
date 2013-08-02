@@ -38,7 +38,7 @@ namespace ExploringCSharp
             // so I got this code from Paul's homework and typed it in, looking at resharper's 
             // suggestions as I went.  I think I understand the use of Math so far.
             //
-            return (int)(number * Math.Pow(10, y: Math.Ceiling(Math.Log(number))))
+            return (int) (number*Math.Pow(10, y: Math.Ceiling(Math.Log(number))));
 
         }
     }
