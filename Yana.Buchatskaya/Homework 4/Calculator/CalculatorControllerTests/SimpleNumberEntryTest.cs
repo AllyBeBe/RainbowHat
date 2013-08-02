@@ -66,7 +66,7 @@ namespace CalculatorControllerTests
             _controller.AcceptCharacter('0');
             _controller.AcceptCharacter('=');
 
-            Assert.That(_controller.GetOuput(),Is.EqualTo('0'));
+            Assert.That(_controller.GetOutput(),Is.EqualTo('0'));
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace CalculatorControllerTests
             _controller.AcceptCharacter('4');
             _controller.AcceptCharacter('=');
             
-            Assert.That(_controller.GetOuput(), Is.EqualTo("-20"));
+            Assert.That(_controller.GetOutput(), Is.EqualTo("-20"));
         }
 
         [Test]
@@ -91,7 +91,7 @@ namespace CalculatorControllerTests
             _controller.AcceptCharacter('5');
             _controller.AcceptCharacter('=');
 
-            Assert.That(_controller.GetOuput(), Is.EqualTo("-4"));
+            Assert.That(_controller.GetOutput(), Is.EqualTo("-4"));
         }
 
         [Test]
@@ -104,7 +104,7 @@ namespace CalculatorControllerTests
             _controller.AcceptCharacter('5');
             _controller.AcceptCharacter('=');
 
-            Assert.That(_controller.GetOuput(), Is.EqualTo("-10"));
+            Assert.That(_controller.GetOutput(), Is.EqualTo("-10"));
         }
 
         [Test]
@@ -116,7 +116,7 @@ namespace CalculatorControllerTests
             _controller.AcceptCharacter('8');
             _controller.AcceptCharacter('=');
            
-            Assert.That(_controller.GetOuput(), Is.EqualTo("3"));
+            Assert.That(_controller.GetOutput(), Is.EqualTo("3"));
         }
 
         [Test]
@@ -129,7 +129,7 @@ namespace CalculatorControllerTests
             _controller.AcceptCharacter('5');
             _controller.AcceptCharacter('=');
 
-            Assert.That(_controller.GetOuput(), Is.EqualTo("-10"));
+            Assert.That(_controller.GetOutput(), Is.EqualTo("-10"));
         }
 
         [Test]
@@ -140,7 +140,7 @@ namespace CalculatorControllerTests
             _controller.AcceptCharacter('5');
             _controller.AcceptCharacter('=');
 
-            Assert.That(_controller.GetOuput(), Is.EqualTo("505"));
+            Assert.That(_controller.GetOutput(), Is.EqualTo("505"));
         }
     }
 }
