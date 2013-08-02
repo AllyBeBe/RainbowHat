@@ -21,6 +21,8 @@ namespace CalculatorControllerTests
         public void CanEnterSingleDigit()
         {
             Assert.That(_controller.AcceptCharacter('1'), Is.EqualTo("1"));
+            Assert.That(_controller.AcceptCharacter('0'), Is.EqualTo("0"));
+            Assert.That(_controller.AcceptCharacter('9'), Is.EqualTo("9"));
         }
 
         [Test]
@@ -33,8 +35,8 @@ namespace CalculatorControllerTests
             // "Contains" class returns a constraint that requires that the value being tested contain the
             // substring "3".
             Assert.That(_controller.GetOutput(), Contains.Substring("3"));
-
             Assert.That(_controller.GetOutput(), Is.EqualTo("13"));
+
         }
     }
 }
