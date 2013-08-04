@@ -107,5 +107,10 @@ namespace Calculator
             _controller.Clear();
             output.Text = _controller.GetOutput();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

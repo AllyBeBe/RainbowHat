@@ -1,4 +1,6 @@
-﻿namespace Calculator
+﻿using System.Runtime.InteropServices;
+
+namespace Calculator
 {
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
@@ -12,15 +14,16 @@
 
             // DO NOT WRITE THIS CODE YET!  WRITING THIS CODE WILL BE HOMEWORK 5!
 
-            return GetOutput();
+            return GetOutput(input);
         }
 
         // Someday, this method will return the string that should be displayed in the "output window" of the 
         // calculator.  For now, it just returns a dummy value of "13", since the compiler requires that it
         // return something.
-        public string GetOutput()
+        public string GetOutput(char input)
         {
-            return "13";
+            
+            return input;
         }
 
         public void Clear()
@@ -29,6 +32,11 @@
             // I added it to the public interface of the CalculatorController class so that tests
             // can share a CalculatorController instance -- they just need to call "Clear" before 
             // each test.
+          
+
         }
+
+      
+
     }
 }

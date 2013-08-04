@@ -52,6 +52,20 @@ namespace CalculatorControllerTests
             Assert.That(_controller.GetOutput(), Is.EqualTo("13"));
         }
 
+        public void CalculatorStartOffShowingZero()
+        {
+            CalculatorController calc1 = new CalculatorController();
+            
+            Assert.That(calc1.GetOutput(), Is.EqualTo("0"));
+        }
+
+        public void CalculatorClearButtonResetsValue()
+        {
+            CalculatorController calc1 = new CalculatorController();
+            Assert.That(calc1.GetOutput(), Is.EqualTo("0"));
+        
+        }
+
        
 
     }
