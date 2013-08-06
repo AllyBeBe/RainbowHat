@@ -24,7 +24,8 @@ namespace Calculator
         // and it's really easy to visually verify that each method does the intended thing.
         private void HandleInput(char input)
         {
-            output.Text = _controller.AcceptCharacter(input);
+            _controller.AcceptCharacter(input);
+            output.Text = _controller.GetOutput();
         }
 
 
@@ -104,8 +105,7 @@ namespace Calculator
 
         private void ButtonClearClick(object sender, EventArgs e)
         {
-            _controller.Clear();
-            output.Text = _controller.GetOutput();
+            HandleInput('c');
         }
     }
 }

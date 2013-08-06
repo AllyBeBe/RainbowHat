@@ -14,7 +14,7 @@ namespace CalculatorControllerTests
         [SetUp]
         public void BeforeEachTest()
         {
-            _controller.Clear();
+            _controller.AcceptCharacter('c');
         }
 
         [Test]
@@ -26,7 +26,8 @@ namespace CalculatorControllerTests
         [Test]
         public void CanEnterSingleDigit()
         {
-            Assert.That(_controller.AcceptCharacter('1'), Is.EqualTo("1"));
+            _controller.AcceptCharacter('1');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("1"));
         }
 
 
@@ -47,134 +48,196 @@ namespace CalculatorControllerTests
         [Test]
         public void CanEnterEachDigit()
         {
-            Assert.That(_controller.AcceptCharacter('1'), Is.EqualTo("1"));
-            Assert.That(_controller.AcceptCharacter('2'), Is.EqualTo("12"));
-            Assert.That(_controller.AcceptCharacter('3'), Is.EqualTo("123"));
-            Assert.That(_controller.AcceptCharacter('4'), Is.EqualTo("1234"));
-            Assert.That(_controller.AcceptCharacter('5'), Is.EqualTo("12345"));
-            Assert.That(_controller.AcceptCharacter('6'), Is.EqualTo("123456"));
-            Assert.That(_controller.AcceptCharacter('7'), Is.EqualTo("1234567"));
-            Assert.That(_controller.AcceptCharacter('8'), Is.EqualTo("12345678"));
-            Assert.That(_controller.AcceptCharacter('9'), Is.EqualTo("123456789"));
-            Assert.That(_controller.AcceptCharacter('0'), Is.EqualTo("1234567890")); // overflow yet???
-            Assert.That(_controller.AcceptCharacter('C'), Is.EqualTo("0"));
+            _controller.AcceptCharacter('1');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("1"));
+            _controller.AcceptCharacter('2');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("12"));
+            _controller.AcceptCharacter('3');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("123"));
+            _controller.AcceptCharacter('4');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("1234"));
+            _controller.AcceptCharacter('5');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("12345"));
+            _controller.AcceptCharacter('6');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("123456"));
+            _controller.AcceptCharacter('7');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("1234567"));
+            _controller.AcceptCharacter('8');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("12345678"));
+            _controller.AcceptCharacter('9');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("123456789"));
+            _controller.AcceptCharacter('0');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("1234567890")); // overflow yet???
+            _controller.AcceptCharacter('C');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
         }
 
         [Test]
         public void CanIgnoreLeadingZeros()
         {
-            Assert.That(_controller.AcceptCharacter('0'), Is.EqualTo("0"));
-            Assert.That(_controller.AcceptCharacter('2'), Is.EqualTo("2")); // not "02"
+            _controller.AcceptCharacter('0');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
+            _controller.AcceptCharacter('2');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("2")); // not "02"
         }
 
         [Test]
         public void CanDoBasicAdd() //    +  -  *  /  =  C
         {
-            Assert.That(_controller.AcceptCharacter('2'), Is.EqualTo("2"));
-            Assert.That(_controller.AcceptCharacter('+'), Is.EqualTo("2"));
-            Assert.That(_controller.AcceptCharacter('6'), Is.EqualTo("6"));
-            Assert.That(_controller.AcceptCharacter('='), Is.EqualTo("8"));
+            _controller.AcceptCharacter('2');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("2"));
+            _controller.AcceptCharacter('+');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("2"));
+            _controller.AcceptCharacter('6');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("6"));
+            _controller.AcceptCharacter('=');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
         }
 
         [Test]
         public void CanDoMultipleDigitAdd() //    +  -  *  /  =  C
         {
-            Assert.That(_controller.AcceptCharacter('2'), Is.EqualTo("2"));
-            Assert.That(_controller.AcceptCharacter('8'), Is.EqualTo("28"));
-            Assert.That(_controller.AcceptCharacter('+'), Is.EqualTo("28"));
-            Assert.That(_controller.AcceptCharacter('9'), Is.EqualTo("9"));
-            Assert.That(_controller.AcceptCharacter('1'), Is.EqualTo("91"));
-            Assert.That(_controller.AcceptCharacter('='), Is.EqualTo("119"));
+            _controller.AcceptCharacter('2');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("2"));
+            _controller.AcceptCharacter('8');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("28"));
+            _controller.AcceptCharacter('+');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("28"));
+            _controller.AcceptCharacter('9');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
+            _controller.AcceptCharacter('1');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("91"));
+            _controller.AcceptCharacter('=');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("119"));
         }
 
 
         [Test]
         public void CanDoBasicSubtract() //    +  -  *  /  =  C
         {
-            Assert.That(_controller.AcceptCharacter('7'), Is.EqualTo("7"));
-            Assert.That(_controller.AcceptCharacter('-'), Is.EqualTo("7"));
-            Assert.That(_controller.AcceptCharacter('3'), Is.EqualTo("3"));
-            Assert.That(_controller.AcceptCharacter('='), Is.EqualTo("4"));
+            _controller.AcceptCharacter('7');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("7"));
+            _controller.AcceptCharacter('-');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("7"));
+            _controller.AcceptCharacter('3');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("3"));
+            _controller.AcceptCharacter('=');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("4"));
         }
 
         [Test]
         public void CanDoUnarySubtract() //    +  -  *  /  =  C
         {
-            Assert.That(_controller.AcceptCharacter('-'), Is.EqualTo("0"));
-            Assert.That(_controller.AcceptCharacter('9'), Is.EqualTo("9"));
-            Assert.That(_controller.AcceptCharacter('='), Is.EqualTo("-9"));
+            _controller.AcceptCharacter('-');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
+            _controller.AcceptCharacter('9');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
+            _controller.AcceptCharacter('=');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("-9"));
         }
                
         [Test]
         public void CanGoNegativeOnSubtract() //    +  -  *  /  =  C
         {
-            Assert.That(_controller.AcceptCharacter('7'), Is.EqualTo("7"));
-            Assert.That(_controller.AcceptCharacter('-'), Is.EqualTo("7"));
-            Assert.That(_controller.AcceptCharacter('9'), Is.EqualTo("9"));
-            Assert.That(_controller.AcceptCharacter('='), Is.EqualTo("-2"));
+            _controller.AcceptCharacter('7');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("7"));
+            _controller.AcceptCharacter('-');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("7"));
+            _controller.AcceptCharacter('9');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
+            _controller.AcceptCharacter('=');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("-2"));
         }
 
         [Test]
         public void CanDoBasicMultiply() //    +  -  *  /  =  C
         {
-            Assert.That(_controller.AcceptCharacter('4'), Is.EqualTo("4"));
-            Assert.That(_controller.AcceptCharacter('*'), Is.EqualTo("4"));
-            Assert.That(_controller.AcceptCharacter('5'), Is.EqualTo("5"));
-            Assert.That(_controller.AcceptCharacter('='), Is.EqualTo("20"));
+            _controller.AcceptCharacter('4');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("4"));
+            _controller.AcceptCharacter('*');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("4"));
+            _controller.AcceptCharacter('5');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("5"));
+            _controller.AcceptCharacter('=');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("20"));
         }
 
         [Test]
         public void CanHandleUnaryMultiply() //    +  -  *  /  =  C
         {
-            Assert.That(_controller.AcceptCharacter('*'), Is.EqualTo("0"));
-            Assert.That(_controller.AcceptCharacter('9'), Is.EqualTo("9"));
-            Assert.That(_controller.AcceptCharacter('='), Is.EqualTo("0"));
+            _controller.AcceptCharacter('*');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
+            _controller.AcceptCharacter('9');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
+            _controller.AcceptCharacter('=');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
         }
 
         [Test]
         public void CanMultiplyNegative()
         {
-            Assert.That(_controller.AcceptCharacter('-'), Is.EqualTo("0"));
-            Assert.That(_controller.AcceptCharacter('9'), Is.EqualTo("9"));
-            Assert.That(_controller.AcceptCharacter('*'), Is.EqualTo("-9"));
-            Assert.That(_controller.AcceptCharacter('5'), Is.EqualTo("5"));
-            Assert.That(_controller.AcceptCharacter('='), Is.EqualTo("-45"));
+            _controller.AcceptCharacter('-');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
+            _controller.AcceptCharacter('9');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
+            _controller.AcceptCharacter('*');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("-9"));
+            _controller.AcceptCharacter('5');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("5"));
+            _controller.AcceptCharacter('=');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("-45"));
         }
 
         [Test]
-        public void CanDoBasicDivide() 
+        public void CanDoBasicDivide()
         {
-            Assert.That(_controller.AcceptCharacter('8'), Is.EqualTo("8"));
-            Assert.That(_controller.AcceptCharacter('/'), Is.EqualTo("8"));
-            Assert.That(_controller.AcceptCharacter('2'), Is.EqualTo("2"));
-            Assert.That(_controller.AcceptCharacter('='), Is.EqualTo("4"));
+            _controller.AcceptCharacter('8');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
+            _controller.AcceptCharacter('/');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
+            _controller.AcceptCharacter('2');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("2"));
+            _controller.AcceptCharacter('=');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("4"));
         }
 
         [Test]
-        public void CanHandleUnaryDivide() 
+        public void CanHandleUnaryDivide()
         {
-            Assert.That(_controller.AcceptCharacter('/'), Is.EqualTo("0"));
-            Assert.That(_controller.AcceptCharacter('9'), Is.EqualTo("9"));
-            Assert.That(_controller.AcceptCharacter('='), Is.EqualTo("0"));
+            _controller.AcceptCharacter('/');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
+            _controller.AcceptCharacter('9');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
+            _controller.AcceptCharacter('=');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
         }
 
         [Test]
         public void CatchDivideByZero()
-        {      
-            Assert.That(_controller.AcceptCharacter('8'), Is.EqualTo("8"));
-            Assert.That(_controller.AcceptCharacter('/'), Is.EqualTo("8"));
-            Assert.That(_controller.AcceptCharacter('0'), Is.EqualTo("0"));
-            Assert.That(_controller.AcceptCharacter('='), Is.EqualTo("Error:Divide by 0"));  // or some other shorter message
+        {
+            _controller.AcceptCharacter('8');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
+            _controller.AcceptCharacter('/');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
+            _controller.AcceptCharacter('0');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
+            _controller.AcceptCharacter('=');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("Error:Divide by 0"));  // or some other shorter message
         }
 
         [Test]
         public void CatchNotDivideByZero()
         {
-            Assert.That(_controller.AcceptCharacter('8'), Is.EqualTo("8"));
-            Assert.That(_controller.AcceptCharacter('/'), Is.EqualTo("8"));
-            Assert.That(_controller.AcceptCharacter('0'), Is.EqualTo("0"));
-            Assert.That(_controller.AcceptCharacter('1'), Is.EqualTo("1"));
-            Assert.That(_controller.AcceptCharacter('='), Is.EqualTo("8"));
+            _controller.AcceptCharacter('8');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
+            _controller.AcceptCharacter('/');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
+            _controller.AcceptCharacter('0');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
+            _controller.AcceptCharacter('1');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("1"));
+            _controller.AcceptCharacter('=');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
         }
 
         //  CanPerformMultipleOperations   15+3-8*20=

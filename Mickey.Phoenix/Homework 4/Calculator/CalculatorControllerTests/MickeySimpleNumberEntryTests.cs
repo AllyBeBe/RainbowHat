@@ -1,23 +1,17 @@
 ﻿using System;
 using NUnit.Framework;
-using Calculator;
 
 namespace CalculatorControllerTests
 {
+    // By adding ": BaseTestFixture" here, I cause this class to "inherit" its behavior from the
+    // class BaseTestFixture.  Thus, I can call the methods "EnterNumber()" and "AssertOutput()" as
+    // if they were my own methods.
+    //
+    // If you want to use these same methods in your test fixtures, you should similarly add
+    // ": BaseTestFixture" to your test fixture class declarations.
     [TestFixture]
-    public class MickeySimpleNumberEntryTests
+    public class MickeySimpleNumberEntryTests : BaseTestFixture
     {
-        // This CalculatorController instance will be created before any test is run, and will be used by each test in turn.
-        private readonly CalculatorController _controller = new CalculatorController();
-
-        // The method that is marked with the [SetUp] annotation is run before each test is run.
-        // In this case, its purpose is to call Clear() on the CalculatorController so that each test starts with a clean slate.
-        [SetUp]
-        public void BeforeEachTest()
-        {
-            _controller.Clear();
-        }
-
         [Test]
         public void DigitsAreAddedToTheRightOfTheCurrentValue()
         {
@@ -34,11 +28,11 @@ namespace CalculatorControllerTests
 
             // Actual test code, where each line (approximately) corresponds to a line of the pseudocode
             EnterNumber(1);
-            Assert.That(_controller.GetOutput(), Is.EqualTo("1"));
+            AssertOutput("1");
             EnterNumber(3);
-            Assert.That(_controller.GetOutput(), Is.EqualTo("13"));
+            AssertOutput("13");
             EnterNumber(7);
-            Assert.That(_controller.GetOutput(), Is.EqualTo("137"));
+            AssertOutput("137");
         }
 
         [Test]
@@ -49,7 +43,7 @@ namespace CalculatorControllerTests
             EnterNumber(3);
             AcceptCharacters("=");
 
-            Assert.AreEqual("10", _controller.GetOutput());
+            AssertOutput("10");
         }
 
         [Test]
@@ -60,60 +54,23 @@ namespace CalculatorControllerTests
             EnterNumber(3);
             AcceptCharacters("+");
 
-            Assert.AreEqual("13", _controller.GetOutput());
+            AssertOutput("13");
 
             EnterNumber(15);
 
-            Assert.AreEqual("15", _controller.GetOutput());
+            AssertOutput("15");
 
             AcceptCharacters("=");
 
-            Assert.AreEqual("28", _controller.GetOutput());
+            AssertOutput("28");
         }
 
+        // This is the "long form" of "CanExceedMaxInt()", without the helper functions.
+        // When you find yourself writing a test like this, it's a good indicator that you may
+        // want to consider writing some helper functions to handle the "busy-work" of the
+        // test (such as entering each character of a number manually).
         [Test]
-        public void CanExceedMaxInt()
-        {
-            EnterNumber(int.MaxValue);
-            AcceptCharacters("+");
-            EnterNumber(int.MaxValue);
-            AcceptCharacters("=");
-
-            long expectedResult = (long)int.MaxValue + int.MaxValue;
-
-            Assert.AreEqual(expectedResult.ToString(), _controller.GetOutput());
-        }
-
-        [Test]
-        public void CanExceedMaxLong()
-        {
-            EnterNumber(long.MaxValue);
-            AcceptCharacters("+");
-            EnterNumber(long.MaxValue);
-            AcceptCharacters("=");
-
-            Decimal expectedResult = new Decimal(long.MaxValue) + new decimal(long.MaxValue);
-
-            Assert.AreEqual(expectedResult.ToString(), _controller.GetOutput());
-        }
-
-        // These helper functions make it easier to express simple interactions with the calculator, without having to
-        // have ten or fifteen lines of "_controller.AcceptCharacter('7');" and so on
-        private void EnterNumber(Decimal input)
-        {
-            AcceptCharacters(input.ToString());
-        }
-
-        private void AcceptCharacters(string inputString)
-        {
-            foreach (char expressionChar in inputString)
-            {
-                _controller.AcceptCharacter(expressionChar);
-            }
-        }
-
-        [Test]
-        public void CanAddMaxIntToMaxInt()
+        public void CanExceedMaxIntLongForm()
         {
             // Enter Int.MaxValue
             _controller.AcceptCharacter('2');
@@ -142,9 +99,33 @@ namespace CalculatorControllerTests
             _controller.AcceptCharacter('4');
             _controller.AcceptCharacter('7');
 
-            long expectedResult = (long)int.MaxValue + int.MaxValue;
+            const long expectedResult = (long)int.MaxValue + int.MaxValue;
             Assert.AreEqual(expectedResult.ToString(), _controller.GetOutput());
         }
 
+        [Test]
+        public void CanExceedMaxInt()
+        {
+            EnterNumber(int.MaxValue);
+            AcceptCharacters("+");
+            EnterNumber(int.MaxValue);
+            AcceptCharacters("=");
+
+            const long expectedResult = (long)int.MaxValue + int.MaxValue;
+            AssertOutput(expectedResult.ToString());
+        }
+
+        [Test]
+        public void CanExceedMaxLong()
+        {
+            EnterNumber(long.MaxValue);
+            AcceptCharacters("+");
+            EnterNumber(long.MaxValue);
+            AcceptCharacters("=");
+
+            Decimal expectedResult = new Decimal(long.MaxValue) + new decimal(long.MaxValue);
+
+            AssertOutput(expectedResult.ToString());
+        }
     }
 }

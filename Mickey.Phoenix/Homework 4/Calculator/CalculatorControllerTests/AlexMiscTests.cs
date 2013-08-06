@@ -13,7 +13,7 @@ namespace CalculatorControllerTests
         [SetUp]
         public void BeforeEachTest()
         {
-            _controller.Clear();
+            _controller.AcceptCharacter('c');
         }
 
         [Test]

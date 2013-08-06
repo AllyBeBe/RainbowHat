@@ -14,13 +14,14 @@ namespace CalculatorControllerTests
         [SetUp]
         public void BeforeEachTest()
         {
-            _controller.Clear();
+            _controller.AcceptCharacter('c');
         }
 
         [Test]
         public void CanEnterSingleDigit()
         {
-            Assert.That(_controller.AcceptCharacter('1'), Is.EqualTo("1"));
+            _controller.AcceptCharacter('1');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("1"));
         }
 
         [Test]
@@ -42,7 +43,8 @@ namespace CalculatorControllerTests
         {
             _controller.AcceptCharacter('5');
             _controller.AcceptCharacter('4');
-            _controller.Clear();
+
+            _controller.AcceptCharacter('c');
 
             Assert.That(_controller.GetOutput(), Is.Empty);
         }

@@ -15,7 +15,7 @@ namespace CalculatorControllerTests
         [SetUp]
         public void BeforeEachTest()
         {
-            _controller.Clear();
+            _controller.AcceptCharacter('c');
         }
 
         private bool DoMath(char @operator)

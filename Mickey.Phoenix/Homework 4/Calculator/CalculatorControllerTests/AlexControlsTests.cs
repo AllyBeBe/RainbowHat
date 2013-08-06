@@ -13,7 +13,7 @@ namespace CalculatorControllerTests
         [SetUp]
         public void BeforeEachTest()
         {
-            _controller.Clear();
+            _controller.AcceptCharacter('c');
         }
 
         [Test]
@@ -29,7 +29,8 @@ namespace CalculatorControllerTests
             const string operators = "+-*/";
             foreach (char @operator in operators)
             {
-                Assert.That(_controller.AcceptCharacter(@operator), Is.EqualTo(@operator.ToString()));
+                _controller.AcceptCharacter(@operator);
+                Assert.That(_controller.GetOutput(), Is.EqualTo(@operator.ToString()));
             }
         }
     }
