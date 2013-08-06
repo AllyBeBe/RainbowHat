@@ -22,5 +22,13 @@
         {
             return "13";
         }
+
+        public void Clear()
+        {
+            // Someday, this method will reset the calculator controller to a "like-new" state.
+            // I added it to the public interface of the CalculatorController class so that tests
+            // can share a CalculatorController instance -- they just need to call "Clear" before 
+            // each test.
+        }
     }
 }
