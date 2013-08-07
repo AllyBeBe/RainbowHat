@@ -68,7 +68,7 @@ namespace CalculatorControllerTests
             Assert.That(_controller.GetOutput(), Is.EqualTo("123456789"));
             _controller.AcceptCharacter('0');
             Assert.That(_controller.GetOutput(), Is.EqualTo("1234567890")); // overflow yet???
-            _controller.AcceptCharacter('C');
+            _controller.AcceptCharacter('c');
             Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
         }
 
@@ -222,7 +222,7 @@ namespace CalculatorControllerTests
             _controller.AcceptCharacter('0');
             Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
             _controller.AcceptCharacter('=');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("Error:Divide by 0"));  // or some other shorter message
+            Assert.That(_controller.GetOutput(), Is.EqualTo("Divide by Zero"));  // or some other shorter message
         }
 
         [Test]

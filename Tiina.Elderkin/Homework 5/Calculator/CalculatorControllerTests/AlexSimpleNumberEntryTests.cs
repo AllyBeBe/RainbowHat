@@ -25,6 +25,8 @@ namespace CalculatorControllerTests
         {
             for (int i = 0; i < 9; i++)
             {
+                _controller.AcceptCharacter('c');  // loop will create an additive string
+
                 _controller.AcceptCharacter((char) i);
                 Assert.That(_controller.GetOutput(), Is.EqualTo(i.ToString()));   
             }

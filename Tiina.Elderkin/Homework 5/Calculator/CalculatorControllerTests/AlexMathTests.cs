@@ -27,16 +27,16 @@ namespace CalculatorControllerTests
             switch (@operator)
             {
                 case '+':
-                    expectedResult = number1 + number2;
+                    expectedResult = number1 + number2;  // this will fail if the combination of the two numbers is > int.MaxValue
                     break;
                 case '-':
-                    expectedResult = number1 - number2;
+                    expectedResult = number1 - number2;   // this does not test any subtraction where the first number is negative
                     break;
                 case '*':
-                    expectedResult = number1 * number2;
+                    expectedResult = number1 * number2;   // will fail if overflow
                     break;
                 case '/':
-                    expectedResult = number1 / number2;
+                    expectedResult = number1 / number2;   // will fail if number2 is zero
                     break;
             }
             

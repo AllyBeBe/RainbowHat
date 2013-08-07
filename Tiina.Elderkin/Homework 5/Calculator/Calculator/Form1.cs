@@ -107,5 +107,15 @@ namespace Calculator
         {
             HandleInput('c');
         }
+
+        private void output_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonEquals_Click(object sender, EventArgs e)
+        {
+            HandleInput('=');
+        }
     }
 }
