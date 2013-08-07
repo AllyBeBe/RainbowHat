@@ -17,6 +17,7 @@ namespace ExploringCSharp
         /*
          * only works for zero and above numbers
          */
+
         public int MultiplyByTheNextLargerPowerOfTen(int number)
         {
             if (number == 0)
@@ -35,7 +36,11 @@ namespace ExploringCSharp
             {
                 return number*100;
             }
-            return number*1000;
+            if (number <= 1000)
+            {
+                return number*1000;
+            }
+            return number*10000;
         }
     }
 }
