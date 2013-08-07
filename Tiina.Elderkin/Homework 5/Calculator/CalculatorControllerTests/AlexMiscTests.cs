@@ -27,7 +27,7 @@ namespace CalculatorControllerTests
         }
 
         [Test]
-        public void CanProcessDecimals()
+        public void CanProcessDecimals_Disabled()
         {
             _controller.AcceptCharacter('.');
             // Assert.That(_controller.GetOutput(), Contains.Substring(".")); // not part of this project

@@ -56,9 +56,10 @@ namespace Calculator
                 case '-':
                 case '/':
                 case '*':
-                    _buildingNumber = false;
-                    _ApplyOperator();
+                    if (_buildingNumber)
+                        _ApplyPrevOperator();
                     _activeOperator = input;
+                    _buildingNumber = false;
                     break;
                 case 'c':
                     _activeOperator = '+' ;
@@ -71,7 +72,7 @@ namespace Calculator
         }
 
 
-        private void _ApplyOperator()
+        private void _ApplyPrevOperator()
         {
             switch (_activeOperator)
             {
@@ -112,6 +113,7 @@ namespace Calculator
                     break;
              }
              _currentValue = 0;
+             _activeOperator = ' ';
 
         }
         public string GetOutput()
