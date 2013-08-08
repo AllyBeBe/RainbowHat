@@ -53,8 +53,7 @@
     <Compile Include="NumberEntryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleBehaviorsTests.cs" />
-    <Compile Include="TammyNumberManipulationTests.cs" />
-    <Compile Include="TammySimpleNumberEntryTests.cs" />
+    <Compile Include="TammyTests.cs" />
     <Compile Include="TiinaTests.cs" />
     <Compile Include="YanaTests.cs" />
   </ItemGroup>
