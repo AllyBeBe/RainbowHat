@@ -47,6 +47,7 @@
     <Compile Include="AlexSimpleNumberEntryTests.cs" />
     <Compile Include="BaseTestFixture.cs" />
     <Compile Include="BryanTests.cs" />
+    <Compile Include="PaulTests.cs" />
     <Compile Include="JayTests.cs" />
     <Compile Include="MickeySimpleNumberEntryTests.cs" />
     <Compile Include="MikeTests.cs" />
