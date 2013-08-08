@@ -42,14 +42,10 @@ namespace Calculator
                 case '8':
                 case '9':
                     _buildingNumber = true;
-                    if ((int.MaxValue - (input - '0'))/10 > _currentValue)
-                    {
+                    if ((int.MaxValue - (input - '0'))/10 >= _currentValue) 
                         _currentValue = _currentValue*10 + (input - '0');
-                    }
                     else
-                    {
                         _OutOfRangeWarning = "too big"; // calc just plays a 'ding' instead
-                    }
                     break;
                 case '=':
                 case '+': 
@@ -62,10 +58,7 @@ namespace Calculator
                     _buildingNumber = false;
                     break;
                 case 'c':
-                    _activeOperator = '+' ;
-                    _accumulator = 0;
-                    _currentValue = 0;
-                    _OutOfRangeWarning = "";
+                    _Reset();
                     break;
                 // anything else is simply ignored
             }
@@ -76,9 +69,9 @@ namespace Calculator
         {
             switch (_activeOperator)
             {
-                //case '=':  // end of computation, just resetting modes
-                  //   _accumulator = _currentValue;
-                   //  break;
+                case '=':  // end of previous computation, transfer new base value to the accumulator
+                      _accumulator = _currentValue;
+                     break;
                 case '+':
                      if (_accumulator > 0  && (int.MaxValue - _accumulator) < _currentValue)
                          _OutOfRangeWarning = "overflow"; // calc switches to scientific notation
@@ -87,29 +80,21 @@ namespace Calculator
                      break;
                 case '-':
                     if (_accumulator < 0 && (_accumulator - int.MinValue ) < _currentValue)
-                    {
                         _OutOfRangeWarning = "underflow"; // calc switches to scientific notation
-                    }
                     else
-                    {
                         _accumulator -= _currentValue;
-                    }
                     break;
                 case '*':
                     if (_accumulator > 0 && (int.MaxValue/_accumulator) < _currentValue)
-                    {
                         _OutOfRangeWarning = "overflow"; // calc switches to scientific notation
-                    }
                     else
-                    {
                         _accumulator *= _currentValue;
-                    }
                     break;
                 case '/':
                     if (_currentValue == 0)
                         _OutOfRangeWarning = "Divide by Zero";
                     else
-                        _accumulator /= _currentValue;  // since this is integer calculator, it is currently DIV instead of true divide.
+                        _accumulator /= _currentValue;  //  this is currently an integer calculator so this is currently DIV instead of true divide.
                     break;
              }
              _currentValue = 0;

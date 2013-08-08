@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Calculator;
 
 namespace CalculatorControllerTests
@@ -8,6 +9,15 @@ namespace CalculatorControllerTests
     {
         // This CalculatorController instance will be created before any test is run, and will be used by each test in turn.
         private readonly CalculatorController _controller = new CalculatorController();
+
+        private void stuffAndExpect(string StuffIt, string Expecting)
+        {
+            foreach (char buttonpress in StuffIt )
+            {
+                _controller.AcceptCharacter(buttonpress);
+            }
+            Assert.That(_controller.GetOutput(),Is.EqualTo(Expecting));
+        }
 
         // The method that is marked with the [SetUp] annotation is run before each test is run.
         // In this case, its purpose is to call Clear() on the CalculatorController so that each test starts with a clean slate.
@@ -26,237 +36,256 @@ namespace CalculatorControllerTests
         [Test]
         public void CanEnterSingleDigit()
         {
-            _controller.AcceptCharacter('1');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("1"));
+            stuffAndExpect("1", "1"); 
         }
 
 
         [Test]
         public void CanEnterMultipleDigits()
         {
-            _controller.AcceptCharacter('1');  
-            _controller.AcceptCharacter('3');
-
-            // An example of a constraint other than "Is"  In this case, the Substring() method of the
-            // "Contains" class returns a constraint that requires that the value being tested contain the
-            // substring "3".
-            Assert.That(_controller.GetOutput(), Contains.Substring("3"));
-            Assert.That(_controller.GetOutput(), Is.EqualTo("13"));
+            stuffAndExpect("13", "13"); 
         }
 
 
         [Test]
         public void CanEnterEachDigit()
+            // tests if the controller can build substantial multidigit numbers and that each digit is mapped correctly
         {
-            _controller.AcceptCharacter('1');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("1"));
-            _controller.AcceptCharacter('2');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("12"));
-            _controller.AcceptCharacter('3');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("123"));
-            _controller.AcceptCharacter('4');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("1234"));
-            _controller.AcceptCharacter('5');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("12345"));
-            _controller.AcceptCharacter('6');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("123456"));
-            _controller.AcceptCharacter('7');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("1234567"));
-            _controller.AcceptCharacter('8');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("12345678"));
-            _controller.AcceptCharacter('9');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("123456789"));
-            _controller.AcceptCharacter('0');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("1234567890")); // overflow yet???
-            _controller.AcceptCharacter('c');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
+            stuffAndExpect("1", "1");
+            stuffAndExpect("2", "12");
+            stuffAndExpect("3", "123");
+            stuffAndExpect("4", "1234");
+            stuffAndExpect("5", "12345");
+            stuffAndExpect("6", "123456");
+            stuffAndExpect("7", "1234567");
+            stuffAndExpect("8", "12345678");
+            stuffAndExpect("9", "123456789");
+            stuffAndExpect("0", "1234567890");
+
+        }
+
+        [Test ]
+        public void CanUseResetButton()
+        {
+            stuffAndExpect("c","0");  // don't have a good way of testing if anything internally TRULY cleared out.
         }
 
         [Test]
         public void CanIgnoreLeadingZeros()
         {
-            _controller.AcceptCharacter('0');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
-            _controller.AcceptCharacter('2');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("2")); // not "02"
+            stuffAndExpect("0","0"); // should see initial zero
+            stuffAndExpect("2","2"); // rather than "02"
         }
 
         [Test]
-        public void CanDoBasicAdd() //    +  -  *  /  =  C
+        public void CanDoBasicAdd()
         {
-            _controller.AcceptCharacter('2');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("2"));
-            _controller.AcceptCharacter('+');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("2"));
-            _controller.AcceptCharacter('6');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("6"));
-            _controller.AcceptCharacter('=');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
+            stuffAndExpect("2+6=", "8");
         }
 
         [Test]
-        public void CanDoMultipleDigitAdd() //    +  -  *  /  =  C
+        public void BasicAddDisplaysCorrectly()
         {
-            _controller.AcceptCharacter('2');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("2"));
-            _controller.AcceptCharacter('8');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("28"));
-            _controller.AcceptCharacter('+');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("28"));
-            _controller.AcceptCharacter('9');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
-            _controller.AcceptCharacter('1');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("91"));
-            _controller.AcceptCharacter('=');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("119"));
+            stuffAndExpect("3","3");
+            stuffAndExpect("+", "3");
+            stuffAndExpect("7","7");
+            stuffAndExpect("=", "10");
+        }
+
+        [Test]
+        public void CanDoMultipleDigitAdd()
+        {
+            stuffAndExpect("249+14367=", "14616");
+        }
+
+        [Test]
+        public void MultipleDigitAddDisplaysCorrectly()
+        {
+            stuffAndExpect("28","28");
+            stuffAndExpect("+","28");
+            stuffAndExpect("91","91");
+            stuffAndExpect("=","119");
         }
 
 
         [Test]
-        public void CanDoBasicSubtract() //    +  -  *  /  =  C
+        public void CanDoBasicSubtract()
         {
-            _controller.AcceptCharacter('7');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("7"));
-            _controller.AcceptCharacter('-');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("7"));
-            _controller.AcceptCharacter('3');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("3"));
-            _controller.AcceptCharacter('=');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("4"));
+            stuffAndExpect("6-2=", "4");
         }
 
         [Test]
-        public void CanDoUnarySubtract() //    +  -  *  /  =  C
+        public void BasicSubtractDisplaysCorrectly()
         {
-            _controller.AcceptCharacter('-');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
-            _controller.AcceptCharacter('9');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
-            _controller.AcceptCharacter('=');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("-9"));
+            stuffAndExpect("7","7");
+            stuffAndExpect("-","7");
+            stuffAndExpect("1","1");
+            stuffAndExpect("=","6");
+        }
+
+        [Test]
+        public void CanDoAndDisplayUnarySubtract()
+        {
+            stuffAndExpect("-","0");
+            stuffAndExpect("3","3");
+            stuffAndExpect("=","-3");
         }
                
         [Test]
-        public void CanGoNegativeOnSubtract() //    +  -  *  /  =  C
+        public void CanGoNegativeOnSubtract()
         {
-            _controller.AcceptCharacter('7');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("7"));
-            _controller.AcceptCharacter('-');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("7"));
-            _controller.AcceptCharacter('9');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
-            _controller.AcceptCharacter('=');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("-2"));
+            stuffAndExpect("7-9=","-2");
         }
 
         [Test]
-        public void CanDoBasicMultiply() //    +  -  *  /  =  C
+        public void CanDoBasicMultiply()
         {
-            _controller.AcceptCharacter('4');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("4"));
-            _controller.AcceptCharacter('*');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("4"));
-            _controller.AcceptCharacter('5');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("5"));
-            _controller.AcceptCharacter('=');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("20"));
+            stuffAndExpect("4*5=","20");
         }
 
         [Test]
-        public void CanHandleUnaryMultiply() //    +  -  *  /  =  C
+        public void CanHandleUnaryMultiply()
         {
-            _controller.AcceptCharacter('*');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
-            _controller.AcceptCharacter('9');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
-            _controller.AcceptCharacter('=');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
+            stuffAndExpect("*9=","0");  // implied zero: 0*9=0
         }
 
         [Test]
         public void CanMultiplyNegative()
         {
-            _controller.AcceptCharacter('-');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
-            _controller.AcceptCharacter('9');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
-            _controller.AcceptCharacter('*');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("-9"));
-            _controller.AcceptCharacter('5');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("5"));
-            _controller.AcceptCharacter('=');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("-45"));
+            stuffAndExpect("-7*3=", "-21");
+        }
+
+        [Test]
+        public void MultiplyNegativeDisplaysCorrectly()
+        {
+            stuffAndExpect("-9","9"); // should not show negative sign yet
+            stuffAndExpect("*","-9"); // now the negative portion is applied
+            stuffAndExpect("5=","-45");
         }
 
         [Test]
         public void CanDoBasicDivide()
         {
-            _controller.AcceptCharacter('8');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
-            _controller.AcceptCharacter('/');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
-            _controller.AcceptCharacter('2');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("2"));
-            _controller.AcceptCharacter('=');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("4"));
+            stuffAndExpect("8/2=","4");
         }
 
         [Test]
         public void CanHandleUnaryDivide()
         {
-            _controller.AcceptCharacter('/');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
-            _controller.AcceptCharacter('9');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("9"));
-            _controller.AcceptCharacter('=');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
+            stuffAndExpect("/9=","0"); // this should not be an error since zero is implied:  0/9=0
         }
 
         [Test]
         public void CatchDivideByZero()
         {
-            _controller.AcceptCharacter('8');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
-            _controller.AcceptCharacter('/');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
-            _controller.AcceptCharacter('0');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
-            _controller.AcceptCharacter('=');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("Divide by Zero"));  // or some other shorter message
+            stuffAndExpect("8/0=","Divide by Zero"); // or whatever the programmer decided to display for a message
         }
 
         [Test]
-        public void CatchNotDivideByZero()
+        public void CanDivideByNumberWithLeadingZero()
         {
-            _controller.AcceptCharacter('8');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
-            _controller.AcceptCharacter('/');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
-            _controller.AcceptCharacter('0');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
-            _controller.AcceptCharacter('1');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("1"));
-            _controller.AcceptCharacter('=');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("8"));
+            stuffAndExpect("8/01=","8");  // the zero should be ignored and not make the calculation fail
         }
 
-        //  CanPerformMultipleOperations   15+3-8*20=
-        //  CanAddLargeNumbers
-        //  CanSubtractLargeNumbers
-        //  CanDivideLargeNumbers
-        //  CanMultiplyLargeNumbers
+        [Test]
+        public void CanPerformMultipleOperations()
+        {
+            stuffAndExpect("15+3-8*20=","200");
+        }
+
+        [Test]
+        public void CanEnterValueNearMaxInt()
+        {
+            stuffAndExpect((int.MaxValue-10).ToString() + "=", (int.MaxValue-10).ToString( ));
+        }
+
+        [Test]
+        public void CanAddNearMaxInt()
+        {
+            stuffAndExpect((int.MaxValue - 10).ToString() + "+9=", (int.MaxValue - 1).ToString());
+        }
+
+        [Test]
+        public void CanSubtractLargeNumbers()
+        {
+            stuffAndExpect(int.MaxValue.ToString() +"-" + (int.MaxValue-1789).ToString()+"=","1789") ;
+            stuffAndExpect("c","0");
+            stuffAndExpect((int.MaxValue-4567).ToString() + "-" + (int.MaxValue).ToString()+"=", "-4567");
+        }
+
+        [Test]
+        public void CanDivideLargeNumbers()
+        {
+            stuffAndExpect(int.MaxValue.ToString()+"/10000=",(int.MaxValue/10000).ToString());  //not a great test since the test itself could not be as expected
+            stuffAndExpect("c","0");
+            stuffAndExpect("456456456/10000=","45645");  // this is the floor of integer division. Should really be floating point and accurate
+
+        }
+
+        [Test]
+        public void CanMultiplyLargeNumbers()
+        {
+            Assert.Fail(); // need to write some good test cases here
+        }
         //
         //
-        //  Omitting use of Clear key - assumption is new number after equals is start of new computation
-        //  3+4=4+5=   should yield 7 then 9
+        [Test]
+        public void CanStartNewComputationAfterEquals()
+        {
+            //  Omitting use of Clear key - assumption is new number after equals is start of new computation
+            //  3+4=4+5=   should yield 7 then 9
+            stuffAndExpect("3+4=", "7");
+            stuffAndExpect("4+5=", "9");
+        }
 
-        // Nonstandard cases
-        //  Understands +=  -=  *= and /=  as operating on last result
-        //          1+2+= 6     any number -=  0        4*= 16     any number /=  1
+        [Test]
+        public void CanStartMultiDigitComputationAfterEquals()
+        {
+            stuffAndExpect("2342-342=", "2000");
+            stuffAndExpect("6000/30=","200");
+        }
 
-        //  CanIgnoreExtraneousOperators  1+2+++= (6) ;   3-+4  (7)
-        //   
-        //  CanIgnoreAbsenceOfOperators   13=14=59 (13 then 14 then 59)   
+
+        // More Tests that are not included:  
+        //  These would be crucial for a production system but are of limited value as an academic exercise.
+
+        // - Computations near MinValues
+        // - Checking for computations crossing through and using zero (both display and computational checks)
+        // - All testing of cases beyond INT precision level
+        // - All testing of decimal/floating point use
+        // - Suite of tests for scientific notation support
+
+        // Nonstandard/More obscure cases
+
+       
+        [Test]
+        public void BeyondScope_CanOperateOnLastResult() //beyond scope of this project ??
+            //  Understands +=  -=  *= and /=  as operating on last result
+            //          1+2+= 6     any number -=  0        4*= 16     any number /=  1
+        {
+            stuffAndExpect("1+2+=","6");
+            stuffAndExpect("c","0");
+            stuffAndExpect("45-=","0");
+            stuffAndExpect("c", "0");
+            stuffAndExpect("4*=","16");
+            stuffAndExpect("123/=","1");
+        }
+
+        [Test]
+        public void CanIgnoreExtraneousOperators()
+        {
+            stuffAndExpect("1+2+++-1=", "2");
+            stuffAndExpect("3-*2+8/-1=", "13");
+            stuffAndExpect("33+/11=", "3");
+        }
+
+        [Test]
+        public void CanIgnoreAbsenceOfOperators()
+        {
+            stuffAndExpect("13=", "13");
+            stuffAndExpect("14=", "14");
+            stuffAndExpect("59=", "59");
+        }
 
         // Boundary Conditions and overflows
 
