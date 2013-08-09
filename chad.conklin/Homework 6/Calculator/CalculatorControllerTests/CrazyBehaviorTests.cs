@@ -52,7 +52,7 @@ namespace CalculatorControllerTests
             AcceptCharacters("=");
             AssertOutput("1");
             AcceptCharacters("=");
-            AssertOutput("0.1111111111111111");
+            AssertOutput("0.111111111111111");
         }
 
         // Tiina
@@ -77,7 +77,7 @@ namespace CalculatorControllerTests
             ForInputExpect("c", "0");
 
             ForInputExpect("123/=", "1");
-            ForInputExpect("=", "0.008130081300813");
+            ForInputExpect("=", "0.00813008130081301");
         }
 
     }

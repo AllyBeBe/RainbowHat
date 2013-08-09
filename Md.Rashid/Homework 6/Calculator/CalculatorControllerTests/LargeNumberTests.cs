@@ -31,7 +31,7 @@ namespace CalculatorControllerTests
         [Test]
         public void CanDivideLargeNumbers()
         {
-            ForInputExpect("9999999999999999/10000=", "999999999999.9999");
+            ForInputExpect("999999999999999/10000=", "99999999999.9999");
         }
 
         // Tiina, modified by Mickey
@@ -98,14 +98,14 @@ namespace CalculatorControllerTests
         [Test]
         public void CanDisplayLargerValuesThanCanBeEntered()
         {
-            ForInputExpect("9999999999999999+9999999999999999=", "2.e+16");
+            ForInputExpect("999999999999999+999999999999999=", "2E+15");
         }
 
         // Tammy
         [Test]
         public void CanMultiplyVeryLargeValues()
         {
-            ForInputExpect("9999999999999999*9999999999999999=", "9.999999999999998e+31");
+            ForInputExpect("999999999999999*999999999999999=", "9.99999999999998E+29");
         }
 
         // We can't actually do this test.  long.MaxValue is 9223372036854775807, which is more than 16 characters.  
