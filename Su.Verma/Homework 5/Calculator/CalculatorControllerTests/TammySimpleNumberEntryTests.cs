@@ -15,7 +15,7 @@ namespace CalculatorControllerTests
         [SetUp]
         public void BeforeEachTest()
         {
-            _controller.Clear();
+            _controller.AcceptCharacter('c');
         }
 
         [Test]
@@ -23,16 +23,14 @@ namespace CalculatorControllerTests
         {
             for (int a = 0; a <= 9; a++)
             {
-                Assert.That(_controller.AcceptCharacter((char)a), Is.EqualTo(a.ToString(CultureInfo.InvariantCulture)));
+                _controller.AcceptCharacter((char) a);
+                Assert.That(_controller.GetOutput(), Is.EqualTo(a.ToString(CultureInfo.InvariantCulture)));
             }
 
         }
 
         [Test]
         public void CanEnterMultipleDigits()
-        
-        
-        
         {
             _controller.AcceptCharacter('1');
             _controller.AcceptCharacter('3');
@@ -44,6 +42,5 @@ namespace CalculatorControllerTests
 
             Assert.That(_controller.GetOutput(), Is.EqualTo("13"));
         }
-      
     }
 }
