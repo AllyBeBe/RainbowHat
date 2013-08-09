@@ -71,7 +71,7 @@ namespace CalculatorControllerTests
             _controller.AcceptCharacter('C');
             Assert.That(_controller.GetOutput(), Is.EqualTo("0"));
         }
-
+        //Below is interesting 
         [Test]
         public void CanIgnoreLeadingZeros()
         {
@@ -124,7 +124,7 @@ namespace CalculatorControllerTests
             _controller.AcceptCharacter('=');
             Assert.That(_controller.GetOutput(), Is.EqualTo("4"));
         }
-
+        //Below - thorough
         [Test]
         public void CanDoUnarySubtract() //    +  -  *  /  =  C
         {
@@ -161,7 +161,7 @@ namespace CalculatorControllerTests
             _controller.AcceptCharacter('=');
             Assert.That(_controller.GetOutput(), Is.EqualTo("20"));
         }
-
+        // Keep?
         [Test]
         public void CanHandleUnaryMultiply() //    +  -  *  /  =  C
         {
