@@ -23,14 +23,14 @@ namespace CalculatorControllerTests
         public void CanDisplayRepeatingDecimals()
         {
             AcceptCharacters("10/3=");
-            AssertOutput("3.333333333333333"); // Displays max of 16 digits
+            AssertOutput("3.33333333333333"); // Displays max of 16 digits
         }
 
         [Test]
         public void CanDisplayRoundedRepeatingDecimals()
         {
             AcceptCharacters("20/3=");
-            AssertOutput("6.666666666666667"); // Rounded to 16 digits
+            AssertOutput("6.66666666666667"); // Rounded to 16 digits
         }
 
     }
