@@ -10,6 +10,7 @@ namespace Calculator
         public Form1()
         {
             InitializeComponent();
+            output.Text = _controller.GetOutput();
         }
 
         // I noticed that the same basic code was showing up in all of the methods:
