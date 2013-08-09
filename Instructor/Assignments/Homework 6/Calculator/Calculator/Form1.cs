@@ -108,5 +108,10 @@ namespace Calculator
         {
             HandleInput('c');
         }
+
+        private void ButtonEqualsClick(object sender, EventArgs e)
+        {
+            HandleInput('=');
+        }
     }
 }
