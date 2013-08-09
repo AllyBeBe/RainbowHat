@@ -76,6 +76,9 @@ namespace CalculatorControllerTests
             Controller.AcceptCharacter('4');
             Controller.AcceptCharacter('7');
 
+            // Display the answer
+            Controller.AcceptCharacter('=');
+
             const long expectedResult = (long)int.MaxValue + int.MaxValue;
             Assert.AreEqual(expectedResult.ToString(), Controller.GetOutput());
         }

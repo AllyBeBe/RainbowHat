@@ -51,14 +51,14 @@ namespace CalculatorControllerTests
         [Test]
         public void DoesLargeDigitMultiplicationWork()
         {
-            ForInputExpect("111*999", "110889");
+            ForInputExpect("111*999=", "110889");
         }
 
         // Ahsan
         [Test]
         public void DoesVeryLargeDigitMultiplicationWork()
         {
-            ForInputExpect("111999*999999", "111998888001");
+            ForInputExpect("111999*999999=", "111998888001");
         }
     }
 }
