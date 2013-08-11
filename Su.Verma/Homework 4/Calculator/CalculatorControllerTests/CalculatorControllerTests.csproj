@@ -40,8 +40,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SimpleNumberEntryTest.cs" />
+    <Compile Include="AhsanTests.cs" />
+    <Compile Include="AlexControlsTests.cs" />
+    <Compile Include="AlexMathTests.cs" />
+    <Compile Include="AlexMiscTests.cs" />
+    <Compile Include="AlexSimpleNumberEntryTests.cs" />
+    <Compile Include="BryanTests.cs" />
+    <Compile Include="SuTests.cs" />
+    <Compile Include="JayTests.cs" />
+    <Compile Include="MickeySimpleNumberEntryTests.cs" />
+    <Compile Include="MikeTests.cs" />
+    <Compile Include="NumberEntryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleBehaviorsTests.cs" />
+    <Compile Include="TammyNumberManipulationTests.cs" />
+    <Compile Include="TammySimpleNumberEntryTests.cs" />
+    <Compile Include="TiinaTests.cs" />
+    <Compile Include="YanaTests.cs" />
+    <Compile Include="_controller.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Calculator\Calculator.csproj">

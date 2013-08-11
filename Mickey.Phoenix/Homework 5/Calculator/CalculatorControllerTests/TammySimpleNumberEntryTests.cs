@@ -23,7 +23,8 @@ namespace CalculatorControllerTests
         {
             for (int a = 0; a <= 9; a++)
             {
-                _controller.AcceptCharacter((char) a);
+                _controller.AcceptCharacter('c');
+                _controller.AcceptCharacter(a.ToString()[0]);
                 Assert.That(_controller.GetOutput(), Is.EqualTo(a.ToString(CultureInfo.InvariantCulture)));
             }
 

@@ -18,7 +18,7 @@ namespace CalculatorControllerTests
             // Abstract idea in English:
             // When I enter "1" and then "3" and then "7", the calculator displays "1" and then "13" and then "137".
 
-            // Psedocode, often following the "when I/then" paradigm
+            // Pseudocode, often following the "when I/then" paradigm
             // When I: enter "1"
             // Then: the calculator should say "1"
             // When I: enter "3"

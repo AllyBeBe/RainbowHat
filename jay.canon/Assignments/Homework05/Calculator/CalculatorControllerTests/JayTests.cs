@@ -3,97 +3,205 @@ using Calculator;
 using NUnit.Framework;
 
 namespace CalculatorControllerTests
+    //Homework 05 re-write for deterministic behaviorial tests on CalculatorController and using 
+    //M. Phoenix's BaseTestFixture helper methods
 {
-    public class SimpleMathOperation
+    [TestFixture]
+    public class JayTests : BaseTestFixture
     {
-        public int Add(int a, int b)
+        [SetUp]
+        public void ClearCalculatorBeforeEachTest()
         {
-            int x = a + b;
-            return x;
+            BeforeEachTest();
         }
 
-        public int Subtract(int a, int b)
+        [Test]
+        public void CanEnterSingleDigit()
         {
-            int x = a - b;
-            return x;
+            EnterNumber(1);
+            AssertOutput("1");
         }
 
-        public int Multiply(int a, int b)
+        [Test]
+        public void ClearResetToZero()
         {
-            int x = a*b;
-            return x;
-        }
-        
-        public int Divide(int a, int b)
-        {
-            if (b == 0)
-            {
-                //Error: Cannot divide by zero
-            }
-            int x = a / b;
-            return x;
+            EnterNumber(1);
+            AssertOutput("1");
+            EnterNumber(2);
+            AssertOutput("12");
+            AcceptCharacters("C");
+            AssertOutput("0");
         }
 
-        [TestFixture]
-        public class SimpleMathTest
+       [Test]
+        public void CanEnterMultipleDigits()
         {
-            private readonly CalculatorController _controller = new CalculatorController();
-        
-            [Test]
-            public void SimpleAdditionTest()
-            {
-                SimpleMathOperation smo = new SimpleMathOperation();
-                _controller.AcceptCharacter('3');
-                int operandA = Convert.ToInt32(_controller.GetOutput());
+            EnterNumber(1);
+            AssertOutput("1");
+            EnterNumber(2);
+            AssertOutput("12");
+            EnterNumber(3);
+            AssertOutput("123");
+            EnterNumber(4);
+            AssertOutput("1234");
+            EnterNumber(5);
+            AssertOutput("12345");
+            EnterNumber(6);
+            AssertOutput("123456");
+            EnterNumber(7);
+            AssertOutput("1234567");
+            EnterNumber(8);
+            AssertOutput("12345678");
+            EnterNumber(9);
+            AssertOutput("123456789");
+            EnterNumber(0);
+            AssertOutput("1234567890");
+        }
 
-                _controller.AcceptCharacter('1');
-                // You may want to use "calc" to verify what the current state of the calculator is after you
-                // enter "3" and then "1".
-                int operandB = Convert.ToInt32(_controller.GetOutput());
+        [Test]
+        public void CanDoAddition()
+        {
+            EnterNumber(25);
+            AcceptCharacters("+");
+            EnterNumber(69);
+            AcceptCharacters("=");
+            AssertOutput("94");
+        }
 
-                // This is testing the SimpleMathOperation class more than it is testing the CalculatorController
-                // class.  Rather than writing a SimpleMathOperation class, try figuring out what intputs you
-                // would need to give to the _controller CalculatorController instance in order to get its
-                // output to be "4".
-                int result = smo.Add(operandA, operandB);
-                Assert.AreEqual(4, result);
-            }
+        [Test]
+        public void CanDoSubtraction()
+        {
+            EnterNumber(94);
+            AcceptCharacters("-");
+            EnterNumber(69);
+            AcceptCharacters("=");
+            AssertOutput("25");
+        }
 
-            [Test]
-            public void SimpleSubtractionTest()
-            {
-                SimpleMathOperation smo = new SimpleMathOperation();
-                _controller.AcceptCharacter('3');
-                int operandA = Convert.ToInt32(_controller.GetOutput());
-                _controller.AcceptCharacter('1');
-                int operandB = Convert.ToInt32(_controller.GetOutput());
-                int result = smo.Subtract(operandA, operandB);
-                Assert.AreEqual(2, result);
-            }
+        [Test]
+        public void CanDisplayNegativeIntegers()
+        {
+            EnterNumber(13);
+            AcceptCharacters("-");
+            EnterNumber(14);
+            AcceptCharacters("=");
+            AssertOutput("-1");
+        }
+        [Test]
+        public void CanDoMultiplication()
+        {
+            EnterNumber(25);
+            AcceptCharacters("*");
+            EnterNumber(69);
+            AcceptCharacters("=");
+            AssertOutput("1725");
+        }
 
-            [Test]
-            public void SimpleMultiplicationTest()
-            {
-                SimpleMathOperation smo = new SimpleMathOperation();
-                _controller.AcceptCharacter('3');
-                int operandA = Convert.ToInt32(_controller.GetOutput());
-                _controller.AcceptCharacter('1');
-                int operandB = Convert.ToInt32(_controller.GetOutput());
-                int result = smo.Multiply(operandA, operandB);
-                Assert.AreEqual(3, result);
-            }
+        [Test]
+        public void CanDoDivision()
+        {
+            EnterNumber(1725);
+            AcceptCharacters("/");
+            EnterNumber(69);
+            AcceptCharacters("=");
+            AssertOutput("25");
+        }
 
-            [Test]
-            public void SimpleDivisionTest()
-            {
-                SimpleMathOperation smo = new SimpleMathOperation();
-                _controller.AcceptCharacter('3');
-                int operandA = Convert.ToInt32(_controller.GetOutput());
-                _controller.AcceptCharacter('1');
-                int operandB = Convert.ToInt32(_controller.GetOutput());
-                int result = smo.Divide(operandA, operandB);
-                Assert.AreEqual(3, result);
-            }
+        [Test]
+        public void CanIgnoreAllButLastOperatorInput()
+        {
+            EnterNumber(25);
+            AcceptCharacters("+");
+            AcceptCharacters("*");
+            EnterNumber(69);
+            AcceptCharacters("=");
+            AssertOutput("1725");
+        }
+
+        [Test]
+        public void CanWarnDivisionByZero()
+        {
+            EnterNumber(1725);
+            AcceptCharacters("/");
+            EnterNumber(0);
+            AcceptCharacters("=");
+            AssertOutput("Cannot divide by zero");
+        }
+
+        [Test]
+        public void CanDivideZeroByAnyNumber()
+        {
+            EnterNumber(0);
+            AcceptCharacters("/");
+            EnterNumber(1725);
+            AcceptCharacters("=");
+            AssertOutput("0");
+        }
+
+        [Test]
+        public void CanDoUnaryOperations_Add()
+        {
+            EnterNumber(9);
+            AcceptCharacters("+");
+            AcceptCharacters("=");
+            AssertOutput("18");
+        }
+
+        [Test]
+        public void CanDoUnaryOperations_Subtract()
+        {
+            EnterNumber(9);
+            AcceptCharacters("-");
+            AcceptCharacters("=");
+            AssertOutput("0");
+        }
+
+        [Test]
+        public void CanDoUnaryOperations_Multiply()
+        {
+            EnterNumber(9);
+            AcceptCharacters("*");
+            AcceptCharacters("=");
+            AssertOutput("81");
+        }
+
+        [Test]
+        public void CanDoUnaryOperations_Divide()
+        {
+            EnterNumber(9);
+            AcceptCharacters("/");
+            AcceptCharacters("=");
+            AssertOutput("1");
+        }
+
+        public void RepeatedClickOfEqual()
+        {
+            EnterNumber(1);
+            AcceptCharacters("+");
+            AcceptCharacters("=");
+            AssertOutput("2");
+            AcceptCharacters("=");
+            AssertOutput("3");
+            AcceptCharacters("=");
+            AssertOutput("4");
+            AcceptCharacters("=");
+            AssertOutput("5");
+        }
+
+        [Test]
+        public void CanPerformMultipleOperations()
+        {
+            EnterNumber(9);
+            AcceptCharacters("+");
+            EnterNumber(7);
+            AcceptCharacters("*");
+            EnterNumber(18);
+            AcceptCharacters("-");
+            EnterNumber(3);
+            AcceptCharacters("/");
+            EnterNumber(5);
+            AcceptCharacters("=");
+            AssertOutput("57");
         }
     }
 }

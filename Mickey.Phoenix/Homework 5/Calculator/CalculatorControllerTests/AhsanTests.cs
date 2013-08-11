@@ -60,7 +60,7 @@ namespace CalculatorControllerTests
             _controller.AcceptCharacter('1');
             _controller.AcceptCharacter('c');
 
-            Assert.That(_controller.GetOutput(),Is.EqualTo(""));
+            Assert.That(_controller.GetOutput(),Is.EqualTo("0"));
         }
 
 

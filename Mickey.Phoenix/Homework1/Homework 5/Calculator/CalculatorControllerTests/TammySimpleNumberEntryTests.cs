@@ -7,7 +7,7 @@ namespace CalculatorControllerTests
     [TestFixture]
     public class TammySimpleNumberEntryTests
     {
-        // This CalculatorController instance will be created before any test is run, and will be used by each test in turn...
+        // This CalculatorController instance will be created before any test is run, and will be used by each test in turn.
         private readonly CalculatorController _controller = new CalculatorController();
 
         // The method that is marked with the [SetUp] annotation is run before each test is run.
