@@ -14,62 +14,27 @@ namespace CalculatorControllerTests
         [SetUp]
         public void BeforeEachTest()
         {
-            _controller.AcceptCharacter('c');
+            _controller.Clear();
         }
 
         [Test]
         public void CanEnterSingleDigit()
         {
-            _controller.AcceptCharacter('1');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("1"));            
-        }
+            Assert.That(_controller.AcceptCharacter('1'), Is.EqualTo("1"));
+            Assert.That(_controller.AcceptCharacter('2'), Is.EqualTo("2"));
+            Assert.That(_controller.AcceptCharacter('3'), Is.EqualTo("3"));
+            Assert.That(_controller.AcceptCharacter('4'), Is.EqualTo("4"));
+            Assert.That(_controller.AcceptCharacter('5'), Is.EqualTo("5"));
+            Assert.That(_controller.AcceptCharacter('6'), Is.EqualTo("6"));
+            Assert.That(_controller.AcceptCharacter('7'), Is.EqualTo("7"));
+            Assert.That(_controller.AcceptCharacter('8'), Is.EqualTo("8"));
+            Assert.That(_controller.AcceptCharacter('9'), Is.EqualTo("9"));
+            Assert.That(_controller.AcceptCharacter('+'), Is.EqualTo("+"));
+            Assert.That(_controller.AcceptCharacter('-'), Is.EqualTo("-"));
+            Assert.That(_controller.AcceptCharacter('='), Is.EqualTo("="));
+            Assert.That(_controller.AcceptCharacter('/'), Is.EqualTo("/"));
+            Assert.That(_controller.AcceptCharacter('*'), Is.EqualTo("*"));
 
-        [Test]
-        public void CanEnterMultiDigitNumbers()
-        {
-            _controller.AcceptCharacter('1');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("1"));
-
-            _controller.AcceptCharacter('2');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("12"));
-
-            _controller.AcceptCharacter('3');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("123"));
-
-            _controller.AcceptCharacter('4');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("1234"));
-
-            _controller.AcceptCharacter('5');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("12345"));
-
-            _controller.AcceptCharacter('6');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("123456"));
-
-            _controller.AcceptCharacter('7');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("1234567"));
-
-            _controller.AcceptCharacter('8');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("12345678"));
-
-            _controller.AcceptCharacter('9');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("123456789"));
-
-            _controller.AcceptCharacter('+');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("+"));
-
-            // What happens if you run "calc", and enter a number, then "+", and
-            // then "-"?
-            _controller.AcceptCharacter('-');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("-"));
-
-            _controller.AcceptCharacter('=');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("="));
-
-            _controller.AcceptCharacter('/');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("/"));
-
-            _controller.AcceptCharacter('*');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("*"));
         }
 
         [Test]
@@ -85,5 +50,8 @@ namespace CalculatorControllerTests
 
             Assert.That(_controller.GetOutput(), Is.EqualTo("13"));
         }
+
+       
+
     }
 }

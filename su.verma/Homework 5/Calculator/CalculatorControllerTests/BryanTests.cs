@@ -14,14 +14,13 @@ namespace CalculatorControllerTests
         [SetUp]
         public void BeforeEachTest()
         {
-            _controller.AcceptCharacter('c');
+            _controller.Clear();
         }
 
         [Test]
         public void CanEnterSingleDigit()
         {
-            _controller.AcceptCharacter('1');
-            Assert.That(_controller.GetOutput(), Is.EqualTo("1"));
+            Assert.That(_controller.AcceptCharacter('1'), Is.EqualTo("1"));
         }
 
         [Test]
@@ -42,20 +41,16 @@ namespace CalculatorControllerTests
         {
             _controller.AcceptCharacter('1');
             _controller.AcceptCharacter('3');
-            _controller.AcceptCharacter('c');
+            _controller.Clear();
 
             Assert.That(_controller.GetOutput(), Is.Empty);
         }
-
-        // You may wish to open "calc" and enter "0", "1", "2" to see whether this test
-        // correctly represents your expectations.
         [Test]
         public void CanEnterAnyDigitConsecutively()
         {
             for (int i = 0; i < 9; i++)
             {
-                _controller.AcceptCharacter((char) i);
-                Assert.That(_controller.GetOutput(), Is.EqualTo(i.ToString()));
+                Assert.That(_controller.AcceptCharacter((char) i), Is.EqualTo(i.ToString()));
             }
         }
         [Test]

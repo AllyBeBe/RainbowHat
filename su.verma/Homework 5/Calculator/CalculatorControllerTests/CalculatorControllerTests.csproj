@@ -47,6 +47,7 @@
     <Compile Include="AlexSimpleNumberEntryTests.cs" />
     <Compile Include="BaseTestFixture.cs" />
     <Compile Include="BryanTests.cs" />
+    <Compile Include="SuTests.cs" />
     <Compile Include="JayTests.cs" />
     <Compile Include="MickeySimpleNumberEntryTests.cs" />
     <Compile Include="MikeTests.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="TammySimpleNumberEntryTests.cs" />
     <Compile Include="TiinaTests.cs" />
     <Compile Include="YanaTests.cs" />
+    <Compile Include="_controller.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Calculator\Calculator.csproj">

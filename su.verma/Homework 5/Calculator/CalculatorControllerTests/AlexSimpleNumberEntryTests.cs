@@ -15,18 +15,15 @@ namespace CalculatorControllerTests
         [SetUp]
         public void BeforeEachTest()
         {
-            _controller.AcceptCharacter('c');
+            _controller.Clear();
         }
 
-        // You may wish to open "calc" and enter "0", "1", "2" to see whether this test
-        // correctly represents your expectations.
         [Test]
         public void CanEnterSingleDigit()
         {
             for (int i = 0; i < 9; i++)
             {
-                _controller.AcceptCharacter((char) i);
-                Assert.That(_controller.GetOutput(), Is.EqualTo(i.ToString()));   
+                Assert.That(_controller.AcceptCharacter((char) i), Is.EqualTo(i.ToString()));   
             }
         }
 

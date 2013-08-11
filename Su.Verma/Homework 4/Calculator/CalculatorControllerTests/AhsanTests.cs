@@ -26,13 +26,18 @@ namespace CalculatorControllerTests
         [SetUp]
         public void BeforeEachTest()
         {
-            _controller.Clear();
+            // Someday, this method will reset the calculator controller to a "like-new" state.
+            // I added it to the public interface of the CalculatorController class so that tests
+            // can share a CalculatorController instance -- they just need to call "Clear" before 
+            // each test.
+            _controller.AcceptCharacter('c');
         }
 
         [Test]
         public void CanEnterSingleDigit()
         {
-            Assert.That(_controller.AcceptCharacter('1'), Is.EqualTo("1"));
+            _controller.AcceptCharacter('1');
+            Assert.That(_controller.GetOutput(), Is.EqualTo("1"));
         }
 
         [Test]
@@ -53,7 +58,7 @@ namespace CalculatorControllerTests
         public void DoesClearWork()
         {
             _controller.AcceptCharacter('1');
-            _controller.Clear();
+            _controller.AcceptCharacter('c');
 
             Assert.That(_controller.GetOutput(),Is.EqualTo(""));
         }
