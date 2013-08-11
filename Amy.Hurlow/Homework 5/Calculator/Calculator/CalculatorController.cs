@@ -10,6 +10,7 @@
         // helper methods that it calls) to make the calculator behave according to the tests.
         public void AcceptCharacter(char input)
         {
+
             // Your code will eventually go here, to make all of the tests pass.
 
             // DO NOT WRITE THIS CODE YET!  WRITING THIS CODE WILL BE HOMEWORK 5!
