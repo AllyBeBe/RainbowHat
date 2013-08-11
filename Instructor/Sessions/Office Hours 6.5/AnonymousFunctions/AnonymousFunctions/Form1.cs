@@ -12,10 +12,8 @@ namespace AnonymousFunctions
             // The next two lines do EXACTLY the same thing...
             // doSomethingButton.Text += " Haha!";
             doSomethingButton.Text = doSomethingButton.Text + " Haha!";
-
-
         }
-
+        
         // Q: If you can click both a Button and a Label, what's the difference?
         // A: Beyond just that they look different, the big difference is in the graphical *behavior* when they
         // are hovered over or clicked.  If you hover over a Button, it changes color.  If you click a Button,
@@ -31,7 +29,7 @@ namespace AnonymousFunctions
         // Also recommended:
         //      "Don't Make Me Think" -- Steve Krug
         //      "Why Software Sucks" -- David Platt
-        
+        //      http://pingv.com/blog/the-best-user-interface-is-the-one-you-dont-notice
 
         private void DoSomethingButtonClick(object sender, EventArgs e)
         {
@@ -63,9 +61,9 @@ namespace AnonymousFunctions
             // in a string.  An "un-escaped double quote" will end the string, and cause syntax errors.
             //
             // "anthropomorphization" is imagining human characteristics onto something that is not human.
-//            string message = string.Format("Handled a click on \"{0}\" in a named method.", senderAsControl.Text);
-//
-//            MessageBox.Show(message);
+            string message = string.Format("Handled a click on \"{0}\" in a named method.", senderAsControl.Text);
+
+            MessageBox.Show(message);
 
 
             // Safe vs. Unsafe Type Coercions:
