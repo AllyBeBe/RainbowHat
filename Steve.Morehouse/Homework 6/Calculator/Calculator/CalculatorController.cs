@@ -6,9 +6,27 @@ namespace Calculator
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
     {
-        private string _currentValue;
-        private string _lastValue;
+        /*
+         * the current value of the displayed register
+         */
+        private string _currentValue = String.Empty;
+
+        /*
+         * this is the second register, the value which was previously entered but we need to perform the
+         * selected operation upon
+         */
+        private string _lastValue = String.Empty;
+
+        /*
+         * we need a memory in the Polish notation of what the operation is
+         */
         private char _lastOperation;
+
+        /*
+         * is an operation is made, the current value still needs to be displayed.
+         * however a flag is set so upon entry of a new number, the new current Value is cleared
+         */
+        private bool clearCurrentValue = false;
 
         // This method is the core method of CalculatorController.  In Homework 5, when you are making
         // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
@@ -27,32 +45,43 @@ namespace Calculator
                 case '7':
                 case '8':
                 case '9':
-                case '.':
+                case '.': // not used right now
+                    /*
+                     * if there was an operation made where the current contents needs to be cleared, do so now
+                     * before entry is made
+                     */
+                    if (clearCurrentValue == true)
+                    {
+                        clearCurrentValue = false;
+                        _currentValue = String.Empty;
+                    }
+
+                    // keep on adding to the current string regardless
                     _currentValue += input;
                     break;
                 case 'c':
-                    _currentValue = null;
-                    _lastValue = null;
+                    _currentValue = String.Empty;
+                    _lastValue = String.Empty;
                     break;
                 case '+':
                     _lastOperation = '+';
                     _lastValue = String.Copy(_currentValue);
-                    _currentValue = null;
+                    clearCurrentValue = true;
                     break;
                 case '-':
                     _lastOperation = '-';
                     _lastValue = String.Copy(_currentValue);
-                    _currentValue = null;
+                    clearCurrentValue = true;
                     break;
                 case '*':
                     _lastOperation = '*';
                     _lastValue = String.Copy(_currentValue);
-                    _currentValue = null;
+                    clearCurrentValue = true;
                     break;
                 case '/':
                     _lastOperation = '/';
                     _lastValue = String.Copy(_currentValue);
-                    _currentValue = null;
+                    clearCurrentValue = true;
                     break;
                 case '=':
                     switch (_lastOperation)
