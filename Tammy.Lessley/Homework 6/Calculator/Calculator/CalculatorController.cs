@@ -1,15 +1,19 @@
-﻿namespace Calculator
+﻿using System.Runtime.CompilerServices;
+
+namespace Calculator
 {
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
     {
-        private int _currentValue;
-        private string _currentStringValue;
+        private int _currentValue ;
+        private string _currentStringValue = string.Empty;
         // This method is the core method of CalculatorController.  In Homework 5, when you are making
         // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
         // helper methods that it calls) to make the calculator behave according to the tests.
         public void AcceptCharacter(char input)
+
         {
+            
             if (input == 'c')
             {
                 _currentStringValue = string.Empty;

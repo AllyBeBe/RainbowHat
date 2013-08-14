@@ -1,26 +1,113 @@
-﻿namespace Calculator
+﻿using System;
+
+namespace Calculator
 {
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
     {
+
+        // current value of display
+
         private string _currentValue = "0";
 
-        // This method is the core method of CalculatorController.  In Homework 5, when you are making
-        // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
-        // helper methods that it calls) to make the calculator behave according to the tests.
+        // after last value is entered and operator is entered
+        private string _lastValue = String.Empty;
+
+        //to store last operation in memory for tests with multiple operators
+        private char _lastOperation;
+
+        // when number is added, previous number gets cleared
+        private bool clearCurrentValue = true;
+
+
         public void AcceptCharacter(char input)
         {
-            // Your code will eventually go here, to make all of the tests pass.
+            switch (input)
+            {
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
 
-            // DO NOT WRITE THIS CODE YET!  WRITING THIS CODE WILL BE HOMEWORK 5!
+                    // clear current contests before entry is made
+                    if (clearCurrentValue == true)
+                    {
+                        clearCurrentValue = false;
+                        _currentValue = String.Empty;
+                    }
+
+                    // add to current string
+                    _currentValue += input;
+                    break;
+            
+                // when "c" is entered, clear current value and set to zero
+                case 'c':
+                    _currentValue = String.Empty;
+                    _currentValue = "0";
+                    _lastValue = String.Empty;
+                    clearCurrentValue = true;
+                    break;
+
+               
+                case '+':
+                    _lastOperation = '+';
+                    _lastValue = String.Copy(_currentValue);
+                    clearCurrentValue = true;
+                    break;
+                case '-':
+                    _lastOperation = '-';
+                    _lastValue = String.Copy(_currentValue);
+                    clearCurrentValue = true;
+                    break;
+                case '*':
+                    _lastOperation = '*';
+                    _lastValue = String.Copy(_currentValue);
+                    clearCurrentValue = true;
+                    break;
+                case '/':
+                    _lastOperation = '/';
+                    _lastValue = String.Copy(_currentValue);
+                    clearCurrentValue = true;
+                    break;
+                
+                case '=':
+                    switch (_lastOperation)
+                    {
+                        case '+':
+                            _currentValue = Convert.ToString(Convert.ToInt32(_currentValue) + (Convert.ToInt32(_lastValue)));
+                            break;
+                        case '-': _currentValue = Convert.ToString(Convert.ToInt32(_currentValue) - (Convert.ToInt32(_lastValue)));
+
+                            break;
+                        case '*':
+                            _currentValue = Convert.ToString(Convert.ToInt32(_currentValue) * (Convert.ToInt32(_lastValue)));
+                            break;
+                        case '/':
+                            _currentValue = Convert.ToInt32(_lastValue) != 0 ? Convert.ToString(Convert.ToInt32(_currentValue)/(Convert.ToInt32(_lastValue))) : String.Copy("");
+                            break;
+                    }
+                    break;
+            }
         }
 
-        // Someday, this method will return the string that should be displayed in the "output window" of the 
-        // calculator.  For now, it just returns a dummy value of "13", since the compiler requires that it
-        // return something.
-        public string GetOutput()
+    public string GetOutput()
         {
-            return "13";
+            if (_currentValue == "")
+            {
+                return null;
+            }
+            else
+            {
+                return _currentValue;
+            }
+            }
         }
+
     }
-}
+
