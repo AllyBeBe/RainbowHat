@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace Calculator
@@ -10,7 +11,11 @@ namespace Calculator
     {
         private int _currentValue;
         private int _previousValue;
-        private string Operator;
+        private bool OperatorAdd;
+        private bool OperatorSubtract;
+        private bool OperatorMultiply;
+        private bool OperatorDivide;
+
 
 
         // This method is the core method of CalculatorController.  In Homework 5, when you are making
@@ -27,36 +32,32 @@ namespace Calculator
             {
                 _previousValue = _currentValue;
                 _currentValue = 0;
-                Operator = "+";
+                OperatorAdd = true;
             }
             else if (input == '-')
             {
                 _previousValue = _currentValue;
                 _currentValue = 0;
-                Operator = "-";
+                OperatorSubtract = true;
             }
             else if (input == '*')
             {
                 _previousValue = _currentValue;
                 _currentValue = 0;
-                Operator = "*";
+                OperatorMultiply = true;
             }
             else if (input == '/')
             {
                 _previousValue = _currentValue;
                 _currentValue = 0;
-                Operator = "/";
-            }
-            else if (input == '=')
-            {
-
+                OperatorDivide = true;
             }
             else
             {
                 _currentValue = _currentValue*10 + int.Parse(input.ToString());
             }
         }
-
+      
 
         public string GetOutput()
         {
