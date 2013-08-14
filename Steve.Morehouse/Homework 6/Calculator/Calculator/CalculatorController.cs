@@ -60,21 +60,37 @@ namespace Calculator
                      */
                     if (clearCurrentValue == true)
                     {
-                        clearCurrentValue = false;
-                        _currentValue = String.Empty;
+                        /*
+                         * now check for leading zeros.  if so, do not reset flag
+                         */
+                        if (input != '0')
+                        {
+                            _currentValue = String.Empty;
+                            clearCurrentValue = false;
+                            _currentValue += input;
+                        }
+                        else
+                        {
+                            // even though this is still zero, still have to note this 
+                            _currentValue = "0";
+                            // don't reset flag in case there are non-zero numbers
+                        }
+                    }
+                    else
+                    {
+                        // keep on adding to the current string
+                        _currentValue += input;
                     }
 
-                    // keep on adding to the current string regardless
-                    _currentValue += input;
                     break;
 
-                    /*
-                     * CLEAR
-                     * 
-                     * clear the current value
-                     * display zero
-                     * set flag to clear to what user enters
-                     */
+                /*
+                 * CLEAR
+                 * 
+                 * clear the current value
+                 * display zero
+                 * set flag to clear to what user enters
+                 */
                 case 'c':
                     _currentValue = String.Empty;
                     _currentValue = "0";
@@ -114,14 +130,24 @@ namespace Calculator
                             _currentValue = Convert.ToString(Convert.ToInt32(_currentValue) * (Convert.ToInt32(_lastValue)));
                             break;
                         case '/':
-                            if (Convert.ToInt32(_lastValue) != 0)
+                            if (Convert.ToInt32(_currentValue) != 0)
                             {
+
                                 _currentValue =
-                                    Convert.ToString(Convert.ToInt32(_currentValue)/(Convert.ToInt32(_lastValue)));
+                                    //Convert.ToString(Convert.ToInt32(_currentValue)/(Convert.ToInt32(_lastValue)));
+                                    Convert.ToString(Convert.ToInt32(_lastValue)/(Convert.ToInt32(_currentValue)));
                             }
                             else
                             {
-                                _currentValue = String.Copy("DIV0");
+                                // both values are zero
+                                if (Convert.ToInt32(_lastValue) == 0)
+                                {
+                                    _currentValue = String.Copy("Result is undefined");
+                                }
+                                else // divisor only is zero
+                                {
+                                    _currentValue = String.Copy("Cannot divide by zero");
+                                }
                             }
                             break;
                     }
