@@ -9,7 +9,7 @@ namespace Calculator
         /*
          * the current value of the displayed register
          */
-        private string _currentValue = String.Empty;
+        private string _currentValue = "0";
 
         /*
          * this is the second register, the value which was previously entered but we need to perform the
@@ -23,14 +23,22 @@ namespace Calculator
         private char _lastOperation;
 
         /*
-         * is an operation is made, the current value still needs to be displayed.
+         * when an operation is made, the current value still needs to be displayed.
          * however a flag is set so upon entry of a new number, the new current Value is cleared
+         * 
+         * this flag is initially set since the initial value is ZERO but when a user enters a number
+         * it clears to what the user enters, so there are no leading zeros.
          */
-        private bool clearCurrentValue = false;
+        private bool clearCurrentValue = true;
 
-        // This method is the core method of CalculatorController.  In Homework 5, when you are making
-        // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
-        // helper methods that it calls) to make the calculator behave according to the tests.
+        /*
+         * This currently performes integer arithmetic in a Polish notation
+         * 
+         * This does NOT perform (yet)
+         *  - reverse Polish
+         *  - decimal
+         *  arithmetic
+         */
         public void AcceptCharacter(char input)
         {
             switch (input)
@@ -59,9 +67,19 @@ namespace Calculator
                     // keep on adding to the current string regardless
                     _currentValue += input;
                     break;
+
+                    /*
+                     * CLEAR
+                     * 
+                     * clear the current value
+                     * display zero
+                     * set flag to clear to what user enters
+                     */
                 case 'c':
                     _currentValue = String.Empty;
+                    _currentValue = "0";
                     _lastValue = String.Empty;
+                    clearCurrentValue = true;
                     break;
                 case '+':
                     _lastOperation = '+';
