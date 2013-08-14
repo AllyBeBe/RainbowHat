@@ -34,10 +34,10 @@ namespace CalculatorControllerTests
             // Assert GetOutput() is equal to "0"
 
             CalculatorController calc1 = new CalculatorController();
-            calc1.AcceptCharacter('1');
-            Assert.That(calc1.GetOutput(), Is.EqualTo("1"));
+            calc1.AcceptCharacter('4');
+            Assert.That(calc1.GetOutput(), Is.EqualTo("4"));
             calc1.AcceptCharacter('2');
-            Assert.That(calc1.GetOutput(), Is.EqualTo("12"));
+            Assert.That(calc1.GetOutput(), Is.EqualTo("42"));
             calc1.AcceptCharacter('c');
             Assert.That(calc1.GetOutput(), Is.EqualTo("0"));  
         }
