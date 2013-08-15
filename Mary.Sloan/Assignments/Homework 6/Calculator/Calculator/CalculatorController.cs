@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Data.SqlTypes;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Calculator
@@ -10,12 +11,14 @@ namespace Calculator
     // my problem is I think in static classes. 
     public class CalculatorController
     {
-        private int? _currentValue = 0;
+
+
+        private double? _currentValue = 0;
         bool _firstChar = true;
         private char _savedOperator = 'e';  //char doesn't have a null/empty value to check from what I could find.
-        private int? _firstValue;
-        private int? _secondValue;
-        private string _displayString;
+        private double? _firstValue;
+        private double? _secondValue;
+        private string _displayString = "0";
 
 
 
@@ -25,60 +28,71 @@ namespace Calculator
         public void AcceptCharacter(char input)
         {
 
-            if (input == '0' && _firstChar == true)
-            {
-                //leading zero.
-                _displayString = "0";
-                GetOutput();
-                return;
-                
-            }
             
             if (char.IsNumber(input))
             {
-               int intInput;
-               int.TryParse(input.ToString(), out intInput);
-                _currentValue = (_currentValue * 10) + intInput;
-                _firstChar = false;
-                _displayString = _currentValue.ToString();
-                GetOutput();
 
-            }
-            else
-            {
-                    if (_savedOperator == 'e')
-                 {
-                // if you hit the = without having an operator.
-                if (input == '=')
+
+                if (input == '0' && _firstChar == true)
                 {
+                    //leading zero.
                     _displayString = "0";
                     GetOutput();
+                }
+                else
+                {
+                    if (_currentValue.ToString().Length < 15)
+                    {
+                    double dblInput;
+                    double.TryParse(input.ToString(), out dblInput);
+                    _currentValue = (_currentValue * 10) + dblInput;
+                    _firstChar = false;
+                    _displayString = _currentValue.ToString();
+                    GetOutput();
+                    }
+                    else  //just return what you had before.
+                    {
+                        _displayString = _currentValue.ToString();
+                        GetOutput();
+                    }
+                }
+
+            }
+            else  //not a number.
+            {
+                 if (_savedOperator == 'e')
+                 {
+                     // don't do anything if equals used without having an operator first.
+                    if (input == '=')
+                    {
+                    _displayString = _currentValue.ToString();
+                    GetOutput();
+                    
+                    }
+                    else
+                    { //if the operator is hit without entering non-zero number, this will use the zero.
+                    
+                    _savedOperator = input;
+                    _firstValue = _currentValue;
+                    _displayString = _currentValue.ToString();
+                    GetOutput();
+                    _firstChar = true; //leading zero prevention for 2nd value.
+                    _currentValue = null;  //empty for 2nd value.
+                    }
+
 
                 }
                 else
                 {
-                    
-                    _savedOperator = input;
-                    _firstValue = _currentValue;
-                    _currentValue = null;
-                    _firstChar = false;
-                    _displayString = _firstValue.ToString();
-                    GetOutput();
-                }
-
-
-            }
-            else
-            {
                 // there's a saved operator
 
 
-                if (_currentValue.HasValue)
-                {
+                 if (_currentValue.HasValue)
+                    {
                      _secondValue = _currentValue;
-                }
-                else 
-                {
+                    }
+                 else 
+                    {
                 //without a 2nd value, calc just readds the same value or changes the operator.
                     if (input == '=')
                     {
@@ -89,6 +103,7 @@ namespace Calculator
                     {
                         _savedOperator = input;
                     }
+
                 }
             }
                 DoMath();
@@ -98,7 +113,7 @@ namespace Calculator
 
         void DoMath()
         {
-            int? result = 0;
+            double? result = 0;
 
             switch (_savedOperator)
             {
@@ -112,10 +127,20 @@ namespace Calculator
                     result = _firstValue*_secondValue;
                     break;
                 case '/':
-                    result = _firstValue/_secondValue;
-                    break;
+                    if (_secondValue <= 0)
+                    {
+                        _displayString = "Cannot divide by zero";
+                        break;
+                    }
+                    else
+                    {
+                        result = _firstValue / _secondValue;
+                        break; 
+                    }
                 case 'c':
-                    //call the clear function, and add a break.
+                    clearValues();
+                    break;
+                    
                 default:
                     MessageBox.Show("How'd you get here?");
                     break;
@@ -125,6 +150,17 @@ namespace Calculator
             GetOutput();
         }
 
+        void clearValues()
+        {
+            _currentValue = 0;
+            _displayString = "0";
+            _firstChar = true;
+            _firstValue = 0;
+            _secondValue = 0;
+            _savedOperator = 'e';
+            GetOutput();
+
+        }
 
         // Someday, this method will return the string that should be displayed in the "output window" of the 
         // calculator.  For now, it just returns a dummy value of "13", since the compiler requires that it
