@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Mime;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
@@ -11,8 +12,9 @@ namespace Calculator
     {
         private double _currentValue;
         private double _previousValue;
-        private string Operator;
+        private string _operator;
         private bool _isWaitingForSecondOperand;
+        private bool _equalsWasJustPressed;
 
 
         // This method is the core method of CalculatorController.  In Homework 5, when you are making
@@ -24,13 +26,16 @@ namespace Calculator
             if (input == 'c')
             {
                 _currentValue = 0;
+                _previousValue = 0;
+                _equalsWasJustPressed = false;
             }
             else if (input == '+')
             {
                 _previousValue = _currentValue;
                 _currentValue = 0;
-                Operator = "+";
+                _operator = "+";
                 _isWaitingForSecondOperand = true;
+                _equalsWasJustPressed = false;
             }
             else if (input == '-')
             {
@@ -38,7 +43,7 @@ namespace Calculator
                 // execute the math operation represented by Operator (the saved operator).
                 // Otherwise, just copy _currentValue into 
                 // _previousValue, and set _currentValue to 0
-                if (Operator != null)
+                if (_operator != null)
                 {
                     DoMathWithSavedOperator();
                 }
@@ -47,27 +52,32 @@ namespace Calculator
                     _previousValue = _currentValue;
                     _currentValue = 0;                    
                 }
-                Operator = "-";
+                _operator = "-";
                 _isWaitingForSecondOperand = true;
+                _equalsWasJustPressed = false;
             }
             else if (input == '*')
             {
                 _previousValue = _currentValue;
                 _currentValue = 0;
-                Operator = "*";
+                _operator = "*";
                 _isWaitingForSecondOperand = true;
+                _equalsWasJustPressed = false;
             }
             else if (input == '/')
             {
                 _previousValue = _currentValue;
                 _currentValue = 0;
-                Operator = "/";
+                _operator = "/";
                 _isWaitingForSecondOperand = true;
+                _equalsWasJustPressed = false;
             }
             else if (input == '=')
             {
                 DoMathWithSavedOperator();
                 _isWaitingForSecondOperand = false;
+                _previousValue = _currentValue;
+                _equalsWasJustPressed = true;
             }
             else // Digit has been typed
             {
@@ -76,9 +86,19 @@ namespace Calculator
                 // If we weren't waiting for a second operand, this line
                 // has no effect (and is harmless).
                 _isWaitingForSecondOperand = false;
+
                 if (_currentValue.ToString().Length < 15)
                 {
-                    _currentValue = _currentValue * 10 + int.Parse(input.ToString());
+                    if (_equalsWasJustPressed == false)
+                    {
+                        _currentValue = _currentValue*10 + int.Parse(input.ToString());
+                    }
+                    else
+                    {
+                        _currentValue = int.Parse(input.ToString());
+                        _previousValue = _currentValue;
+                    }
+                    _equalsWasJustPressed = false;
                 }
             }
         }
@@ -90,20 +110,38 @@ namespace Calculator
         {
             // Take saved values _previousValue and _currentValue
             // and if the operator was +, add them,
-            if (Operator == "+")
-            {
+            if (_operator == "+")
+            { 
                 _currentValue = _previousValue + _currentValue;
             }
             // if the operator was -, subtract them, 
-            if (Operator == "-")
+            if (_operator == "-")
             {
                 _currentValue = _previousValue - _currentValue;
             }
-
-            // if the operator was *, multiply them,
-            // if the operator was /, divide them.
+            if (_operator == "*")
+            {
+                _currentValue = _previousValue * _currentValue;
+            }
+            if (_operator == "/")
+            {
+                if (_currentValue == 0)
+                {
+                    if (_previousValue == 0)
+                    {
+                        MessageBox.Show("Result is undefined!");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Cannot divide by zero!");
+                    }
+                }
+                else
+                {
+                    _currentValue = _previousValue / _currentValue;
+                }
+            }
         }
-
 
         public string GetOutput()
         {
