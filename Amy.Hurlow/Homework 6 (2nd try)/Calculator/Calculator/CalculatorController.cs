@@ -8,7 +8,7 @@
         // I'm having a very hard time understanding the structure of the code I'll need to write.
         // I immediately started drawing boxes on paper, but got lost trying to relate display behavior 
         // and math operators.
-        // I
+        // 
         // I need some way to visualize the variables and methods I'll need, and their relation to each other.
         // Unfortunately, I Googled "how to (plan/design) software" and  
         // my search led me to discover oh so many systems for modelling, each of which
@@ -21,7 +21,8 @@
         // I need variables in which to store each digit and operator entered, so I can combine them at "=".
         // But I don't know how many digits or operators the user will enter.
         // I can clear the variables and re-use them on the next go-round when the next button 
-        // is clicked after the user clicks "=" and I show the answer
+        // is clicked after the user clicks "=" and I show the answer.
+        // 
         private 
         // This method is the core method of CalculatorController.  In Homework 5, when you are making
         // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
