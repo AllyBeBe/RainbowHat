@@ -34,8 +34,6 @@ namespace Calculator
                     if (_currentValue == "0")
                     {
                         _currentValue = String.Empty;
-                        _lastInput = String.Empty;
-                        _clearCurrentValue = true;
                     }
                     _currentValue += input;
                     break;
