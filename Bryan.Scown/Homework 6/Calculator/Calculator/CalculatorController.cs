@@ -10,6 +10,8 @@ namespace Calculator
         private string _lastInput;
         private char _lastOperation;
         private bool _clearCurrentValue;
+        private string _resultUndefined = "Result is undefined";
+        private string _cantDivideByZero = "Cannot divide by zero";
         
         public void AcceptCharacter(char input)
         {
@@ -68,16 +70,30 @@ namespace Calculator
                     switch (_lastOperation)
                     {
                         case '+':
-                            _currentValue = Convert.ToString(Convert.ToInt32(_currentValue) + (Convert.ToInt32(_lastInput)));
+                            _currentValue = Convert.ToString(Convert.ToDouble(_currentValue) + (Convert.ToDouble(_lastInput)));
                             break;
-                        case '-': 
-                            _currentValue = Convert.ToString(Convert.ToInt32(_currentValue) - (Convert.ToInt32(_lastInput)));
+                        case '-':
+                            _currentValue = Convert.ToString(Convert.ToDouble(_lastInput) - (Convert.ToDouble(_currentValue)));
                             break;
                         case '*':
-                            _currentValue = Convert.ToString(Convert.ToInt32(_currentValue) * (Convert.ToInt32(_lastInput)));
+                            _currentValue = Convert.ToString(Convert.ToDouble(_currentValue) * (Convert.ToDouble(_lastInput)));
                             break;
                         case '/':
-                            _currentValue = Convert.ToInt32(_lastInput) != 0 ? Convert.ToString(Convert.ToInt32(_currentValue)/(Convert.ToInt32(_lastInput))) : String.Copy("DIV0");
+                            if (Convert.ToDouble(_currentValue) != 0)
+                            {
+                                _currentValue = Convert.ToString(Convert.ToDouble(_lastInput) / (Convert.ToDouble(_currentValue)));
+                            }
+                            else
+                            {
+                                if (Convert.ToInt32(_lastInput) == 0)
+                                {
+                                    _currentValue = _resultUndefined;
+                                }
+                                else
+                                {
+                                    _currentValue = _cantDivideByZero;
+                                }
+                            }
                             break;
                     }
                     break;
@@ -90,7 +106,7 @@ namespace Calculator
             {
                 return null;
             }
-            if (_currentValue.Length > 16)
+            if (_currentValue.Length > 16 && _currentValue != _cantDivideByZero && _currentValue != _resultUndefined)
             {
                 return _currentValue.Substring(0, 16);
             }
