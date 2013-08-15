@@ -6,10 +6,10 @@ namespace Calculator
     public partial class Form1 : Form
     {
         private readonly CalculatorController _controller = new CalculatorController();
-
         public Form1()
         {
             InitializeComponent();
+            _controller.AcceptCharacter('c');
             output.Text = _controller.GetOutput();
         }
 
@@ -87,7 +87,7 @@ namespace Calculator
         private void ButtonPlusClick(object sender, EventArgs e)
         {
             HandleInput('+');
-        }
+           }
 
         private void ButtonMinusClick(object sender, EventArgs e)
         {
@@ -112,6 +112,11 @@ namespace Calculator
         private void ButtonEqualsClick(object sender, EventArgs e)
         {
             HandleInput('=');
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+          
         }
     }
 }
