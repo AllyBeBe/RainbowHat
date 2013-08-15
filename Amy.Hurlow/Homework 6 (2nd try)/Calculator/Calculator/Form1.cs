@@ -13,7 +13,7 @@ namespace Calculator
             output.Text = _controller.GetOutput();
         }
 
-        // I noticed that the same basic code was showing up in all of the methods:
+        // I noticed that the same basic code was showing up in all of the methods: (Amy: which methods in what file?)
         //      output.Text = _controller.AcceptCharacter('?')
         // Whenever I see duplicated code, I want to get rid of it -- it's more places where
         // errors can occur, more things I have to read over to find the "meat" of the code,

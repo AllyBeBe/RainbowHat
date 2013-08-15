@@ -1,9 +1,19 @@
-﻿namespace Calculator
+﻿using System;
+
+namespace Calculator
 {
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
     {
         private int _currentValue;
+        // this is what the user just entered (by clicking)
+        // Take currentvalue and store it 
+        // So create a new variable and assign _currentValue's value to it
+        // then, take input from the next button and store that.  Do I need to clear it first?
+        private long _previousValue1;
+        private String Operator;
+
+        //
         // This is the first test I'm trying to make pass.
         // I'm having a very hard time understanding the structure of the code I'll need to write.
         // I immediately started drawing boxes on paper, but got lost trying to relate display behavior 
@@ -23,15 +33,22 @@
         // I can clear the variables and re-use them on the next go-round when the next button 
         // is clicked after the user clicks "=" and I show the answer.
         // 
-        private 
+        
         // This method is the core method of CalculatorController.  In Homework 5, when you are making
         // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
         // helper methods that it calls) to make the calculator behave according to the tests.
+        //
+        // Store the value from the last button clicked in a new variable.  I chose type long.
         public void AcceptCharacter(char input)
         {
-            // Your code will eventually go here, to make all of the tests pass.
+            _previousValue1 = _currentValue;
+        // Now, I can't keep doing this, adding new variables for every button clicked and naming them serially.
+        // because I'd have potentially a whole lot of vaiables, 
+        // and all I want to do is combine them in order of entry, sort the numbers from the operators,
+        // turn consecutive numbers into multi-digit numbers, and perform the operations on the numbers.
+ 
 
-            // DO NOT WRITE THIS CODE YET!  WRITING THIS CODE WILL BE HOMEWORK 5!
+
         }
 
         // Someday, this method will return the string that should be displayed in the "output window" of the 
