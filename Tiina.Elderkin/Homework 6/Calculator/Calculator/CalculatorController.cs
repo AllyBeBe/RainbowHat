@@ -1,11 +1,13 @@
-﻿namespace Calculator
+﻿using System;
+
+namespace Calculator
 {
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
     {
-        private int _currentValue = 0;
-        private int _accumulator = 0;
-        private char _activeOperator = '+';
+        private double _currentValue = 0;
+        private double _accumulator = 0;
+        private char _activeOperator = '=';
         private bool _buildingNumber;
         private string _OutOfRangeWarning = "";
 
@@ -13,7 +15,7 @@
         {
             _currentValue = 0;
             _accumulator = 0;
-            _activeOperator = '+';
+            _activeOperator = '=';
             _OutOfRangeWarning = "";
 
 
@@ -37,7 +39,7 @@
                 case '8':
                 case '9':
                     _buildingNumber = true;
-                    if ((int.MaxValue - (input - '0')) / 10 >= _currentValue)
+                    if ((double.MaxValue - (input - '0')) / 10 >= _currentValue)
                         _currentValue = _currentValue * 10 + (input - '0');
                     else
                         _OutOfRangeWarning = "too big"; // calc just plays a 'ding' instead
@@ -68,34 +70,76 @@
                     _accumulator = _currentValue;
                     break;
                 case '+':
-                    if (_accumulator > 0 && (int.MaxValue - _accumulator) < _currentValue)
-                        _OutOfRangeWarning = "overflow"; // calc switches to scientific notation
-                    else
+                    if (isValidForAddition( _accumulator, _currentValue))
                         _accumulator += _currentValue;
                     break;
                 case '-':
-                    if (_accumulator < 0 && (_accumulator - int.MinValue) < _currentValue)
-                        _OutOfRangeWarning = "underflow"; // calc switches to scientific notation
-                    else
+                    if (isValidForSubtraction( _accumulator, _currentValue))
                         _accumulator -= _currentValue;
                     break;
                 case '*':
-                    if (_accumulator > 0 && (int.MaxValue / _accumulator) < _currentValue)
-                        _OutOfRangeWarning = "overflow"; // calc switches to scientific notation
-                    else
+                    if (isValidForSubtraction( _accumulator, _currentValue))
                         _accumulator *= _currentValue;
                     break;
                 case '/':
-                    if (_currentValue == 0)
-                        _OutOfRangeWarning = "Divide by Zero";
-                    else
-                        _accumulator /= _currentValue;  //  this is currently an integer calculator so this is currently DIV instead of true divide.
+                    if (isValidForDivision(_accumulator, _currentValue))
+                        _accumulator /= _currentValue;
                     break;
             }
             _currentValue = 0;
             _activeOperator = ' ';
 
         }
+
+        private Boolean isValidForAddition(double operand1, double operand2)
+        {
+            if (operand1 > 0 && (double.MaxValue - operand1) < operand2)
+            {
+                _OutOfRangeWarning = "overflow"; // calc switches to scientific notation
+                return false;
+            }
+            return true;
+
+        }
+
+        private Boolean isValidForSubtraction (double operand1, double operand2)
+        {
+            if (operand1 < 0 && (operand1 - double.MinValue) < operand2)
+            {
+                _OutOfRangeWarning = "underflow"; // calc switches to scientific notation
+                return false;
+            }
+            return true;
+
+        }
+
+        private Boolean isValidForMultiplication(double operand1, double operand2)
+        {
+            if (operand1 > 0 && (double.MaxValue/operand1) < operand2)
+            {
+                _OutOfRangeWarning = "overflow"; // calc switches to scientific notation
+                return false;
+            }
+            return true;
+        }
+
+        private Boolean isValidForDivision(double operand1, double operand2)
+        {
+            if (operand1 == 0 && operand2 == 0)
+            {
+                _OutOfRangeWarning = "Result is undefined";
+                return false;
+            }
+
+            if (operand2 == 0)
+            {
+                _OutOfRangeWarning = "Cannot divide by zero";
+                return false;
+            }
+
+            return true;
+        }
+
         public string GetOutput()
         {
             string _returnstring;
