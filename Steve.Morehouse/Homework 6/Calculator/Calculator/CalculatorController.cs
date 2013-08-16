@@ -3,7 +3,6 @@ using System.Linq;
 
 namespace Calculator
 {
-    // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
     {
         /*
@@ -32,17 +31,32 @@ namespace Calculator
         private bool clearCurrentValue = true;
 
         /*
-         * This currently performes integer arithmetic in a Polish notation
+         * if a decimal was entered
+         */
+        private bool isDecimal = false;
+
+        /*
+         * This currently performes arithmetic in a Polish notation format
+         * 
+         * This performs limited capability in the following areas:
+         * - signed
+         * - decimal
          * 
          * This does NOT perform (yet)
          *  - reverse Polish
-         *  - decimal
-         *  arithmetic
+         *  - multiple operations
+         *  - large numbers
+         *  - rounding
+         * 
          */
         public void AcceptCharacter(char input)
         {
             switch (input)
             {
+                case '.': // decimal notation
+                    isDecimal = true;
+                    _currentValue += input;
+                    break;
                 case '0':
                 case '1':
                 case '2':
@@ -53,7 +67,6 @@ namespace Calculator
                 case '7':
                 case '8':
                 case '9':
-                case '.': // not used right now
                     /*
                      * if there was an operation made where the current contents needs to be cleared, do so now
                      * before entry is made
@@ -73,7 +86,7 @@ namespace Calculator
                         {
                             // even though this is still zero, still have to note this 
                             _currentValue = "0";
-                            // don't reset flag in case there are non-zero numbers
+                            // don't reset flag in case there are subsequent zero entries
                         }
                     }
                     else
@@ -102,10 +115,24 @@ namespace Calculator
                     _lastValue = String.Copy(_currentValue);
                     clearCurrentValue = true;
                     break;
+
+                    /*
+                     * minus sign (overload)
+                     * determine if this is minus or negative
+                     */
                 case '-':
-                    _lastOperation = '-';
-                    _lastValue = String.Copy(_currentValue);
-                    clearCurrentValue = true;
+                    if (clearCurrentValue == true)
+                    {
+                        _currentValue = String.Empty;
+                        clearCurrentValue = false;
+                        _currentValue += input;
+                    }
+                    else // this is a minus
+                    {
+                        _lastOperation = '-';
+                        _lastValue = String.Copy(_currentValue);
+                        clearCurrentValue = true;
+                    }
                     break;
                 case '*':
                     _lastOperation = '*';
@@ -117,30 +144,73 @@ namespace Calculator
                     _lastValue = String.Copy(_currentValue);
                     clearCurrentValue = true;
                     break;
+                    
+                /*
+                 * if an equal is entered, we have to collect everything and determine the operation
+                 * to perform.  If there was no previous operation entered, clear the last command
+                 */
                 case '=':
                     switch (_lastOperation)
                     {
                         case '+':
-                            _currentValue = Convert.ToString(Convert.ToInt32(_currentValue) + (Convert.ToInt32(_lastValue)));
-                            break;
-                        case '-': _currentValue = Convert.ToString(Convert.ToInt32(_currentValue) - (Convert.ToInt32(_lastValue)));
-
-                            break;
-                        case '*':
-                            _currentValue = Convert.ToString(Convert.ToInt32(_currentValue) * (Convert.ToInt32(_lastValue)));
-                            break;
-                        case '/':
-                            if (Convert.ToInt32(_currentValue) != 0)
+                            if (isDecimal == true)
                             {
-
                                 _currentValue =
-                                    //Convert.ToString(Convert.ToInt32(_currentValue)/(Convert.ToInt32(_lastValue)));
-                                    Convert.ToString(Convert.ToInt32(_lastValue)/(Convert.ToInt32(_currentValue)));
+                                    Convert.ToString(Convert.ToDouble(_currentValue) + (Convert.ToDouble(_lastValue)));
+                                isDecimal = false;
                             }
                             else
                             {
+                                _currentValue =
+                                       Convert.ToString(Convert.ToInt64(_currentValue) + (Convert.ToInt64(_lastValue)));
+                            }
+                            break;
+                        case '-':
+                            if (isDecimal == true)
+                            {
+                                _currentValue =
+                                    Convert.ToString(Convert.ToDouble(_currentValue) - (Convert.ToDouble(_lastValue)));
+                                isDecimal = false;
+                            }
+                            else
+                            {
+                                _currentValue =
+                                    Convert.ToString(Convert.ToInt64(_currentValue) - (Convert.ToInt64(_lastValue)));
+                            }
+                            break;
+                        case '*':
+                            if (isDecimal == true)
+                            {
+                                _currentValue =
+                                    Convert.ToString(Convert.ToDouble(_currentValue) * (Convert.ToDouble(_lastValue)));
+                                isDecimal = false;
+                            }
+                            else
+                            {
+                                _currentValue =
+                                    Convert.ToString(Convert.ToInt64(_currentValue)*(Convert.ToInt64(_lastValue)));
+                            }
+                            break;
+                        case '/':
+                            if (Convert.ToInt64(_currentValue) != 0)
+                            {
+                                if (isDecimal == true)
+                                {
+                                    _currentValue =
+                                        Convert.ToString(Convert.ToDouble(_currentValue) /
+                                                         (Convert.ToDouble(_lastValue)));
+                                    isDecimal = false;
+                                }
+                                else
+                                {
+                                    _currentValue =
+                                        Convert.ToString(Convert.ToDecimal(_lastValue)/(Convert.ToDecimal(_currentValue)));;
+                                }
+                            }
+                            else // got a problem (double zero or zero divisor)
+                            {
                                 // both values are zero
-                                if (Convert.ToInt32(_lastValue) == 0)
+                                if (Convert.ToInt64(_lastValue) == 0)
                                 {
                                     _currentValue = String.Copy("Result is undefined");
                                 }
@@ -149,6 +219,10 @@ namespace Calculator
                                     _currentValue = String.Copy("Cannot divide by zero");
                                 }
                             }
+                            break;
+
+                        default: // there is no previous operation specified
+                            clearCurrentValue = true;
                             break;
                     }
                     break;
