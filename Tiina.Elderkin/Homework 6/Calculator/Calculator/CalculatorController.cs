@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Resources;
 
 namespace Calculator
 {
@@ -8,8 +9,10 @@ namespace Calculator
         private double _currentValue = 0;
         private double _accumulator = 0;
         private char _activeOperator = '=';
-        private bool _buildingNumber;
+        private bool _isBuildingNumber = false ;
+        private bool _isAfterEquals = false;
         private string _OutOfRangeWarning = "";
+
 
         private void _Reset()   // or initializer - don't know C# approach yet
         {
@@ -17,15 +20,14 @@ namespace Calculator
             _accumulator = 0;
             _activeOperator = '=';
             _OutOfRangeWarning = "";
+            _isAfterEquals  = false;
 
 
         }
-        // This method is the core method of CalculatorController.  In Homework 5, when you are making
-        // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
-        // helper methods that it calls) to make the calculator behave according to the tests.
+        // This method is the core method of CalculatorController. 
         public void AcceptCharacter(char input)
         {
-            //
+
             switch (input)
             {
                 case '0':
@@ -38,21 +40,31 @@ namespace Calculator
                 case '7':
                 case '8':
                 case '9':
-                    _buildingNumber = true;
-                    if ((double.MaxValue - (input - '0')) / 10 >= _currentValue)
+                    if (_isAfterEquals)
+                        _Reset();
+                    if (! _isBuildingNumber)
+                    {
+                        _currentValue = 0;
+                        _isBuildingNumber = true;
+                    }
+                    if (isValidForAppendingDigit(input-'0'))
                         _currentValue = _currentValue * 10 + (input - '0');
-                    else
-                        _OutOfRangeWarning = "too big"; // calc just plays a 'ding' instead
                     break;
                 case '=':
+                    _ApplyPrevOperator();
+                    _isBuildingNumber = false;
+                    _isAfterEquals = true;
+                    break;
                 case '+':
                 case '-':
                 case '/':
                 case '*':
-                    if (_buildingNumber)
+                    if (_isBuildingNumber)
                         _ApplyPrevOperator();
+                    _currentValue = _accumulator;
                     _activeOperator = input;
-                    _buildingNumber = false;
+                    _isBuildingNumber = false;
+                    _isAfterEquals = false;
                     break;
                 case 'c':
                     _Reset();
@@ -86,11 +98,22 @@ namespace Calculator
                         _accumulator /= _currentValue;
                     break;
             }
-            _currentValue = 0;
-            _activeOperator = ' ';
-
         }
 
+        private Boolean isValidForAppendingDigit(double newdigit)
+        {
+            if ((double.MaxValue - newdigit)/10 < _currentValue)
+            {
+                _OutOfRangeWarning = "too big"; // calc just plays a 'ding' instead
+                return false;
+            }
+            if (_currentValue.ToString().Length >= 15)
+            {
+                return false;  // this case is a result of the testing suite provided and may not be needed.
+            }
+            return true;
+
+        }
         private Boolean isValidForAddition(double operand1, double operand2)
         {
             if (operand1 > 0 && (double.MaxValue - operand1) < operand2)
@@ -148,9 +171,10 @@ namespace Calculator
             if (_OutOfRangeWarning.Length > 0)
             {
                 _returnstring = _OutOfRangeWarning;
-                _OutOfRangeWarning = ""; // just report once and then clear warning
+                _OutOfRangeWarning = ""; 
+                // just report once and then clear warning.
             }
-            else if (_buildingNumber)
+            else if (_isBuildingNumber)
                 _returnstring = _currentValue.ToString(); // + _activeOperator;
             else
                 _returnstring = _accumulator.ToString(); // + _activeOperator; 
