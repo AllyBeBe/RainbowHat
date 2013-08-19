@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.Mime;
-using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-
-namespace Calculator
+﻿namespace Calculator
 {
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
@@ -15,7 +8,7 @@ namespace Calculator
         private string _operator;
         private bool _isWaitingForSecondOperand;
         private bool _equalsWasJustPressed;
-        private int _errorState;
+        private string _error;
 
         public CalculatorController()
         {
@@ -113,7 +106,7 @@ namespace Calculator
             _operator = null;
             _isWaitingForSecondOperand = false;
             _equalsWasJustPressed = false;
-            _errorState = 0;
+            _error = null;
         }
 
         // (alternate approach, have a lookup table from the
@@ -142,11 +135,11 @@ namespace Calculator
                 {
                     if (_previousValue == 0)
                     {
-                        _errorState = 1;
+                        _error = "Result is undefined";
                     }
                     else
                     {
-                        _errorState = 2;
+                        _error = "Cannot divide by zero";
                     }
                 }
                 else
@@ -161,31 +154,15 @@ namespace Calculator
             // Eva's solution:
             // If we're trying to divide zero by zero,
             // return "Result is undefined"
-
-            if (_errorState == 1)
-            {
-                return "Result is undefined";
-            }
-
             // If we're trying to divide anything else by zero,
             // return "Cannot divide by zero"
-            if (_errorState == 2)
-            {
-                return "Cannot divide by zero";
-            }
-
-            if (_errorState == 3)
-            {
-                return "some other error message";
-            }
-
-            if (_errorState == 4)
-            {
-                return "yet another error message";
-            }
-
+            
             // Alex's solution
             // If we have an error, return that error
+            if (_error != null)
+            {
+                return _error;
+            }
 
             // If we are waiting for a second operand, display
             // _previousValue rather than _currentValue
