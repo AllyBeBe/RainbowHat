@@ -15,8 +15,7 @@ namespace Calculator
         private string _operator;
         private bool _isWaitingForSecondOperand;
         private bool _equalsWasJustPressed;
-        private bool _isTryingToDivideZeroByZero;
-        private bool _isTryingToDivideNonZeroByZero;
+        private int _errorState;
 
         public CalculatorController()
         {
@@ -114,8 +113,7 @@ namespace Calculator
             _operator = null;
             _isWaitingForSecondOperand = false;
             _equalsWasJustPressed = false;
-            _isTryingToDivideNonZeroByZero = false;
-            _isTryingToDivideZeroByZero = false;
+            _errorState = 0;
         }
 
         // (alternate approach, have a lookup table from the
@@ -144,11 +142,11 @@ namespace Calculator
                 {
                     if (_previousValue == 0)
                     {
-                        _isTryingToDivideZeroByZero = true;
+                        _errorState = 1;
                     }
                     else
                     {
-                        _isTryingToDivideNonZeroByZero = true;
+                        _errorState = 2;
                     }
                 }
                 else
@@ -163,16 +161,27 @@ namespace Calculator
             // Eva's solution:
             // If we're trying to divide zero by zero,
             // return "Result is undefined"
-            if (_isTryingToDivideZeroByZero)
+
+            if (_errorState == 1)
             {
                 return "Result is undefined";
             }
 
             // If we're trying to divide anything else by zero,
             // return "Cannot divide by zero"
-            if (_isTryingToDivideNonZeroByZero)
+            if (_errorState == 2)
             {
                 return "Cannot divide by zero";
+            }
+
+            if (_errorState == 3)
+            {
+                return "some other error message";
+            }
+
+            if (_errorState == 4)
+            {
+                return "yet another error message";
             }
 
             // Alex's solution
