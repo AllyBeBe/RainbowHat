@@ -15,6 +15,8 @@ namespace Calculator
         private string _operator;
         private bool _isWaitingForSecondOperand;
         private bool _equalsWasJustPressed;
+        private bool _isTryingToDivideZeroByZero;
+        private bool _isTryingToDivideNonZeroByZero;
 
         public CalculatorController()
         {
@@ -52,7 +54,7 @@ namespace Calculator
                 else
                 {
                     _previousValue = _currentValue;
-                    _currentValue = 0;                    
+                    _currentValue = 0;
                 }
                 _operator = "-";
                 _isWaitingForSecondOperand = true;
@@ -93,7 +95,7 @@ namespace Calculator
                 {
                     if (_equalsWasJustPressed == false)
                     {
-                        _currentValue = _currentValue*10 + int.Parse(input.ToString());
+                        _currentValue = _currentValue * 10 + int.Parse(input.ToString());
                     }
                     else
                     {
@@ -112,6 +114,8 @@ namespace Calculator
             _operator = null;
             _isWaitingForSecondOperand = false;
             _equalsWasJustPressed = false;
+            _isTryingToDivideNonZeroByZero = false;
+            _isTryingToDivideZeroByZero = false;
         }
 
         // (alternate approach, have a lookup table from the
@@ -122,7 +126,7 @@ namespace Calculator
             // Take saved values _previousValue and _currentValue
             // and if the operator was +, add them,
             if (_operator == "+")
-            { 
+            {
                 _currentValue = _previousValue + _currentValue;
             }
             // if the operator was -, subtract them, 
@@ -140,11 +144,11 @@ namespace Calculator
                 {
                     if (_previousValue == 0)
                     {
-                        MessageBox.Show("Result is undefined!");
+                        _isTryingToDivideZeroByZero = true;
                     }
                     else
                     {
-                        MessageBox.Show("Cannot divide by zero!");
+                        _isTryingToDivideNonZeroByZero = true;
                     }
                 }
                 else
@@ -156,6 +160,24 @@ namespace Calculator
 
         public string GetOutput()
         {
+            // Eva's solution:
+            // If we're trying to divide zero by zero,
+            // return "Result is undefined"
+            if (_isTryingToDivideZeroByZero)
+            {
+                return "Result is undefined";
+            }
+
+            // If we're trying to divide anything else by zero,
+            // return "Cannot divide by zero"
+            if (_isTryingToDivideNonZeroByZero)
+            {
+                return "Cannot divide by zero";
+            }
+
+            // Alex's solution
+            // If we have an error, return that error
+
             // If we are waiting for a second operand, display
             // _previousValue rather than _currentValue
             if (_isWaitingForSecondOperand)
