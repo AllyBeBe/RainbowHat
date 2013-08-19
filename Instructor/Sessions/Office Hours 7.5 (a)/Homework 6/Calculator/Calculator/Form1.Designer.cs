@@ -52,9 +52,11 @@
             this.output.Enabled = false;
             this.output.Location = new System.Drawing.Point(32, 13);
             this.output.Margin = new System.Windows.Forms.Padding(2);
+            this.output.MaxLength = 14;
             this.output.Name = "output";
             this.output.Size = new System.Drawing.Size(149, 20);
             this.output.TabIndex = 0;
+            this.output.TextChanged += new System.EventHandler(this.output_TextChanged);
             // 
             // button1
             // 
@@ -257,6 +259,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
