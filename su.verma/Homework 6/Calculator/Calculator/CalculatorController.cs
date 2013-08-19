@@ -38,6 +38,8 @@ namespace Calculator
             else if (_currentValue == "")
             {
                 _currentValue = input.ToString();
+                _result = "";
+
             }
 
             else if (input == '+')
