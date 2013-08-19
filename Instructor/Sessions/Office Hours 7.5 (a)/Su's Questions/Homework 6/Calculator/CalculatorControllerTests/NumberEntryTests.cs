@@ -12,6 +12,15 @@ namespace CalculatorControllerTests
             AssertOutput("3");
         }
 
+        [Test]
+        public void CanEnterMultipleDigitNumber()
+        {
+            EnterNumber(3);
+            AssertOutput("3");
+            EnterNumber(4);
+            AssertOutput("34");
+        }
+
         // Tammy
         [Test]
         public void MultipleZerosAreIgnored()

@@ -16,50 +16,70 @@ namespace Calculator
         
 
         public CalculatorController()
+        {
+            ClearCalculatorState();
+        }
 
+        private void ClearCalculatorState()
         {
             _operator = '0';
-            _currentValue = "";
+            _currentValue = "0";
             _previousValue = "";
             _result = "";
         }
-
 
         // This method is the core method of CalculatorController.  In Homework 5, when you are making
         // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
         // helper methods that it calls) to make the calculator behave according to the tests.
         public void AcceptCharacter(char input)
         {
+            // Clearing out the calculator
             if (input == 'c')
             {
-                _currentValue = "";
+                ClearCalculatorState();
             }
 
-            else if (_currentValue == "")
-            {
-                _currentValue = input.ToString();
-                _result = "";
-
-            }
-
+            // Record the "+" operator
             else if (input == '+')
             {
                 _operator = input;
-            }
-
-            else if (_currentValue != "" && input != '=')
-            {
+                // Save the "_currentValue" into "_previousValue", 
                 _previousValue = _currentValue;
-                _currentValue = input.ToString();
+                // and clear out _currentValue
+                _currentValue = "";
             }
 
             else if (input == '=')
             {
                 if (_operator == '+')
                 {
-                    _result = (Convert.ToInt16(_previousValue) + Convert.ToInt16(_currentValue)).ToString();
+                    _result = (Convert.ToDouble(_previousValue) + Convert.ToDouble(_currentValue)).ToString();
                 }
             }
+
+            // There's no current value, and the user has typed a digit
+            else if (_currentValue == "")
+            {
+                _currentValue = input.ToString();
+                _result = "";
+            }
+            
+            // There is a current value, and the user has typed a digit
+            else if (_currentValue != "")
+            {
+                // If _currentValue is "0", remove that "0" before adding input
+                if (_currentValue == "0")
+                {
+                    _currentValue = "";
+                }
+
+                // Only add the digit if we have fewer than 15 digits entered
+                if (_currentValue.Length < 15)
+                {
+                    _currentValue = _currentValue + input;
+                }
+            }
+
 
             //else
             //{
@@ -81,6 +101,14 @@ namespace Calculator
             {
                 return _result;
             }
+
+            // If they have entered a "+" but current value is still "", display
+            // the previous value
+            if (_operator == '+' && _currentValue == "")
+            {
+                return _previousValue;
+            }
+
             return _currentValue;
         }
     }

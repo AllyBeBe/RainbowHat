@@ -24,7 +24,7 @@ namespace CalculatorControllerTests
 
         // Tiina, showing intermediate outputs
         [Test]
-        public void BasicAddDisplaysCorrectly()
+        public void  BasicAddDisplaysCorrectly()
         {
             EnterNumber(2);
             AssertOutput("2");
