@@ -8,10 +8,13 @@ namespace Calculator
         
         private string _currentValue = "0";
         private string _lastInput;
-        private char _lastOperation;
+        private char? _lastOperation;
         private bool _clearCurrentValue;
         private string _resultUndefined = "Result is undefined";
         private string _cantDivideByZero = "Cannot divide by zero";
+        private bool _isWaitingForNextNumToStart = false;
+        private bool _isAfterEquals = false;
+
         
         public void AcceptCharacter(char input)
         {
@@ -37,34 +40,36 @@ namespace Calculator
                     {
                         _currentValue = String.Empty;
                     }
+                    //if (_isWaitingForNextNumToStart)
                     _currentValue += input;
                     break;
                     
                 case 'c':
-                    _currentValue = String.Empty;
-                    _currentValue = "0";
-                    _lastInput = String.Empty;
-                    _clearCurrentValue = true;
+                    ResetCalculatorState();
                     break;
                 case '+':
                     _lastOperation = '+';
                     _lastInput = String.Copy(_currentValue);
                     _clearCurrentValue = true;
+                    _isWaitingForNextNumToStart = true;
                     break;
                 case '-':
                     _lastOperation = '-';
                     _lastInput = String.Copy(_currentValue);
                     _clearCurrentValue = true;
+                    _isWaitingForNextNumToStart = true;
                     break;
                 case '*':
                     _lastOperation = '*';
                     _lastInput = String.Copy(_currentValue);
                     _clearCurrentValue = true;
+                    _isWaitingForNextNumToStart = true;
                     break;
                 case '/':
                     _lastOperation = '/';
                     _lastInput = String.Copy(_currentValue);
                     _clearCurrentValue = true;
+                    _isWaitingForNextNumToStart = true;
                     break;
                 case '=':
                     switch (_lastOperation)
@@ -100,6 +105,15 @@ namespace Calculator
             }
         }
 
+        private void ResetCalculatorState()
+        {
+            _currentValue = String.Empty;
+            _currentValue = "0";
+            _lastInput = String.Empty;
+            _clearCurrentValue = true;
+            _lastOperation = null;
+        }
+
         public string GetOutput()
         {
             if (_currentValue == "")
@@ -110,7 +124,7 @@ namespace Calculator
             {
                 return _currentValue.Substring(0, 16);
             }
-            return _currentValue;
+                     return _currentValue;
         }
         
     }
