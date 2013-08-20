@@ -6,6 +6,12 @@ namespace Calculator
     public class CalculatorController
     {
         /*
+         * the maximum number of characters to be displayed
+         */
+        private const int MAXDISPLAYCHARACTERS = 15;
+        private int currentDisplayCharacters = 0;
+
+        /*
          * the current value of the displayed register
          */
         private string _currentValue = "0";
