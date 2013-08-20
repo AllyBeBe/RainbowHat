@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Resources;
 using System.Windows.Forms;
 
 namespace Calculator
@@ -8,6 +9,8 @@ namespace Calculator
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
     {
+
+        
         private string _currentValueString="0";
         private double _currentValue=0;
         private double _previousValue=0;
@@ -165,23 +168,57 @@ namespace Calculator
             switch (_operator)
             {
                 case "+":
-                    _currentValue = _previousValue + _currentValue;
-                    _currentValueString = Convert.ToString(_currentValue);
+                    if (_previousValue == 0)
+                    {
+                        _previousValue = _currentValue;
+                        _currentValue = _currentValue + _currentValue;
+                        _currentValueString = Convert.ToString(_currentValue);
+                    }
+                    else
+                    {
+                        _currentValue = _previousValue + _currentValue;
+                        _currentValueString = Convert.ToString(_currentValue);  
+                    }
                     break;
                 case "-":
-                    _currentValue = _previousValue - _currentValue;
-                    _currentValueString = Convert.ToString(_currentValue);
+                    if (_previousValue == 0)
+                    {
+                        _previousValue = _currentValue;
+                        _currentValue = _currentValue - _currentValue;
+                        _currentValueString = Convert.ToString(_currentValue);
+                    }
+                    else
+                    {
+                        _currentValue = _previousValue - _currentValue;
+                        _currentValueString = Convert.ToString(_currentValue);
+                    }
                     break;
                 case "*":
-                    _currentValue = _previousValue * _currentValue;
-                    _currentValueString = Convert.ToString(_currentValue);
+                    if (_previousValue == 0)
+                    {
+                        _previousValue = _currentValue;
+                        _currentValue = _currentValue * _currentValue;
+                        _currentValueString = Convert.ToString(_currentValue);
+                    }
+                    else
+                    {
+                        _currentValue = _previousValue * _currentValue;
+                        _currentValueString = Convert.ToString(_currentValue);
+                    }
                     break;
                 case "/":
                     if (_currentValue == 0)
                     {
                         _currentValueString = "Cannot divide by zero";
-                        Reset();
+                        //Reset();
                     }
+                    else if (_previousValue == 0)
+                    {
+                        _previousValue = _currentValue;
+                        _currentValue = _currentValue / _currentValue;
+                        _currentValueString = Convert.ToString(_currentValue);
+                    }
+                    
                     else
                     {
                         _currentValue = _previousValue / _currentValue;
