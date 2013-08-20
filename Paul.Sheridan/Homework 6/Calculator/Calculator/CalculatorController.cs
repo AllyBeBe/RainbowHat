@@ -124,6 +124,7 @@ namespace Calculator
             if (_operator == "+")
             { 
                 _currentValue = _previousValue + _currentValue;
+                _previousValue = 0;
             }
             // if the operator was -, subtract them, 
             if (_operator == "-")
@@ -140,11 +141,11 @@ namespace Calculator
                 {
                     if (_previousValue == 0)
                     {
-                        MessageBox.Show("Result is undefined!");
+                        ;
                     }
                     else
                     {
-                        MessageBox.Show("Cannot divide by zero!");
+                        ;
                     }
                 }
                 else
