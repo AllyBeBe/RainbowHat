@@ -55,6 +55,7 @@
             this.output.Name = "output";
             this.output.Size = new System.Drawing.Size(149, 20);
             this.output.TabIndex = 0;
+            this.output.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // button1
             // 
