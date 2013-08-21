@@ -8,9 +8,7 @@ namespace Calculator
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
     {
-        //private int _currentValue ;
-        //private string _currentStringValue = string.Empty;
-        //private int _LastValue;
+
         private double _currentValue;
         private double _previousValue;
         private bool OperatorAdd;
@@ -70,22 +68,9 @@ namespace Calculator
         // calculator.  For now, it just returns a dummy value of "13", since the compiler requires that it
         // return something.
         public string GetOutput()
-            //{
-            //    if (_currentStringValue == string.Empty)
-            //    {
-            //        return "0";
-            //    }
-            //    return _currentStringValue;
-            //}
-            //{           return _currentValue.ToString();}
-
-            //}
+          
         {
-            //if (sizeof(_currentValue) == "")
-            //{
-            //    return null;
-            //}
-            ;
+           
             if (Math.Floor(Math.Log10(_currentValue) + 1) > 16)
             {
                 return _currentValue.ToString().Substring(0, 16);
