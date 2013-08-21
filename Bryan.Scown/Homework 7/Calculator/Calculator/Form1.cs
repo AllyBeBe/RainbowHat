@@ -10,6 +10,7 @@ namespace Calculator
         public Form1()
         {
             InitializeComponent();
+            _controller.ResetCalculatorState();
             _controller.AcceptCharacter('c');
             output.Text = _controller.GetOutput();
         }
