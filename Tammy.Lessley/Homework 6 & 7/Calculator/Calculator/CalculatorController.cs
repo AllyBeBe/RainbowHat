@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 
 namespace Calculator
 {
@@ -11,69 +12,170 @@ namespace Calculator
 
         private double _currentValue;
         private double _previousValue;
-        private bool OperatorAdd;
-        private bool OperatorSubtract;
-        private bool OperatorMultiply;
-        private bool OperatorDivide;
+        private string _operator;
+        private bool _isWaitingForSecondOperator;
+        private bool _divideZeroByZero;
+        private bool _equalButtonPushed;
+        private bool _divideNumbersByZero;
 
-        // This method is the core method of CalculatorController.  In Homework 5, when you are making
-        // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
-        // helper methods that it calls) to make the calculator behave according to the tests.
-        public void AcceptCharacter(char input)
+        private void ResetCalculator()
         {
-            if (input == 'c')
-            {
-                _currentValue = 0;
+            _currentValue = 0;
+            _previousValue = 0;
+            _operator = null;
+            _isWaitingForSecondOperator = false;
+            _equalButtonPushed = false;
+        }
+
+         private void DoMathWithSavedOperator()
+        {
+            if (_operator == "+")
+            { 
+                _currentValue = _previousValue + _currentValue;
             }
-            else if (input == '+')
+            if (_operator == "-")
             {
-                _previousValue = _currentValue;
-                _currentValue = 0;
-                OperatorAdd = true;
+                _currentValue = _previousValue - _currentValue;
             }
-            else if (input == '-')
+            if (_operator == "*")
             {
-                _previousValue = _currentValue;
-                _currentValue = 0;
-                OperatorAdd = true;
+                _currentValue = _previousValue * _currentValue;
             }
-            else if (input == '*')
+            if (_operator == "/")
             {
-                _previousValue = _currentValue;
-                _currentValue = 0;
-                OperatorAdd = true;
-            }
-            else if (input == '/')
-            {
-                _previousValue = _currentValue;
-                _currentValue = 0;
-                OperatorAdd = true;
-            }
-            else
-            {
-                _currentValue = _currentValue*10 + int.Parse(input.ToString());
+                if (_currentValue == 0)
+                {
+                    if (_previousValue == 0)
+                    {
+                        _divideZeroByZero = true;
+                    }
+                    else
+                    {
+                        _divideNumbersByZero = true;
+                    }
+                }
+                else
+                {
+                    _currentValue = _previousValue / _currentValue;
+                }
             }
         }
+        public CalculatorController()
+        {
+            ResetCalculator();
+        }
+
+        public void AcceptCharacter(char input)
+        {
+            switch (input)
+            {
+                case 'c':
+                    ResetCalculator();
+                    break;
+                case '+':
+                    if (_operator != null)
+                    {
+                        DoMathWithSavedOperator();
+                    }
+                    _previousValue = _currentValue;
+                    _currentValue = 0;
+                    _operator = "+";
+                    _isWaitingForSecondOperator = true;
+                    _equalButtonPushed = false;
+                    break;
+                case '-':
+                    if (_operator != null)
+                    {
+                        DoMathWithSavedOperator();
+                    }
+                    _previousValue = _currentValue;
+                    _currentValue = 0;
+                    _operator = "-";
+                    _isWaitingForSecondOperator = true;
+                    _equalButtonPushed = false;
+                    break;
+                case '*':
+                    if (_operator != null)
+                    {
+                        DoMathWithSavedOperator();
+                    }
+                    _previousValue = _currentValue;
+                    _currentValue = 0;
+                    _operator = "*";
+                    _isWaitingForSecondOperator = true;
+                    _equalButtonPushed = false;
+                    break;
+                case '/':
+                    if (_operator != null)
+                    {
+                        DoMathWithSavedOperator();
+                    }
+                    _previousValue = _currentValue;
+                    _currentValue = 0;
+                    _operator = "/";
+                    _isWaitingForSecondOperator = true;
+                    _equalButtonPushed = false;
+                    break;
+                case '=':
+                    if (_operator != null)
+                    {
+                        DoMathWithSavedOperator();
+                    }
+                    _previousValue = _currentValue;
+                    _currentValue = 0;
+                    _operator = "=";
+                    _isWaitingForSecondOperator = true;
+                    _equalButtonPushed = false;
+                    break;
+                default:
+                    _isWaitingForSecondOperator = false;
+                    _equalButtonPushed = false;
+                    if (_currentValue.ToString().Length < 16)
+                    {
+                        if (_equalButtonPushed == false)
+                        {
+                            _currentValue = _currentValue*10 + int.Parse(input.ToString());
+                        }
+                        else
+                        {
+                            _previousValue = _currentValue;
+                            double d = _currentValue - int.Parse(input.ToString());
+                        }
+                    }
+                    break;
+            }
+        }
+
+
+
 
 
         //ignore leading zeros... if the first digit is zero... if the sum of the first N digits is zero... disregard, else currentvalue...
 
 
-        // Your code will eventually go here, to make all of the tests pass.
+                // Your code will eventually go here, to make all of the tests pass.
 
-        // DO NOT WRITE THIS CODE YET!  WRITING THIS CODE WILL BE HOMEWORK 5!
+                // DO NOT WRITE THIS CODE YET!  WRITING THIS CODE WILL BE HOMEWORK 5!
 
 
-        // Someday, this method will return the string that should be displayed in the "output window" of the 
-        // calculator.  For now, it just returns a dummy value of "13", since the compiler requires that it
-        // return something.
-        public string GetOutput()
+                // Someday, this method will return the string that should be displayed in the "output window" of the 
+                // calculator.  For now, it just returns a dummy value of "13", since the compiler requires that it
+                // return something.
+            public
+            string GetOutput()
           
         {
-           
-            if (Math.Floor(Math.Log10(_currentValue) + 1) > 16)
+            if (_divideNumbersByZero)
             {
-                return _currentValue.ToString().Substring(0, 16);
+                return "Cannot divide by zero";
+            }
+            if (_divideZeroByZero)
+            {
+                return "Result is undefined";
+            }
+            if (_isWaitingForSecondOperator)
+            {
+                return _previousValue.ToString();
             }
             return _currentValue.ToString();
         }
