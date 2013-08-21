@@ -77,12 +77,12 @@ namespace CalculatorControllerTests
         // Tammy
         // Modified Tammy's test to be more consistent with Calc
         [Test]
-        public void CanEnterUpTo16DigitsAndNoMore()
+        public void CanEnterUpTo15DigitsAndNoMore()
         {
-            AcceptCharacters("1234567891234567");
-            AssertOutput("1234567891234567");
-            AcceptCharacters("8");
-            AssertOutput("1234567891234567");
+            AcceptCharacters("123456789123456");
+            AssertOutput("123456789123456");
+            AcceptCharacters("7");
+            AssertOutput("123456789123456");
         }
     }
 }

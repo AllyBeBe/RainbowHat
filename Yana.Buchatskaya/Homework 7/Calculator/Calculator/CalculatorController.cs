@@ -3,129 +3,93 @@ using System.Windows.Forms;
 
 namespace Calculator
 {
+    // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
     {
-        
-        private string _currentValue = "0";
-        private string _lastInput;
-        private char? _lastOperation;
-        private bool _clearCurrentValue;
-        private string _resultUndefined = "Result is undefined";
-        private string _cantDivideByZero = "Cannot divide by zero";
-        private bool _isWaitingForNextNumToStart;
+        private double _currentValue;
+        private double _previousValue;
+        private string _operator;
         private bool _isWaitingForSecondOperand;
-        private bool _isAfterEquals;
-        private bool _isNegativeInput;
+        private bool _equalsWasJustPressed;
+        private bool _isDivideZeroByZero;
+        private bool _isDivideNumberByZero;
 
+        public CalculatorController()
+        {
+            ResetCalculatorState();
+        } 
 
         public void AcceptCharacter(char input)
         {
             switch (input)
             {
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                
-                    if (_clearCurrentValue)
-                    {
-                        _clearCurrentValue = false;
-                        _currentValue = String.Empty;
-                    }
-                    if (_currentValue == "0")
-                    {
-                        _currentValue = String.Empty;
-                    }
-                    if (_isAfterEquals == false)
-                    {
-                        _currentValue += input;    
-                    }
-                    /*if (_isNegativeInput)
-                    {
-                        _currentValue = String.Format("-{0}", input);
-                    }*/
-                    else
-                    {
-                        _currentValue = Convert.ToString(input);
-                        _lastInput = _currentValue;    
-                    }
-                    _isAfterEquals = false;
-                    break;
-                    
                 case 'c':
                     ResetCalculatorState();
                     break;
                 case '+':
-                    _lastOperation = '+';
-                    _lastInput = String.Copy(_currentValue);
-                    _clearCurrentValue = true;
-                    _isWaitingForNextNumToStart = true;
-                    _isAfterEquals = false;
+                    if (_operator != null)
+                    {
+                        DoMathWithSavedOperator();
+                    }
+                    _previousValue = _currentValue;
+                    _currentValue = 0;
+                    _operator = "+";
+                    _isWaitingForSecondOperand = true;
+                    _equalsWasJustPressed = false;
                     break;
                 case '-':
-                    /*if (_currentValue == "0" || _currentValue == String.Empty)
+                    if (_operator != null)
                     {
-                        _isNegativeInput = true;
-                        _isAfterEquals = false;
-                        
-                    }*/
-                    _lastOperation = '-';
-                    _lastInput = String.Copy(_currentValue);
-                    _clearCurrentValue = true;
-                    _isWaitingForNextNumToStart = true;
-                    _isAfterEquals = false;
+                        DoMathWithSavedOperator();
+                    }
+                    _operator = "-";
+                    _isWaitingForSecondOperand = true;
+                    _equalsWasJustPressed = false;
+                    _previousValue = _currentValue;
+                     _currentValue = 0;
                     break;
                 case '*':
-                    _lastOperation = '*';
-                    _lastInput = String.Copy(_currentValue);
-                    _clearCurrentValue = true;
-                    _isWaitingForNextNumToStart = true;
-                    _isAfterEquals = false;
+                    if (_operator != null)
+                    {
+                        DoMathWithSavedOperator();
+                    }                   
+                    _previousValue = _currentValue;
+                    _currentValue = 0;
+                    _operator = "*";
+                    _isWaitingForSecondOperand = true;
+                    _equalsWasJustPressed = false;
                     break;
                 case '/':
-                    _lastOperation = '/';
-                    _lastInput = String.Copy(_currentValue);
-                    _clearCurrentValue = true;
-                    _isWaitingForNextNumToStart = true;
-                    _isAfterEquals = false;
+                    if (_operator != null)
+                    {
+                        DoMathWithSavedOperator();
+                    }
+                    _previousValue = _currentValue;
+                    _currentValue = 0;
+                    _operator = "/";
+                    _isWaitingForSecondOperand = true;
+                    _equalsWasJustPressed = false;
                     break;
                 case '=':
-                    _isAfterEquals = true;
-                    _isWaitingForNextNumToStart = false;
-                    switch (_lastOperation)
+                    DoMathWithSavedOperator();
+                    _isWaitingForSecondOperand = false;
+                    _previousValue = _currentValue;
+                    _equalsWasJustPressed = true;
+                    break;
+                default:
+                    _isWaitingForSecondOperand = false;
+                    _equalsWasJustPressed = false;
+                    if (_currentValue.ToString().Length < 15)
                     {
-                        case '+':
-                            _currentValue = Convert.ToString(Convert.ToDouble(_currentValue) + (Convert.ToDouble(_lastInput)));
-                            break;
-                        case '-':
-                            _currentValue = Convert.ToString(Convert.ToDouble(_lastInput) - (Convert.ToDouble(_currentValue)));
-                            break;
-                        case '*':
-                            _currentValue = Convert.ToString(Convert.ToDouble(_currentValue) * (Convert.ToDouble(_lastInput)));
-                            break;
-                        case '/':
-                            if (Convert.ToDouble(_currentValue) != 0)
-                            {
-                                _currentValue = Convert.ToString(Convert.ToDouble(_lastInput) / (Convert.ToDouble(_currentValue)));
-                            }
-                            else
-                            {
-                                if (Convert.ToInt32(_lastInput) == 0)
-                                {
-                                    _currentValue = _resultUndefined;
-                                }
-                                else
-                                {
-                                    _currentValue = _cantDivideByZero;
-                                }
-                            }
-                            break;
+                        if (_equalsWasJustPressed == false)
+                        {
+                            _currentValue = _currentValue*10 + int.Parse(input.ToString());
+                        }
+                        else
+                        {
+                            _currentValue = int.Parse(input.ToString());
+                            _previousValue = _currentValue;
+                        }                        
                     }
                     break;
             }
@@ -133,25 +97,64 @@ namespace Calculator
 
         private void ResetCalculatorState()
         {
-            _currentValue = String.Empty;
-            _currentValue = "0";
-            _lastInput = String.Empty;
-            _clearCurrentValue = true;
-            _lastOperation = null;
+            _currentValue = 0;
+            _previousValue = 0;
+            _operator = null;
+            _isWaitingForSecondOperand = false;
+            _equalsWasJustPressed = false;
+        }
+
+        private void DoMathWithSavedOperator()
+        {
+            if (_operator == "+")
+            { 
+                _currentValue = _previousValue + _currentValue;
+            }
+            if (_operator == "-")
+            {
+                _currentValue = _previousValue - _currentValue;
+            }
+            if (_operator == "*")
+            {
+                _currentValue = _previousValue * _currentValue;
+            }
+            if (_operator == "/")
+            {
+                if (_currentValue == 0)
+                {
+                    if (_previousValue == 0)
+                    {
+                        _isDivideZeroByZero = true;
+                    }
+                    else
+                    {
+                        _isDivideNumberByZero = true;
+                    }
+                }
+                else
+                {
+                    _currentValue = _previousValue / _currentValue;
+                }
+            }
         }
 
         public string GetOutput()
         {
-            if (_currentValue == "")
+           
+            if (_isDivideNumberByZero)
             {
-                return null;
+                return "Cannot divide by zero";
             }
-            if (_currentValue.Length > 16 && _currentValue != _cantDivideByZero && _currentValue != _resultUndefined)
+            if (_isDivideZeroByZero)
             {
-                return _currentValue.Substring(0, 16);
+                return "Result is undefined";
             }
-                     return _currentValue;
+            if (_isWaitingForSecondOperand)
+            {
+                return _previousValue.ToString();
+            }
+            return _currentValue.ToString();
         }
-        
     }
 }
+
