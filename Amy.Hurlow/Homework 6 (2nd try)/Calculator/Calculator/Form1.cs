@@ -2,16 +2,21 @@
 using System.Windows.Forms;
 
 namespace Calculator
+        // AEH: Form1 is a class.  CalculatorController is a class.  How do they talk?  What kinds of things should
+        // they contain -- just methods, or variables too?  How do classes relate to objects?
 {
     public partial class Form1 : Form
     {
-        // Create new object instance named _controller as part of object class CalculatorController
+        // AEH: Create new object instance named _controller as part of object class CalculatorController?
+        // or is this creating a new type of object, in which case where are the instances created?
+        // AEH: CalculatorController is a class.  So why does it need arguments in the second mention, but not the first?
         private readonly CalculatorController _controller = new CalculatorController();
 
+        // AEH: Is Form1 a method?  Variable?  Object?  How does it realte to CalculatorController?  Why are they separate files?
         public Form1()
         {
-            InitializeComponent();
-            output.Text = _controller.GetOutput();
+            InitializeComponent(); // What does this do?
+            output.Text = _controller.GetOutput();  // What the heck?
         }
 
         // I noticed that the same basic code was showing up in all of the methods: 
@@ -24,7 +29,9 @@ namespace Calculator
         // that code.  Now, each button-click handler just says 
         //      handleInput('?')"
         // and it's really easy to visually verify that each method does the intended thing.
-        private void HandleInput(char input)
+
+        // AEH: What does this actually do?
+        private void HandleInput(char input) // Method
         {
             _controller.AcceptCharacter(input);
             output.Text = _controller.GetOutput();
@@ -35,7 +42,8 @@ namespace Calculator
         // code shorter and cleaner as well, so that we didn't spend quite so many lines of code just
         // hooking these buttons up to the HandleInput function with the appropriate input character.
 
-        private void Button1Click(object sender, EventArgs e)
+        // AEH: Why is there a separate event for each button, again?  
+        private void Button1Click(object sender, EventArgs e) // Events
         {
             HandleInput('1');
         }

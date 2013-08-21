@@ -3,25 +3,20 @@
 namespace Calculator
 {
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
-    public class CalculatorController
+    public class CalculatorController // Class (contains methods -- anything else?)
     {
 
-        // Amy thinking notes
-        // Take currentvalue and store it 
-        // So create a new variable and assign _currentValue's value to it
-        // then, take input from the next button and store that.  Do I need to clear it first?
-        // I need variables in which to store each digit and operator entered, so I can combine them at "=".
-        // But I don't know how many digits or operators the user will enter.
-        // I can clear the variables and re-use them on the next go-round when the next button 
-        // is clicked after the user clicks "=" and I show the answer.
-        // 
         // Mickey notes
         // This method is the core method of CalculatorController.  In Homework 5, when you are making
         // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
         // helper methods that it calls) to make the calculator behave according to the tests.
-        // Store the value from the last button clicked in a new variable.  I chose type long.
+        //
+        // AEH: Is CalculatorController an object?  A class? Both?
+        // AEH: This is a method we need to create.  What should it do?  Where does it fit in the process of 
+        // Click > show string in textbox > store numbers and operators > combine them and calculate > 
+        // get answer(separate step?) > show answer in textbox?
 
-        public void AcceptCharacter(char input)
+        public void AcceptCharacter(char input) // Method
         {
 
 
@@ -32,7 +27,13 @@ namespace Calculator
         // Someday, this method will return the string that should be displayed in the "output window" of the 
         // calculator.  For now, it just returns a dummy value of "13", since the compiler requires that it
         // return something.
-        public string GetOutput()
+
+        // AEH: This looks to be the second to last step?  Check to see what this method's variables/parameters are. 
+        // AEH: Should the code to show the Output in the textbox go here?  Or does this method's return show it in the textbox?
+        //  (looks like it does, because when I run the program, the textbox shows 13)
+        // AEH: Get output from where?  Before it's returned, do we need to store it?
+
+        public string GetOutput() // Method
         {
             return "13";
         }
