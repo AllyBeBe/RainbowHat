@@ -75,11 +75,12 @@ namespace Calculator
                             _savedOperator = input;
                             _firstValue = _currentValue;
                             _displayString = _currentValue.ToString();
-                         GetOutput();
+                             
+                            GetOutput();
 
-                             _firstChar = true; //leading zero prevention for 2nd value.
-                             _currentValue = null;  //empty for 2nd value.
-                             break;
+                            _firstChar = true; //leading zero prevention for 2nd value.
+                            _currentValue = null;  //empty for 2nd value.
+                            break;
                      }
 
                 }
@@ -89,18 +90,17 @@ namespace Calculator
 
                     switch (input)
                     {
-                        case '=':  // this is a problem, it's the only place I use "has value"
+                        case '=':  
                             if (_currentValue.HasValue)
                             {
                                 _secondValue = _currentValue;
                                 DoMath();
-                                GetOutput();
-                            }
+ }
                             else
                             {
                                 _secondValue = _firstValue;
                                 DoMath();
-                                GetOutput();
+  
                             }
                             break;
                         case 'c':
@@ -109,15 +109,19 @@ namespace Calculator
                             break;
                         default: // using a 2nd operator.  Should act like equals.
  
-                            _secondValue = _currentValue;
-                            DoMath();
-                            _displayString = _currentValue.ToString();
-                            GetOutput();
-
-                            _savedOperator = input;
-                            _firstChar = true;
-                            _currentValue = 0;
+                            if (_currentValue.HasValue)
+                            {
+                                _secondValue = _currentValue;
+                                DoMath();
+                                _savedOperator = input;
+                            }
+                            else 
+                            {
+ 
+                                _savedOperator = input;
+                            }
                             break;
+
                     }
 
                 }
@@ -160,6 +164,7 @@ namespace Calculator
 
             }
             _displayString = result.ToString();
+            _firstValue = result;
             GetOutput();
         }
 
