@@ -31,72 +31,104 @@ namespace Calculator
                     ResetCalculatorState();
                     break;
                 case '+':
-                    if (_operator != null)
-                    {
-                        DoMathWithSavedOperator();
-                    }
-                    _previousValue = _currentValue;
-                    _currentValue = 0;
-                    _operator = "+";
-                    _isWaitingForSecondOperand = true;
-                    _equalsWasJustPressed = false;
+                    AdditionState();
                     break;
                 case '-':
-                    if (_operator != null)
-                    {
-                        DoMathWithSavedOperator();
-                    }
-                    _operator = "-";
-                    _isWaitingForSecondOperand = true;
-                    _equalsWasJustPressed = false;
-                    _previousValue = _currentValue;
-                     _currentValue = 0;
+                    SubtractionState();
                     break;
                 case '*':
-                    if (_operator != null)
-                    {
-                        DoMathWithSavedOperator();
-                    }                   
-                    _previousValue = _currentValue;
-                    _currentValue = 0;
-                    _operator = "*";
-                    _isWaitingForSecondOperand = true;
-                    _equalsWasJustPressed = false;
+                    MultiplicationState();
                     break;
                 case '/':
-                    if (_operator != null)
-                    {
-                        DoMathWithSavedOperator();
-                    }
-                    _previousValue = _currentValue;
-                    _currentValue = 0;
-                    _operator = "/";
-                    _isWaitingForSecondOperand = true;
-                    _equalsWasJustPressed = false;
+                    DivisionState();
                     break;
                 case '=':
-                    DoMathWithSavedOperator();
-                    _isWaitingForSecondOperand = false;
-                    _previousValue = _currentValue;
-                    _equalsWasJustPressed = true;
+                    EqualsState();
                     break;
                 default:
-                    _isWaitingForSecondOperand = false;
-                    _equalsWasJustPressed = false;
-                    if (_currentValue.ToString().Length < 15)
-                    {
-                        if (_equalsWasJustPressed == false)
-                        {
-                            _currentValue = _currentValue*10 + int.Parse(input.ToString());
-                        }
-                        else
-                        {
-                            _currentValue = int.Parse(input.ToString());
-                            _previousValue = _currentValue;
-                        }                        
-                    }
+                    NumberInputState(input);
                     break;
             }
+        }
+
+        private void NumberInputState(char input)
+        {
+            _isWaitingForSecondOperand = false;
+            _equalsWasJustPressed = false;
+            if (_currentValue.ToString().Length < 15)
+            {
+                if (_equalsWasJustPressed == false)
+                {
+                    _currentValue = _currentValue*10 + int.Parse(input.ToString());
+                }
+                else
+                {
+                    _currentValue = int.Parse(input.ToString());
+                    _previousValue = _currentValue;
+                }
+            }
+        }
+
+        private void EqualsState()
+        {
+            DoMathWithSavedOperator();
+            _isWaitingForSecondOperand = false;
+            _previousValue = _currentValue;
+            _equalsWasJustPressed = true;
+            _isDivideNumberByZero = false;
+            _isDivideNumberByZero = false;
+        }
+
+        private void DivisionState()
+        {
+            if (_operator != null)
+            {
+                DoMathWithSavedOperator();
+            }
+            _previousValue = _currentValue;
+            _currentValue = 0;
+            _operator = "/";
+            _isWaitingForSecondOperand = true;
+            _equalsWasJustPressed = false;
+        }
+
+        private void MultiplicationState()
+        {
+            if (_operator != null)
+            {
+                DoMathWithSavedOperator();
+            }
+            _previousValue = _currentValue;
+            _currentValue = 0;
+            _operator = "*";
+            _isWaitingForSecondOperand = true;
+            _equalsWasJustPressed = false;
+        }
+
+        private void SubtractionState()
+        {
+            if (_operator != null)
+            {
+                DoMathWithSavedOperator();
+            }
+            _operator = "-";
+            _isWaitingForSecondOperand = true;
+            _equalsWasJustPressed = false;
+            _previousValue = _currentValue;
+            _currentValue = 0;
+        }
+
+        private void AdditionState()
+        {
+            if (_operator != null)
+            {
+                DoMathWithSavedOperator();
+            }
+            _previousValue = _currentValue;
+            _currentValue = 0;
+            _operator = "+";
+            _isWaitingForSecondOperand = true;
+            _equalsWasJustPressed = false;
         }
 
         private void ResetCalculatorState()
@@ -106,6 +138,8 @@ namespace Calculator
             _operator = null;
             _isWaitingForSecondOperand = false;
             _equalsWasJustPressed = false;
+            _isDivideNumberByZero = false;
+            _isDivideNumberByZero = false;
         }
 
         private void DoMathWithSavedOperator()
@@ -129,10 +163,12 @@ namespace Calculator
                     if (_previousValue == 0)
                     {
                         _isDivideZeroByZero = true;
+                        _isDivideNumberByZero = false;
                     }
                     else
                     {
                         _isDivideNumberByZero = true;
+                        _isDivideZeroByZero = false;
                     }
                 }
                 else
@@ -148,17 +184,13 @@ namespace Calculator
             // _previousValue rather than _currentValue
             if (_isDivideNumberByZero)
             {
-                return "Result is undefined";
+                return "Cannot divide by zero";
             }
             if (_isDivideZeroByZero)
             {
                 return "Result is undefined";
             }
-            if (_isWaitingForSecondOperand)
-            {
-                return _previousValue.ToString();
-            }
-            return _currentValue.ToString();
+            return _isWaitingForSecondOperand ? _previousValue.ToString() : _currentValue.ToString();
         }
     }
 }
