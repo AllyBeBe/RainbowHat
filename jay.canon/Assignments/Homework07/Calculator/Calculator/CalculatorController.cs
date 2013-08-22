@@ -21,7 +21,7 @@ namespace Calculator
         {
             switch (input)
             {
-                case 'C':
+                case 'c':
                     _Clear();
                     break;
                 case '0':

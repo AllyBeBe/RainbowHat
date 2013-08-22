@@ -229,7 +229,7 @@
             this.buttonClear.Name = "buttonClear";
             this.buttonClear.Size = new System.Drawing.Size(35, 38);
             this.buttonClear.TabIndex = 16;
-            this.buttonClear.Text = "C";
+            this.buttonClear.Text = "c";
             this.buttonClear.UseVisualStyleBackColor = true;
             this.buttonClear.Click += new System.EventHandler(this._buttonHolder_Click);
             // 
