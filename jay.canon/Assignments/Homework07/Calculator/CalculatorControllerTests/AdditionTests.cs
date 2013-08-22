@@ -8,12 +8,7 @@ namespace CalculatorControllerTests
         [Test]
         public void CanAddSingleDigitsToGetSingleDigitResult()
         {
-              ForInputExpect("1+8=", "9");
-//            EnterNumber(1);
-//            AcceptCharacters("+");
-//            EnterNumber(8);
-//            AcceptCharacters("=");
-//            AssertOutput("9");
+            ForInputExpect("1+8=", "9");
         }
 
         [Test]

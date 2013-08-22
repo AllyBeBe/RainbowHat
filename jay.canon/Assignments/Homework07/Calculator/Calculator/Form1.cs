@@ -30,93 +30,19 @@ namespace Calculator
         }
 
 
-        // This still seems awfully wordy.  You might think about some ways that we could make this 
-        // code shorter and cleaner as well, so that we didn't spend quite so many lines of code just
-        // hooking these buttons up to the HandleInput function with the appropriate input character.
+        // Condensed button_click handler
 
-        private void Button1Click(object sender, EventArgs e)
+        private void _buttonHolder_Click(object sender, EventArgs e)
         {
-            HandleInput('1');
-        }
+            Button sourceButton = (sender as Button);
+            char buttonContent = Convert.ToChar(sourceButton.Text);
 
-        private void Button2Click(object sender, EventArgs e)
-        {
-            HandleInput('2');
-        }
+            HandleInput(buttonContent);
 
-        private void Button3Click(object sender, EventArgs e)
-        {
-            HandleInput('3');
-        }
-
-        private void Button4Click(object sender, EventArgs e)
-        {
-            HandleInput('4');
-        }
-
-        private void Button5Click(object sender, EventArgs e)
-        {
-            HandleInput('5');
-        }
-
-        private void Button6Click(object sender, EventArgs e)
-        {
-            HandleInput('6');
-        }
-
-        private void Button7Click(object sender, EventArgs e)
-        {
-            HandleInput('7');
-        }
-
-        private void Button8Click(object sender, EventArgs e)
-        {
-            HandleInput('8');
-        }
-
-        private void Button9Click(object sender, EventArgs e)
-        {
-            HandleInput('9');
-        }
-
-        private void Button0Click(object sender, EventArgs e)
-        {
-            HandleInput('0');
-        }
-
-        private void ButtonPlusClick(object sender, EventArgs e)
-        {
-            HandleInput('+');
-           }
-
-        private void ButtonMinusClick(object sender, EventArgs e)
-        {
-            HandleInput('-');
-        }
-
-        private void ButtonTimesClick(object sender, EventArgs e)
-        {
-            HandleInput('*');
-        }
-
-        private void ButtonDivideClick(object sender, EventArgs e)
-        {
-            HandleInput('/');
-        }
-
-        private void ButtonClearClick(object sender, EventArgs e)
-        {
-            HandleInput('c');
-        }
-
-        private void ButtonEqualsClick(object sender, EventArgs e)
-        {
-            HandleInput('=');
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-          
         }
     }
 }

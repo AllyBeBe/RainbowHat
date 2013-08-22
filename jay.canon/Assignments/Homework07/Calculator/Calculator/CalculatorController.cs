@@ -1,25 +1,29 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Media;
+using System.Windows.Forms;
 
 namespace Calculator
 {
-   
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
     {
-        private string _currentString = "0";    //what is displayed in output.Text on the Form control
-        private string _operand1;               //string value to hold left operand
-        private string _operand2;               //string value to hold right operand
-        private bool _clearFlag = true;         //allows current operand to be displayed until operator is inputted - then flag and _currentString is cleared to make room for operand2 entry
-        private char _lastOperator;             //indicates last operator entered
-        private double _opr1, _opr2;           //values to hold converted operand string values
-
-        // This method is the core method of CalculatorController.  In Homework 5, when you are making
-        // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
-        // helper methods that it calls) to make the calculator behave according to the tests.
+        private double _displayReadout = 0;         // what is displayed in output.Text
+        private double _currentTotal = 0;           // stores intermediate results from operand calculations
+        private bool _isOperandEntry = false;       // indicates state of whether or not user is entering an operand
+        private bool _shouldShowResults = false;    // indicates state of whether or not user user expects results from operand calculations
+        private bool _errorFlag = false;            // indicates state of errors
+        private char _currentOperator = '=';        /* indicates type of operation to drive switch-case decision for calculations; 
+                                                       must be initialized to '=' to drive transfer of inputted to intermediate storage */
+        public string displayResult = "";           // string holder to store double variables
+        private string _errorText;                  // holds string describing errors
+        
         public void AcceptCharacter(char input)
         {
             switch (input)
             {
+                case 'C':
+                    _Clear();
+                    break;
                 case '0':
                 case '1':
                 case '2':
@@ -30,83 +34,117 @@ namespace Calculator
                 case '7':
                 case '8':
                 case '9':
-                    if (_clearFlag == true) //clear any existing operations and reset calculator to display 'zero'
+                    if (_shouldShowResults)
                     {
-                        if (input != '0')   //eliminate any leading zeros
-                        {
-                            _currentString = string.Empty;
-                            _clearFlag = false;
-                            _currentString += input;
-                        }
-                        else
-                            _currentString = "0";
+                        _Clear();
                     }
-                    else
+                    if (! _isOperandEntry)
                     {
-                        _currentString += input;
+                        _displayReadout = 0;
+                        _isOperandEntry = true;
                     }
-                    break;
-                case 'c':   //user initiated clear 
-                    _currentString = "0";
-                    _clearFlag = true;
-                    break;
+
+                    if (_digitMaxReached(input - '0'))
+                    {
+                        _displayReadout = _displayReadout * 10 + (input - '0');
+                    }
+                   break;
                 case '+':
-                    _operand1 = _currentString;
-                    _lastOperator = '+';
-                    _clearFlag = true;
+                case '-':
+                case '*':
+                case '/':
+                    if (_isOperandEntry)
+                    {
+                        _Calculate();
+                    }
+                    _displayReadout = _currentTotal;
+                    _currentOperator = input;
+                    _isOperandEntry = false;
+                    _shouldShowResults = false;
+                     break;
+                case '=':
+                    _Calculate();
+                    _isOperandEntry = false;
+                    _shouldShowResults = true;
+                    break;
+            }
+        }
+
+        // maximum of 15-digits per operand can be entered - modelled after WinCalc
+        // sound system beep and prohibit additional digit entry
+        private Boolean _digitMaxReached(double digitEntry) 
+                                                            
+        {
+            if (_displayReadout.ToString().Length >= 15)
+            {
+                SystemSounds.Beep.Play();
+                return false;
+            }
+            return true;
+        }
+
+        private void _Clear() // reinitialize variables and flags.
+        {
+            _displayReadout = 0;
+            _currentTotal = 0;
+            _currentOperator = '=';
+            _shouldShowResults = false;
+            _isOperandEntry = false;
+            _errorFlag = false;
+            _errorText = string.Empty;
+            displayResult = "0";
+        }
+
+        private void _Calculate()
+        {
+            switch (_currentOperator)
+            {
+                case '+':
+                    _currentTotal += _displayReadout;
                     break;
                 case '-':
-                    _operand1 = _currentString;
-                    _lastOperator = '-';
-                    _clearFlag = true;
+                    _currentTotal -= _displayReadout;
                     break;
                 case '*':
-                    _operand1 = _currentString;
-                    _lastOperator = '*';
-                    _clearFlag = true;
+                    _currentTotal *= _displayReadout;
                     break;
                 case '/':
-                    _operand1 = _currentString;
-                    _lastOperator = '/';
-                    _clearFlag = true;
+                    if (_currentTotal == 0.0 && _displayReadout == 0.0)
+                    {
+                        _errorFlag = true;
+                        _errorText = "Result is undefined";
+                        return;
+                    }
+                    if (_displayReadout == 0.0)
+                    {
+                        _errorFlag = true;
+                        _errorText = "Cannot divide by zero";
+                        return;
+                    }
+                   
+                    _currentTotal /= _displayReadout;
                     break;
                 case '=':
-                    _operand2 = _currentString;
-                    double.TryParse(_operand1, out _opr1);
-                    double.TryParse(_operand2, out _opr2);
-                    
-                    switch (_lastOperator)
-                    {
-                        case '+':
-                            _currentString = (_opr1 + _opr2).ToString();
-                            break;
-                        case '-':
-                            _currentString = (_opr1 - _opr2).ToString();
-                            break;
-                        case '*':
-                            _currentString = (_opr1 * _opr2).ToString();
-                            break;
-                        case '/':
-                            _currentString = _operand2 == "0" ? "Cannot divide by zero" : (_opr1/_opr2).ToString();
-                            break;
-                    }
-                    break;
-                default:
-                    _currentString = _currentString + input;
+                    _currentTotal = _displayReadout;
                     break;
             }
         }
 
         public string GetOutput()
         {
-            if (_currentString == string.Empty)
+            if (_errorFlag)
             {
-                return "";
+                displayResult = _errorText;
+            }
+            else if (_isOperandEntry)
+            {
+                displayResult = _displayReadout.ToString();
             }
             else
             {
-                return _currentString;
+                displayResult = _currentTotal.ToString();
             }
-        }
+            return displayResult;
+         }
     }
 }
