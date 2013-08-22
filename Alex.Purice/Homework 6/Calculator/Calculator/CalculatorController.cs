@@ -7,48 +7,48 @@ namespace Calculator
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
     {
-        private const int CurrentValueMaxPresicion = 16;
-        private decimal? _previousValue = null;
-        private decimal? _currentValue = 0;
+        private const int CurrentValueMaxPresicion = 17;
+        private double? _previousValue;
+        private double? _currentValue;
+        private double? _lastValue;
+        private double? _resultValue;
 
-        private char? _previousOperator = null;
-        private char? _currentOperator = null;
+        private char? _previousOperator;
+        private char? _currentOperator;
 
-        private char? _equalityOperator = null;
+        private char? _equalityOperator;
+        private bool _expectDuplicateOperatorInput;
+        private bool _useImplicitZero;
+        private string _errorMessage;
 
-        private bool _clearCurrentValue = false;
-
-        private short _currentValueSign = 1;
-
-
-        //For ome unknown reason constructor doesn't work
-        public void CalculatorConroller()
+        public CalculatorController()
         {
-            ResetContorller();
+            ResetController();
         }
 
-        private void ResetContorller()
+        private void ResetController()
         {
             _previousValue = null;
             _currentValue = 0;
             _previousOperator = null;
             _currentOperator = null;
             _equalityOperator = null;
-            _clearCurrentValue = false;
-            _currentValueSign = 1;
+            _expectDuplicateOperatorInput = false;
+            _errorMessage = null;
+            _resultValue = 0;
+            _useImplicitZero = true;
         }
 
         public void AcceptCharacter(char input)
         {
-            //temporary fix for "not runable" constructor
-            if (_currentValueSign == 0)
-                _currentValueSign = 1;
+            if (_errorMessage != null && input != 'c')
+                return;
 
             switch (input)
             {
                 case 'c':
                 case 'C':
-                    ResetContorller();
+                    ResetController();
                     break;
                 case '1':
                 case '2':
@@ -60,90 +60,100 @@ namespace Calculator
                 case '8':
                 case '9':
                 case '0':
-                    if (_currentOperator.HasValue & _equalityOperator.HasValue)
-                    {
-                        ResetContorller();
-                    }
-                    if (_clearCurrentValue)
-                    {
-                        _currentValue = 0;
-                        _clearCurrentValue = false;
-                    }
-                    if (_currentValue.ToString().Length < 15)
-                    {
-                        _currentValue = Decimal.Parse(_currentValue.ToString() + input.ToString()) * _currentValueSign;
-                    }
+                    ProcessDigitInput(input);
                     break;
                 case '+':
                 case '-':
                 case '*':
                 case '/':
-                    _currentValueSign = 1;
-                    if (_currentValue.HasValue)
-                    {
-                        _clearCurrentValue = true;
-                        _currentOperator = input;
-                    }
-                    else
-                    {
-                        if (input == '-')
-                        {
-                            _currentValueSign = -1;
-                        }
-                    }
-                    if (_previousOperator.HasValue)
-                    {
-                        DoMath();
-                    }
-                    else if (_currentValue.HasValue)
-                    {
-                        _previousValue = _currentValue;
-                    }
-                    if (_currentOperator.HasValue)
-                    {
-                        _previousOperator = _currentOperator;
-                    }
+                    ProcessOperatorInput(input);
                     break;
                 case '=':
-                    if (!_currentOperator.HasValue)
-                    {
-                        return;
-                    }
-                    _equalityOperator = input;
-                    if (!_previousOperator.HasValue & !_previousValue.HasValue)
-                    {
-                        _currentValue = _previousValue;
-                    }
-                    DoMath();
+                    ProcessEquationSignInput(input);
                     break;
+            }
+        }
+
+        private void ProcessEquationSignInput(char input)
+        {
+            if (!_useImplicitZero)
+            {
+                _currentValue = _lastValue;
+            }
+            _equalityOperator = input;
+            _previousOperator = _currentOperator;
+
+            DoMath();
+            _previousValue = _resultValue;
+            _expectDuplicateOperatorInput = true;
+        }
+
+        private void ProcessOperatorInput(char input)
+        {
+            _useImplicitZero = false;
+            _equalityOperator = null;
+            _currentOperator = input;
+
+            if (!_expectDuplicateOperatorInput)
+            {
+                if (_previousOperator.HasValue && _previousValue.HasValue)
+                {
+                    DoMath();
+                }
+            }
+            _previousValue = _resultValue;
+            _currentValue = 0;
+            _previousOperator = _currentOperator;
+            _expectDuplicateOperatorInput = true;
+        }
+
+        private void ProcessDigitInput(char input)
+        {
+            _useImplicitZero = true;
+            _expectDuplicateOperatorInput = false;
+            if (_equalityOperator.HasValue)
+            {
+                ResetController();
+            }
+            if (_currentValue.ToString().Length < 15)
+            {
+                _currentValue = Double.Parse(_currentValue.ToString() + input.ToString());
+                _lastValue = _currentValue;
+                _resultValue = _currentValue;
             }
         }
 
         private void DoMath()
         {
-            switch (_currentOperator)
+            switch (_previousOperator)
             {
                 case '+':
-                    _currentValue = _previousValue + _currentValue;
+                    _resultValue = _previousValue + _currentValue;
                     return;
                 case '-':
-                    _currentValue = _previousValue - _currentValue;
+                    _resultValue = _previousValue - _currentValue;
                     return;
                 case '*':
-                    _currentValue = _previousValue * _currentValue;
+                    _resultValue = _previousValue * _currentValue;
                     return;
                 case '/':
-                    _currentValue = _previousValue / _currentValue;
+                    if (_previousValue == 0 && _currentValue == 0)
+                        _errorMessage = "Result is undefined";
+                    else if (_currentValue == 0)
+                        _errorMessage = "Cannot divide by zero";
+                    else
+                        _resultValue = _previousValue / _currentValue;
                     return;
             }
-            //DataTable dataTable = new DataTable();
-            //_currentValue = (decimal?) dataTable.Compute(_previousValue.ToString() + _currentOperator.ToString() + _currentValue.ToString(),"");
         }
 
         public string GetOutput()
         {
-            var _precision = CurrentValueMaxPresicion - ((int)_currentValue).ToString().Length - 1;//-1 for comma
-            return Math.Round((decimal)_currentValue, _precision).ToString();
+            if (_errorMessage != null)
+                return _errorMessage;
+            var precision = CurrentValueMaxPresicion - ((long)_resultValue).ToString().Length - 1;//-1 for comma
+            string result = (precision > 0)?Math.Round((double)_resultValue, precision).ToString():_resultValue.ToString();
+            return result;
         }
     }
 }
