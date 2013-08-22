@@ -6,25 +6,20 @@ using System.Windows.Forms;
 
 namespace Calculator
 {
-    // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
-
-    // my problem is I think in static classes. 
+    
     public class CalculatorController
     {
 
 
-        private double? _currentValue = 0;
+        private double? _currentValue = null;
         bool _firstChar = true;
-        private char _savedOperator = 'e';  //char doesn't have a null/empty value to check from what I could find.
+        private char _savedOperator = 'e';  
         private double? _firstValue;
         private double? _secondValue;
         private string _displayString = "0";
 
 
 
-        // This method is the core method of CalculatorController.  In Homework 5, when you are making
-        // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
-        // helper methods that it calls) to make the calculator behave according to the tests.
         public void AcceptCharacter(char input)
         {
 
@@ -33,80 +28,100 @@ namespace Calculator
             {
 
 
-                if (input == '0' && _firstChar == true)
+                if ((input == '0' && _firstChar == true) || (_currentValue.ToString().Length > 15))
                 {
-                    //leading zero.
-                    _displayString = "0";
+                    
+                    _displayString = _currentValue.ToString();
                     GetOutput();
                 }
                 else
                 {
-                    if (_currentValue.ToString().Length < 15)
+                    double dblInput;
+                    double.TryParse(input.ToString(), out dblInput);
+                    if (_currentValue == null) 
                     {
-                        double dblInput;
-                        double.TryParse(input.ToString(), out dblInput);
-                        _currentValue = (_currentValue * 10) + dblInput;
-                        _firstChar = false;
-                        _displayString = _currentValue.ToString();
-                        GetOutput();
+                        _currentValue = 0;
                     }
-                    else  //just return what you had before.
-                    {
-                        _displayString = _currentValue.ToString();
-                        GetOutput();
-                    }
+                    _currentValue = (_currentValue * 10) + dblInput;
+                    _displayString = _currentValue.ToString();
+                    GetOutput();
+
+                    _firstChar = false;
                 }
 
             }
-            else  //not a number.
+            else  
             {
+
+
                 if (_savedOperator == 'e')
                 {
-                    // don't do anything if equals used without having an operator first.
-                    if (input == '=')
+
+                    switch (input)
                     {
-                        _displayString = _currentValue.ToString();
-                        GetOutput();
-
-                    }
-                    else
-                    { //if the operator is hit without entering non-zero number, this will use the zero.
-
-                        _savedOperator = input;
-                        _firstValue = _currentValue;
-                        _displayString = _currentValue.ToString();
-                        GetOutput();
-                        _firstChar = true; //leading zero prevention for 2nd value.
-                        _currentValue = null;  //empty for 2nd value.
-                    }
-
-
-                }
-                else
-                {
-                    // there's a saved operator
-
-
-                    if (_currentValue.HasValue)
-                    {
-                        _secondValue = _currentValue;
-                    }
-                    else
-                    {
-                        //without a 2nd value, calc just readds the same value or changes the operator.
-                        if (input == '=')
-                        {
-                            _secondValue = _firstValue;
-
-                        }
-                        else
-                        {
+                        case '=':
+                            GetOutput();   
+                            break;
+                        case 'c':
+                            clearValues();
+                            GetOutput();
+                            break;
+                        default: 
                             _savedOperator = input;
-                        }
+                            _firstValue = _currentValue;
+                            _displayString = _currentValue.ToString();
+
+                            GetOutput();
+
+                            _firstChar = true; 
+                            _currentValue = null;  
+                            break;
+                    }
+
+                }
+                else                 
+                {
+
+
+                    switch (input)
+                    {
+                        case '=':
+                            if (_currentValue.HasValue)
+                            {
+                                _secondValue = _currentValue;
+                                DoMath();
+                            }
+                            else
+                            {
+                                _secondValue = _firstValue;
+                                DoMath();
+
+                            }
+                            break;
+                        case 'c':
+                            clearValues();
+                            GetOutput();
+                            break;
+                        default: 
+
+                            if (_currentValue.HasValue)
+                            {
+                                _secondValue = _currentValue;
+                                DoMath();
+                                _savedOperator = input;
+                            }
+                            else
+                            {
+
+                                _savedOperator = input;
+                            }
+                            break;
 
                     }
+
                 }
-                DoMath();
+
+
             }
 
         }
@@ -137,9 +152,6 @@ namespace Calculator
                         result = _firstValue / _secondValue;
                         break;
                     }
-                case 'c':
-                    clearValues();
-                    break;
 
                 default:
                     MessageBox.Show("How'd you get here?");
@@ -147,24 +159,26 @@ namespace Calculator
 
             }
             _displayString = result.ToString();
+            _firstValue = result;
             GetOutput();
         }
 
         void clearValues()
         {
-            _currentValue = 0;
+            _currentValue = null;
             _displayString = "0";
             _firstChar = true;
             _firstValue = 0;
             _secondValue = 0;
             _savedOperator = 'e';
-            GetOutput();
-
         }
 
-        
         public string GetOutput()
         {
+            if (_displayString == string.Empty)
+            {
+                _displayString = "0";
+            }
             return _displayString;
         }
     }
