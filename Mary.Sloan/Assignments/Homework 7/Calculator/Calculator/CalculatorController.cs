@@ -13,7 +13,7 @@ namespace Calculator
     {
 
 
-        private double? _currentValue = 0;
+        private double? _currentValue = null;
         bool _firstChar = true;
         private char _savedOperator = 'e';  //char doesn't have a null/empty value to check from what I could find.
         private double? _firstValue;
@@ -33,82 +33,98 @@ namespace Calculator
             {
 
 
-                if (input == '0' && _firstChar == true)
+                if ((input == '0' && _firstChar == true) || (_currentValue.ToString().Length > 15))
                 {
-                    //leading zero.
-                    _displayString = "0";
+                    //leading zero or greater than 15 digits.
+                    _displayString = _currentValue.ToString();
                     GetOutput();
                 }
                 else
                 {
-                    if (_currentValue.ToString().Length < 15)
-                    {
                     double dblInput;
                     double.TryParse(input.ToString(), out dblInput);
+                    if (_currentValue == null) // Discovered that I can't add a number to null - it just stays null.  I wish I were smarter.
+                    {
+                        _currentValue = 0;
+                    }
                     _currentValue = (_currentValue * 10) + dblInput;
-                    _firstChar = false;
                     _displayString = _currentValue.ToString();
                     GetOutput();
-                    }
-                    else  //just return what you had before.
-                    {
-                        _displayString = _currentValue.ToString();
-                        GetOutput();
-                    }
+
+                    _firstChar = false;
                 }
 
             }
             else  //not a number.
             {
-                 if (_savedOperator == 'e')
+
+
+                if (_savedOperator == 'e')
                  {
-                     // don't do anything if equals used without having an operator first.
-                    if (input == '=')
-                    {
-                    _displayString = _currentValue.ToString();
-                    GetOutput();
-                    
-                    }
-                    else
-                    { //if the operator is hit without entering non-zero number, this will use the zero.
-                    
-                    _savedOperator = input;
-                    _firstValue = _currentValue;
-                    _displayString = _currentValue.ToString();
-                    GetOutput();
-                    _firstChar = true; //leading zero prevention for 2nd value.
-                    _currentValue = null;  //empty for 2nd value.
-                    }
 
+                     switch (input)
+                     {
+                         case '=':
+                             GetOutput();   // don't do anything if equals used without having a saved operator first.
+                             break;
+                         case 'c':
+                             clearValues();
+                             GetOutput();
+                             break;
+                         default: //if the operator is hit without entering non-zero number, this will use the zero.
+                            _savedOperator = input;
+                            _firstValue = _currentValue;
+                            _displayString = _currentValue.ToString();
+                         GetOutput();
+
+                             _firstChar = true; //leading zero prevention for 2nd value.
+                             _currentValue = null;  //empty for 2nd value.
+                             break;
+                     }
 
                 }
-                else
+                else                 // there's a saved operator and a firstValue.
                 {
-                // there's a saved operator
 
 
-                 if (_currentValue.HasValue)
+                    switch (input)
                     {
-                     _secondValue = _currentValue;
-                    }
-                 else 
-                    {
-                //without a 2nd value, calc just readds the same value or changes the operator.
-                    if (input == '=')
-                    {
-                        _secondValue = _firstValue;
+                        case '=':  // this is a problem, it's the only place I use "has value"
+                            if (_currentValue.HasValue)
+                            {
+                                _secondValue = _currentValue;
+                                DoMath();
+                                GetOutput();
+                            }
+                            else
+                            {
+                                _secondValue = _firstValue;
+                                DoMath();
+                                GetOutput();
+                            }
+                            break;
+                        case 'c':
+                            clearValues();
+                            GetOutput();
+                            break;
+                        default: // using a 2nd operator.  Should act like equals.
+ 
+                            _secondValue = _currentValue;
+                            DoMath();
+                            _displayString = _currentValue.ToString();
+                            GetOutput();
 
-                    }
-                    else
-                    {
-                        _savedOperator = input;
+                            _savedOperator = input;
+                            _firstChar = true;
+                            _currentValue = 0;
+                            break;
                     }
 
                 }
+
+
             }
-                DoMath();
-            }
-            
+
         }
 
         void DoMath()
@@ -137,10 +153,7 @@ namespace Calculator
                         result = _firstValue / _secondValue;
                         break; 
                     }
-                case 'c':
-                    clearValues();
-                    break;
-                    
+ 
                 default:
                     MessageBox.Show("How'd you get here?");
                     break;
@@ -152,21 +165,20 @@ namespace Calculator
 
         void clearValues()
         {
-            _currentValue = 0;
+            _currentValue = null;
             _displayString = "0";
             _firstChar = true;
             _firstValue = 0;
             _secondValue = 0;
             _savedOperator = 'e';
-            GetOutput();
-
         }
-
-        // Someday, this method will return the string that should be displayed in the "output window" of the 
-        // calculator.  For now, it just returns a dummy value of "13", since the compiler requires that it
-        // return something.
+        
         public string GetOutput()
         {
+            if (_displayString == string.Empty)
+            {
+                _displayString = "0";
+            }
             return _displayString;
         }
     }
