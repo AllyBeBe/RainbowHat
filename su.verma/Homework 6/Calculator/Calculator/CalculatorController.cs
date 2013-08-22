@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
@@ -13,6 +14,7 @@ namespace Calculator
         private string _currentValue;
         private string _previousValue;
         private string _result;
+        private Boolean _operatorBeforeNumber;
 
 
         public CalculatorController()
@@ -42,21 +44,39 @@ namespace Calculator
             }
 
                 // Record the '+' operator
-            else if (input == '+')
+            else if (input == '+' || input  == '-')
             {
+                if (_currentValue == "0")
+                {
+                    _operatorBeforeNumber = true;
+                    _operator = input;
+                    return;
+                }
+
                 _operator = input;
-                // save the '_currentValue' into '_previousValue'
-                _previousValue = _currentValue;
-                // Clear out the _currentvalue
-                _currentValue = "";
+
+                    // save the '_currentValue' into '_previousValue'
+                    _previousValue = _currentValue;
+                    // Clear out the _currentvalue
+                    _currentValue = "";
+                _operatorBeforeNumber = false;
+
+
             }
 
             else if (input == '=')
             {
-                if (_operator == '+')
+                if (_operatorBeforeNumber == true)
+                {
+                    _result = _operator + _currentValue;
+                }
+                else  if (_operator == '+')
                 {
                     _result = (Convert.ToDouble(_previousValue) + Convert.ToDouble(_currentValue)).ToString();
                 }
+
+                //_result = _currentValue;
+                //_currentValue = "";
 
             }
                 //There is no _currentValue and user has typed a digit
@@ -65,6 +85,7 @@ namespace Calculator
             {
                 _currentValue = input.ToString();
                 _result = "";
+
             }
                 //There is a _currentValue and user has typed a digit
             else if (_currentValue != "")
