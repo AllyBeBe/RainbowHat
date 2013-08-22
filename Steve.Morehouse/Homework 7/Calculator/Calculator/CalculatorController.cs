@@ -73,72 +73,18 @@ namespace Calculator
                 case '7':
                 case '8':
                 case '9':
-                    /*
-                     * if there was an operation made where the current contents needs to be cleared, do so now
-                     * before entry is made
-                     */
-                    if (clearCurrentValue == true)
-                    {
-                        /*
-                         * now check for leading zeros.  if so, do not reset flag
-                         */
-                        if (input != '0')
-                        {
-                            _currentValue = String.Empty;
-                            clearCurrentValue = false;
-                            _currentValue += input;
-                        }
-                        else
-                        {
-                            // even though this is still zero, still have to note this 
-                            _currentValue = "0";
-                            // don't reset flag in case there are subsequent zero entries
-                        }
-                    }
-                    else
-                    {
-                        // keep on adding to the current string
-                        _currentValue += input;
-                    }
-
+                    numberEntered(input);
                     break;
-
-                /*
-                 * CLEAR
-                 * 
-                 * clear the current value
-                 * display zero
-                 * set flag to clear to what user enters
-                 */
                 case 'c':
-                    _currentValue = String.Empty;
-                    _currentValue = "0";
-                    _lastValue = String.Empty;
-                    clearCurrentValue = true;
+                    clear();
                     break;
                 case '+':
                     _lastOperation = '+';
                     _lastValue = String.Copy(_currentValue);
                     clearCurrentValue = true;
                     break;
-
-                    /*
-                     * minus sign (overload)
-                     * determine if this is minus or negative
-                     */
                 case '-':
-                    if (clearCurrentValue == true)
-                    {
-                        _currentValue = String.Empty;
-                        clearCurrentValue = false;
-                        _currentValue += input;
-                    }
-                    else // this is a minus
-                    {
-                        _lastOperation = '-';
-                        _lastValue = String.Copy(_currentValue);
-                        clearCurrentValue = true;
-                    }
+                    dashEntered(input);
                     break;
                 case '*':
                     _lastOperation = '*';
@@ -150,101 +96,172 @@ namespace Calculator
                     _lastValue = String.Copy(_currentValue);
                     clearCurrentValue = true;
                     break;
-                    
-                /*
-                 * if an equal is entered, we have to collect everything and determine the operation
-                 * to perform.  If there was no previous operation entered, clear the last command
-                 */
                 case '=':
-                    switch (_lastOperation)
-                    {
-                        case '+':
-                            if (isDecimal == true)
-                            {
-                                _currentValue =
-                                    Convert.ToString(Convert.ToDouble(_currentValue) + (Convert.ToDouble(_lastValue)));
-                                isDecimal = false;
-                            }
-                            else
-                            {
-                                _currentValue =
-                                       Convert.ToString(Convert.ToInt64(_currentValue) + (Convert.ToInt64(_lastValue)));
-                            }
-                            break;
-                        case '-':
-                            if (isDecimal == true)
-                            {
-                                _currentValue =
-                                    Convert.ToString(Convert.ToDouble(_currentValue) - (Convert.ToDouble(_lastValue)));
-                                isDecimal = false;
-                            }
-                            else
-                            {
-                                _currentValue =
-                                    Convert.ToString(Convert.ToInt64(_currentValue) - (Convert.ToInt64(_lastValue)));
-                            }
-                            break;
-                        case '*':
-                            if (isDecimal == true)
-                            {
-                                _currentValue =
-                                    Convert.ToString(Convert.ToDouble(_currentValue) * (Convert.ToDouble(_lastValue)));
-                                isDecimal = false;
-                            }
-                            else
-                            {
-                                _currentValue =
-                                    Convert.ToString(Convert.ToInt64(_currentValue)*(Convert.ToInt64(_lastValue)));
-                            }
-                            break;
-                        case '/':
-                            if (Convert.ToInt64(_currentValue) != 0)
-                            {
-                                if (isDecimal == true)
-                                {
-                                    _currentValue =
-                                        Convert.ToString(Convert.ToDouble(_currentValue) /
-                                                         (Convert.ToDouble(_lastValue)));
-                                    isDecimal = false;
-                                }
-                                else
-                                {
-                                    _currentValue =
-                                        Convert.ToString(Convert.ToDecimal(_lastValue)/(Convert.ToDecimal(_currentValue)));;
-                                }
-                            }
-                            else // got a problem (double zero or zero divisor)
-                            {
-                                // both values are zero
-                                if (Convert.ToInt64(_lastValue) == 0)
-                                {
-                                    _currentValue = String.Copy("Result is undefined");
-                                }
-                                else // divisor only is zero
-                                {
-                                    _currentValue = String.Copy("Cannot divide by zero");
-                                }
-                            }
-                            break;
-
-                        default: // there is no previous operation specified
-                            clearCurrentValue = true;
-                            break;
-                    }
+                    equalsEntered();
                     break;
             }
         }
 
     public string GetOutput()
+    {
+        if (_currentValue == "")
         {
-            if (_currentValue == "")
+            return null;
+        }
+        else
+        {
+            return _currentValue;
+        }
+    }
+
+    /*
+     * CLEAR
+     * 
+     * clear the current value
+     * display zero
+     * set flag to clear to what user enters
+     */
+    public void clear()
+    {
+        _currentValue = String.Empty;
+        _currentValue = "0";
+        _lastValue = String.Empty;
+        clearCurrentValue = true;
+    }
+
+    /*
+     * if there was an operation made where the current contents needs to be cleared, do so now
+     * before entry is made
+     */
+    public void numberEntered(char input)
+    {
+        if (clearCurrentValue == true)
+        {
+            /*
+             * now check for leading zeros.  if so, do not reset flag
+             */
+            if (input != '0')
             {
-                return null;
+                _currentValue = String.Empty;
+                clearCurrentValue = false;
+                _currentValue += input;
             }
             else
             {
-                return _currentValue;
+                // even though this is still zero, still have to note this 
+                _currentValue = "0";
+                // don't reset flag in case there are subsequent zero entries
             }
         }
+        else
+        {
+            // keep on adding to the current string
+            _currentValue += input;
+        }
+    }
+
+    /*
+     * if an equal is entered, we have to collect everything and determine the operation
+     * to perform.  If there was no previous operation entered, clear the last command
+     */
+    public void equalsEntered()
+    {
+        switch (_lastOperation)
+        {
+            case '+':
+                if (isDecimal == true)
+                {
+                    _currentValue =
+                        Convert.ToString(Convert.ToDouble(_currentValue) + (Convert.ToDouble(_lastValue)));
+                    isDecimal = false;
+                }
+                else
+                {
+                    _currentValue =
+                           Convert.ToString(Convert.ToInt64(_currentValue) + (Convert.ToInt64(_lastValue)));
+                }
+                break;
+            case '-':
+                if (isDecimal == true)
+                {
+                    _currentValue =
+                        Convert.ToString(Convert.ToDouble(_currentValue) - (Convert.ToDouble(_lastValue)));
+                    isDecimal = false;
+                }
+                else
+                {
+                    _currentValue =
+                        Convert.ToString(Convert.ToInt64(_currentValue) - (Convert.ToInt64(_lastValue)));
+                }
+                break;
+            case '*':
+                if (isDecimal == true)
+                {
+                    _currentValue =
+                        Convert.ToString(Convert.ToDouble(_currentValue) * (Convert.ToDouble(_lastValue)));
+                    isDecimal = false;
+                }
+                else
+                {
+                    _currentValue =
+                        Convert.ToString(Convert.ToInt64(_currentValue) * (Convert.ToInt64(_lastValue)));
+                }
+                break;
+            case '/':
+                if (Convert.ToInt64(_currentValue) != 0)
+                {
+                    if (isDecimal == true)
+                    {
+                        _currentValue =
+                            Convert.ToString(Convert.ToDouble(_currentValue) /
+                                             (Convert.ToDouble(_lastValue)));
+                        isDecimal = false;
+                    }
+                    else
+                    {
+                        _currentValue =
+                            Convert.ToString(Convert.ToDecimal(_lastValue) / (Convert.ToDecimal(_currentValue))); ;
+                    }
+                }
+                else // got a problem (double zero or zero divisor)
+                {
+                    // both values are zero
+                    if (Convert.ToInt64(_lastValue) == 0)
+                    {
+                        _currentValue = String.Copy("Result is undefined");
+                    }
+                    else // divisor only is zero
+                    {
+                        _currentValue = String.Copy("Cannot divide by zero");
+                    }
+                }
+                break;
+
+            default: // there is no previous operation specified
+                clearCurrentValue = true;
+                break;
+        }
+    }
+
+    /*
+     * minus sign (overload)
+     * determine if this is minus or negative
+     */
+    public void dashEntered(char input)
+    {
+        if (clearCurrentValue == true)
+        {
+            _currentValue = String.Empty;
+            clearCurrentValue = false;
+            _currentValue += input;
+        }
+        else // this is a minus
+        {
+            _lastOperation = '-';
+            _lastValue = String.Copy(_currentValue);
+            clearCurrentValue = true;
+        }
+    }
+
     }
 }
