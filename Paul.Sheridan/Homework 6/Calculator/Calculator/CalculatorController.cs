@@ -163,11 +163,9 @@ namespace Calculator
                     if (_previousValue == 0)
                     {
                         _isDivideZeroByZero = true;
-                        _isDivideNumberByZero = false;
                     }
                     else
                     {
-                        _isDivideNumberByZero = true;
                         _isDivideZeroByZero = false;
                     }
                 }
