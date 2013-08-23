@@ -4,6 +4,13 @@ namespace CalculatorControllerTests
 {
     // Extra credit to Jay for the existence of this test fixture -- Jay, these are some profoundly bizarre WinCalc behaviors you've found.
     // Extra credit to Tiina for offering a model for understanding WinCalc's bizarre behavior in these cases.
+    //
+    // Proposed mental model:
+    // Entering a number, or doing a calculation based on the user
+    // entering an operator other than equals, updates the "last result"
+    // variable.  Hitting equals does not update the "last result" variable
+    // When the user hits "=", we operate on the current value
+    // with the "last operator" and "last result".
     [TestFixture]
     class CrazyBehaviorTests : BaseTestFixture
     {

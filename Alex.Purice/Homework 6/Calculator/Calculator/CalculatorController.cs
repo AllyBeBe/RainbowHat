@@ -99,6 +99,7 @@ namespace Calculator
                 if (_previousOperator.HasValue && _previousValue.HasValue)
                 {
                     DoMath();
+                    _lastValue = _resultValue;
                 }
             }
             _previousValue = _resultValue;
