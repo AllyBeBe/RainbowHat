@@ -73,6 +73,14 @@ namespace Calculator
                     _isAfterEquals = false;
                     break;
                 case '*':
+                    // Q: How do you tell if you have a pending operation?
+                    // A: You have a _lastOperation, and some second
+                    // number has been entered
+                    if ((_lastOperation != null) && (_currentValue != null))
+                    {
+                        DoMath();
+                    }
+
                     _lastOperation = '*';
                     _lastInput = _currentValue;
                     _clearCurrentValue = true;
@@ -89,27 +97,32 @@ namespace Calculator
                 case '=':
                     _isAfterEquals = true;
                     _isWaitingForNextNumToStart = false;
-                    switch (_lastOperation)
+                    DoMath();
+                    break;
+            }
+        }
+
+        private void DoMath()
+        {
+            switch (_lastOperation)
+            {
+                case '+':
+                    _currentValue = Convert.ToString(Convert.ToDouble(_lastInput) + (Convert.ToDouble(_currentValue)));
+                    break;
+                case '-':
+                    _currentValue = Convert.ToString(Convert.ToDouble(_lastInput) - (Convert.ToDouble(_currentValue)));
+                    break;
+                case '*':
+                    _currentValue = Convert.ToString(Convert.ToDouble(_currentValue)*(Convert.ToDouble(_lastInput)));
+                    break;
+                case '/':
+                    if (Convert.ToDouble(_currentValue) != 0)
                     {
-                        case '+':
-                            _currentValue = Convert.ToString(Convert.ToDouble(_lastInput) + (Convert.ToDouble(_currentValue)));
-                            break;
-                        case '-':
-                            _currentValue = Convert.ToString(Convert.ToDouble(_lastInput) - (Convert.ToDouble(_currentValue)));
-                            break;
-                        case '*':
-                            _currentValue = Convert.ToString(Convert.ToDouble(_currentValue) * (Convert.ToDouble(_lastInput)));
-                            break;
-                        case '/':
-                            if (Convert.ToDouble(_currentValue) != 0)
-                            {
-                                _currentValue = Convert.ToString(Convert.ToDouble(_lastInput) / (Convert.ToDouble(_currentValue)));
-                            }
-                            else
-                            {
-                                _currentValue = Convert.ToInt32(_lastInput) == 0 ? _resultUndefined : _cantDivideByZero;
-                            }
-                            break;
+                        _currentValue = Convert.ToString(Convert.ToDouble(_lastInput)/(Convert.ToDouble(_currentValue)));
+                    }
+                    else
+                    {
+                        _currentValue = Convert.ToInt32(_lastInput) == 0 ? _resultUndefined : _cantDivideByZero;
                     }
                     break;
             }
