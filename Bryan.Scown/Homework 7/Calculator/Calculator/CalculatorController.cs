@@ -12,8 +12,11 @@ namespace Calculator
         private bool _clearCurrentValue;
         private string _resultUndefined = "Result is undefined";
         private string _cantDivideByZero = "Cannot divide by zero";
+        private bool _isWaitingForNextNumToStart;
+        private bool _isWaitingForSecondOperand;
         private bool _isAfterEquals;
-        
+
+
         public void AcceptCharacter(char input)
         {
             switch (input)
@@ -40,6 +43,8 @@ namespace Calculator
                     }
                     if (_isAfterEquals == false)
                     {
+                        _isWaitingForSecondOperand = true;
+                        _isWaitingForNextNumToStart = true;
                         _currentValue += input;    
                     }
                     else
@@ -55,30 +60,35 @@ namespace Calculator
                     break;
                 case '+':
                     _lastOperation = '+';
-                    _lastInput = String.Copy(_currentValue);
+                    _lastInput = _currentValue;
                     _clearCurrentValue = true;
+                    _isWaitingForNextNumToStart = true;
                     _isAfterEquals = false;
                     break;
                 case '-':
                     _lastOperation = '-';
-                    _lastInput = String.Copy(_currentValue);
+                    _lastInput = _currentValue;
                     _clearCurrentValue = true;
+                    _isWaitingForNextNumToStart = true;
                     _isAfterEquals = false;
                     break;
                 case '*':
                     _lastOperation = '*';
-                    _lastInput = String.Copy(_currentValue);
+                    _lastInput = _currentValue;
                     _clearCurrentValue = true;
+                    _isWaitingForNextNumToStart = true;
                     _isAfterEquals = false;
                     break;
                 case '/':
                     _lastOperation = '/';
-                    _lastInput = String.Copy(_currentValue);
+                    _lastInput = _currentValue;
                     _clearCurrentValue = true;
+                    _isWaitingForNextNumToStart = true;
                     _isAfterEquals = false;
                     break;
                 case '=':
                     _isAfterEquals = true;
+                    _isWaitingForNextNumToStart = false;
                     switch (_lastOperation)
                     {
                         case '+':
@@ -97,14 +107,7 @@ namespace Calculator
                             }
                             else
                             {
-                                if (Convert.ToInt32(_lastInput) == 0)
-                                {
-                                    _currentValue = _resultUndefined;
-                                }
-                                else
-                                {
-                                    _currentValue = _cantDivideByZero;
-                                }
+                                _currentValue = Convert.ToInt32(_lastInput) == 0 ? _resultUndefined : _cantDivideByZero;
                             }
                             break;
                     }
@@ -122,12 +125,15 @@ namespace Calculator
 
         public string GetOutput()
         {
-            
+            if (_currentValue == "")
+            {
+                return null;
+            }
             if (_currentValue.Length > 16 && _currentValue != _cantDivideByZero && _currentValue != _resultUndefined)
             {
                 return _currentValue.Substring(0, 16);
             }
-                return _currentValue;
+                     return _currentValue;
         }
         
     }
