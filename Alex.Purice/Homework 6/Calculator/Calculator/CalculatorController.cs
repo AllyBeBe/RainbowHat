@@ -152,8 +152,16 @@ namespace Calculator
         {
             if (_errorMessage != null)
                 return _errorMessage;
+
+            var firstSignificantDigitMultiplier = 1;
+            if (_resultValue != 0)
+            {
+                var resultExponent = Math.Ceiling(Math.Log10((double)_resultValue));
+                if (resultExponent < 0)
+                    firstSignificantDigitMultiplier = (int) Math.Pow(10, -1*resultExponent);
+            }
             var precision = CurrentValueMaxPresicion - ((long)_resultValue).ToString().Length - 1;//-1 for comma
-            string result = (precision > 0)?Math.Round((double)_resultValue, precision).ToString():_resultValue.ToString();
+            string result = (precision > 0) ? (Math.Round((double)_resultValue * firstSignificantDigitMultiplier, precision) / firstSignificantDigitMultiplier).ToString() : _resultValue.ToString();
             return result;
         }
     }
