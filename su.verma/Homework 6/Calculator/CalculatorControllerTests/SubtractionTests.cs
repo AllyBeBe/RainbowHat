@@ -20,7 +20,7 @@ namespace CalculatorControllerTests
 
         // Jay, Michael, Tiina
         [Test]
-        public void CanGoNegativeOnSubtract()
+        public void .CanGoNegativeOnSubtract()
         {
             ForInputExpect("7-9=", "-2");
         }

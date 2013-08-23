@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
@@ -74,7 +75,10 @@ namespace Calculator
                 {
                     _result = (Convert.ToDouble(_previousValue) + Convert.ToDouble(_currentValue)).ToString();
                 }
-
+                else if (_operator == '-')
+                {
+                    _result = (Convert.ToDouble(_previousValue) - Convert.ToDouble(_currentValue)).ToString();
+                }
                 //_result = _currentValue;
                 //_currentValue = "";
 
@@ -138,5 +142,10 @@ namespace Calculator
 
             return _currentValue;
         }
+
+        //if they have entered a '-' but _currentValue is still 
+
+
     }
+
 }
