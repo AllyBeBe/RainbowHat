@@ -16,8 +16,7 @@ namespace Calculator
         private bool _isWaitingForSecondOperand;
         private bool _isAfterEquals;
         private string _resultValue;
-
-
+        
         public void AcceptCharacter(char input)
         {
             switch (input)
@@ -89,7 +88,6 @@ namespace Calculator
                     {
                         DoMath();
                     }
-
                     _lastOperation = '*';
                     _lastInput = _currentValue;
                     _clearCurrentValue = true;
@@ -126,12 +124,13 @@ namespace Calculator
                     _currentValue = Convert.ToString(Convert.ToDouble(_lastInput) - (Convert.ToDouble(_currentValue)));
                     break;
                 case '*':
-                    _currentValue = Convert.ToString(Convert.ToDouble(_currentValue)*(Convert.ToDouble(_lastInput)));
+                    _currentValue = Convert.ToString(Convert.ToDouble(_currentValue) * (Convert.ToDouble(_lastInput)));
                     break;
                 case '/':
                     if (Convert.ToDouble(_currentValue) != 0)
                     {
                         _currentValue = Convert.ToString(Convert.ToDouble(_lastInput)/(Convert.ToDouble(_currentValue)));
+                        
                     }
                     else
                     {
@@ -159,7 +158,7 @@ namespace Calculator
             {
                 return _currentValue.Substring(0, 16);
             }
-                     return _currentValue;
+            return _currentValue;
         }
         
     }
