@@ -9,8 +9,6 @@ namespace Calculator
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
     {
-
-        
         private string _currentValueString="0";
         private double _currentValue=0;
         private double _previousValue=0;
@@ -18,8 +16,6 @@ namespace Calculator
         private string _previousOperator=null;
         private bool _isWaitingForNExtNumberToStart=false;
         private bool _isAfterEquals=false;
-
-
         // This method is the core method of CalculatorController.  In Homework 5, when you are making
         // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
         // helper methods that it calls) to make the calculator behave according to the tests.
@@ -207,18 +203,19 @@ namespace Calculator
                     }
                     break;
                 case "/":
-                    if (_currentValue == 0)
+                    if (_currentValue == 0 && _previousValue!=0)
                     {
                         _currentValueString = "Cannot divide by zero";
                         //Reset();
                     }
-                    else if (_previousValue == 0)
+                    else if (_previousValue == 0 && _currentValue!=0)
                     {
                         _previousValue = _currentValue;
                         _currentValue = _currentValue / _currentValue;
                         _currentValueString = Convert.ToString(_currentValue);
                     }
-                    
+                    else if (_previousValue==0 &&_currentValue==0)
+                        _currentValueString = "Result is undefined";
                     else
                     {
                         _currentValue = _previousValue / _currentValue;
