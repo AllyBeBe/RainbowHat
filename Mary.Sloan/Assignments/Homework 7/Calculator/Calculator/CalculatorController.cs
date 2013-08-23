@@ -19,7 +19,7 @@ namespace Calculator
         private double? _firstValue;
         private double? _secondValue;
         private string _displayString = "0";
-
+        private bool _equalsUsed = false;
 
 
         // This method is the core method of CalculatorController.  In Homework 5, when you are making
@@ -33,7 +33,7 @@ namespace Calculator
             {
 
 
-                if ((input == '0' && _firstChar == true) || (_currentValue.ToString().Length > 15))
+                if ((input == '0' && _firstChar == true ) || (_currentValue.ToString().Length > 14))
                 {
                     //leading zero or greater than 15 digits.
                     _displayString = _currentValue.ToString();
@@ -41,6 +41,10 @@ namespace Calculator
                 }
                 else
                 {
+                    if (_equalsUsed)
+                    {
+                        clearValues();
+                    }
                     double dblInput;
                     double.TryParse(input.ToString(), out dblInput);
                     if (_currentValue == null) // Discovered that I can't add a number to null - it just stays null.  I wish I were smarter.
@@ -95,7 +99,8 @@ namespace Calculator
                             {
                                 _secondValue = _currentValue;
                                 DoMath();
- }
+                                _equalsUsed = true;
+                            }
                             else
                             {
                                 _secondValue = _firstValue;
@@ -147,7 +152,7 @@ namespace Calculator
                     result = _firstValue*_secondValue;
                     break;
                 case '/':
-                    if (_secondValue <= 0)
+                    if (_secondValue == 0)
                     {
                         _displayString = "Cannot divide by zero";
                         break;
