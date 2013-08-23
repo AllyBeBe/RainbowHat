@@ -15,6 +15,7 @@ namespace Calculator
         private bool _isWaitingForNextNumToStart;
         private bool _isWaitingForSecondOperand;
         private bool _isAfterEquals;
+        private string _resultValue;
 
 
         public void AcceptCharacter(char input)
@@ -59,6 +60,10 @@ namespace Calculator
                     ResetCalculatorState();
                     break;
                 case '+':
+                    if ((_lastOperation != null) && (_currentValue != null))
+                    {
+                        DoMath();
+                    }
                     _lastOperation = '+';
                     _lastInput = _currentValue;
                     _clearCurrentValue = true;
@@ -66,6 +71,10 @@ namespace Calculator
                     _isAfterEquals = false;
                     break;
                 case '-':
+                    if ((_lastOperation != null) && (_currentValue != null))
+                    {
+                        DoMath();
+                    }
                     _lastOperation = '-';
                     _lastInput = _currentValue;
                     _clearCurrentValue = true;
@@ -88,6 +97,10 @@ namespace Calculator
                     _isAfterEquals = false;
                     break;
                 case '/':
+                    if ((_lastOperation != null) && (_currentValue != null))
+                    {
+                        DoMath();
+                    }
                     _lastOperation = '/';
                     _lastInput = _currentValue;
                     _clearCurrentValue = true;
