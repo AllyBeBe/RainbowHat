@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Linq;
 using System.Resources;
 using System.Windows.Forms;
 
@@ -16,11 +17,13 @@ namespace Calculator
         private string _previousOperator=null;
         private bool _isWaitingForNExtNumberToStart=false;
         private bool _isAfterEquals=false;
+
         // This method is the core method of CalculatorController.  In Homework 5, when you are making
         // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
         // helper methods that it calls) to make the calculator behave according to the tests.
         public void AcceptCharacter(char input)
         {
+            
             switch (input)
             {
                 case '0':
@@ -33,11 +36,13 @@ namespace Calculator
                 case '7':
                 case '8':
                 case '9':
+                    DigitLimitCheck();
                     if (_isWaitingForNExtNumberToStart == false && _isAfterEquals==false)
                     {
                         if (_currentValueString == "0")
                         {
                             _currentValueString = null;
+                            
                             _currentValueString = _currentValueString + Convert.ToString(input);
                             _currentValue = Convert.ToDouble(_currentValueString);
                         }
@@ -46,7 +51,6 @@ namespace Calculator
                             _currentValueString = _currentValueString + Convert.ToString(input);
                             _currentValue = Convert.ToDouble(_currentValueString);
                         }
-                        
                     }
                     else if (_isWaitingForNExtNumberToStart == false && _isAfterEquals == true)
                     {
@@ -87,10 +91,8 @@ namespace Calculator
                     break;
                 case '-':
                     if (_operator == null)
-                    {
-                        
+                   { 
                         _operator = Convert.ToString(input);
-                        CheckIntitialNegative();
                         _isWaitingForNExtNumberToStart = true;
                     }
                     else
@@ -164,43 +166,21 @@ namespace Calculator
             switch (_operator)
             {
                 case "+":
-                    if (_previousValue == 0)
-                    {
-                        _previousValue = _currentValue;
-                        _currentValue = _currentValue + _currentValue;
-                        _currentValueString = Convert.ToString(_currentValue);
-                    }
-                    else
-                    {
                         _currentValue = _previousValue + _currentValue;
                         _currentValueString = Convert.ToString(_currentValue);  
-                    }
+                   
                     break;
                 case "-":
-                    if (_previousValue == 0)
-                    {
-                        _previousValue = _currentValue;
-                        _currentValue = _currentValue - _currentValue;
-                        _currentValueString = Convert.ToString(_currentValue);
-                    }
-                    else
-                    {
+               
                         _currentValue = _previousValue - _currentValue;
                         _currentValueString = Convert.ToString(_currentValue);
-                    }
+                    
                     break;
                 case "*":
-                    if (_previousValue == 0)
-                    {
-                        _previousValue = _currentValue;
-                        _currentValue = _currentValue * _currentValue;
-                        _currentValueString = Convert.ToString(_currentValue);
-                    }
-                    else
-                    {
+                 
                         _currentValue = _previousValue * _currentValue;
                         _currentValueString = Convert.ToString(_currentValue);
-                    }
+                    
                     break;
                 case "/":
                     if (_currentValue == 0 && _previousValue!=0)
@@ -222,14 +202,13 @@ namespace Calculator
                         _currentValueString = Convert.ToString(_currentValue);
                     }
                     break;
-            }
+            }                
         }
-
-        private void CheckIntitialNegative()
+        private void DigitLimitCheck()
         {
-            if (_currentValueString == "0")
+            if (_currentValueString.Length >= 15)
             {
-                _currentValueString = _operator;
+                //_currentValueString.TrimEnd();
             }
         }
     }

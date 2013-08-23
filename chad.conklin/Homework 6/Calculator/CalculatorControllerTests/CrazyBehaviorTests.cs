@@ -79,6 +79,6 @@ namespace CalculatorControllerTests
             ForInputExpect("123/=", "1");
             ForInputExpect("=", "0.00813008130081301");
         }
-
+      
     }
 }
