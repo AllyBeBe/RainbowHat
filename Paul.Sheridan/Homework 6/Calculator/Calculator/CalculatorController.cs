@@ -7,7 +7,6 @@ using System.Windows.Forms.VisualStyles;
 
 namespace Calculator
 {
-    // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
     {
         private double _currentValue;
@@ -54,9 +53,8 @@ namespace Calculator
         private void NumberInputState(char input)
         {
             _isWaitingForSecondOperand = false;
-            _equalsWasJustPressed = false;
             if (_currentValue.ToString().Length < 15)
-            {
+            {   
                 if (_equalsWasJustPressed == false)
                 {
                     _currentValue = _currentValue*10 + int.Parse(input.ToString());
@@ -65,18 +63,27 @@ namespace Calculator
                 {
                     _currentValue = int.Parse(input.ToString());
                     _previousValue = _currentValue;
+                    _operator = null;
                 }
             }
+            _equalsWasJustPressed = false;
         }
 
         private void EqualsState()
         {
+            if (_isWaitingForSecondOperand)
+            {
+                _currentValue = _previousValue;
+            }
+            if (_equalsWasJustPressed)
+            {
+                DoMathWithSavedOperator();
+            }
             DoMathWithSavedOperator();
+            _operator = null;
             _isWaitingForSecondOperand = false;
             _previousValue = _currentValue;
             _equalsWasJustPressed = true;
-            _isDivideNumberByZero = false;
-            _isDivideNumberByZero = false;
         }
 
         private void DivisionState()
@@ -84,6 +91,7 @@ namespace Calculator
             if (_operator != null)
             {
                 DoMathWithSavedOperator();
+                _operator = null;
             }
             _previousValue = _currentValue;
             _currentValue = 0;
@@ -97,6 +105,7 @@ namespace Calculator
             if (_operator != null)
             {
                 DoMathWithSavedOperator();
+                _operator = null;
             }
             _previousValue = _currentValue;
             _currentValue = 0;
@@ -110,12 +119,13 @@ namespace Calculator
             if (_operator != null)
             {
                 DoMathWithSavedOperator();
+                _operator = null;
             }
             _operator = "-";
             _isWaitingForSecondOperand = true;
-            _equalsWasJustPressed = false;
             _previousValue = _currentValue;
             _currentValue = 0;
+            _equalsWasJustPressed = false;
         }
 
         private void AdditionState()
@@ -123,6 +133,7 @@ namespace Calculator
             if (_operator != null)
             {
                 DoMathWithSavedOperator();
+                _operator = null;
             }
             _previousValue = _currentValue;
             _currentValue = 0;
@@ -166,7 +177,7 @@ namespace Calculator
                     }
                     else
                     {
-                        _isDivideZeroByZero = false;
+                        _isDivideNumberByZero = true;
                     }
                 }
                 else
