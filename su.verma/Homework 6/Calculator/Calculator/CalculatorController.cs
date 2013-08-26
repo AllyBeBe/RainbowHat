@@ -73,11 +73,11 @@ namespace Calculator
                 }
                 else  if (_operator == '+')
                 {
-                    _result = (Convert.ToDouble(_previousValue) + Convert.ToDouble(_currentValue)).ToString();
+                    _result = Convert.ToString(Convert.ToDouble(_previousValue) + (Convert.ToDouble(_currentValue)));
                 }
                 else if (_operator == '-')
                 {
-                    _result = (Convert.ToDouble(_previousValue) - Convert.ToDouble(_currentValue)).ToString();
+                    _result = Convert.ToString(Convert.ToDouble(_previousValue) - (Convert.ToDouble(_currentValue)));
                 }
                 //_result = _currentValue;
                 //_currentValue = "";
