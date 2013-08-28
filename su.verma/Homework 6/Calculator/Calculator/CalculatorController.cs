@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
@@ -15,7 +16,12 @@ namespace Calculator
         private string _currentValue;
         private string _previousValue;
         private string _result;
-        private Boolean _operatorBeforeNumber;
+        private bool _IsFirstOperatorBeforeNumber;
+        private bool _IsFirstOperatorAddedToCurrentValue;
+        private static bool _IsWaitingForSecondOperand;
+        
+        private bool _IsTryingToDivideNonZeroByZero;
+        private bool _IsTryingToDivideZeroByZero;
 
 
         public CalculatorController()
@@ -44,30 +50,34 @@ namespace Calculator
                 ClearCalculatorState();
             }
 
-                // Record the '+' operator
-            else if (input == '+' || input  == '-')
+                // Record the '+' operator or '-' operator or '*' operator or '/' operator
+            else if (input == '+' || input  == '-' || input == '*' || input == '/')
             {
-                if (_currentValue == "0")
+                if (_currentValue == "0" && input != '+')
                 {
-                    _operatorBeforeNumber = true;
+                    _IsFirstOperatorBeforeNumber = true;
                     _operator = input;
                     return;
                 }
 
+                if (_IsFirstOperatorBeforeNumber == true && _operator == '-')
+                {
+                    _currentValue = _operator + _currentValue;
+                }
+                
                 _operator = input;
-
                     // save the '_currentValue' into '_previousValue'
                     _previousValue = _currentValue;
                     // Clear out the _currentvalue
                     _currentValue = "";
-                _operatorBeforeNumber = false;
-
-
+                    _IsWaitingForSecondOperand = true;
+                    _IsFirstOperatorBeforeNumber = false;
+                
             }
 
             else if (input == '=')
             {
-                if (_operatorBeforeNumber == true)
+                if (_IsFirstOperatorBeforeNumber == true)
                 {
                     _result = _operator + _currentValue;
                 }
@@ -79,6 +89,29 @@ namespace Calculator
                 {
                     _result = Convert.ToString(Convert.ToDouble(_previousValue) - (Convert.ToDouble(_currentValue)));
                 }
+                else if (_operator == '*')
+                {
+                    _result = Convert.ToString(Convert.ToDouble(_previousValue) * (Convert.ToDouble(_currentValue)));
+                }
+                else if (_operator == '/')
+                //{
+                //    if (_currentValue == "0")
+                //    {
+                //        if (_previousValue == "0")
+                //        {
+                //            _IsTryingToDivideNonZeroByZero = true;
+                //        }
+                //        else
+                //        {
+                //            _IsTryingToDivideZeroByZero = true;
+                //        }
+                //    }
+                //}
+                //else if
+                {
+                    _result = Convert.ToString(Convert.ToDouble(_previousValue) / (Convert.ToDouble(_currentValue)));
+                }
+
                 //_result = _currentValue;
                 //_currentValue = "";
 
@@ -102,10 +135,12 @@ namespace Calculator
                 }
 
                 //Only add the digits if we have fewer than 15 digits entered 
-                if (_currentValue.Length < 15)
-                {
-                    _currentValue = _currentValue + input;
-                }
+
+                  if (_currentValue.Length < 15)
+                    {
+                        _currentValue = _currentValue + input;
+                    }
+
             }
 
 
@@ -127,6 +162,19 @@ namespace Calculator
         // return something.
         public string GetOutput()
         {
+            // if we'r trying to Divide anything else by Zero
+            // return "Cannot Divide by Zero"
+           //// if (_IsTryingToDivideNonZeroByZero)
+           // {
+           //     return "Cannot Divide by Zero";
+           // }
+
+            // if we'r trying to Divide Zero By Zero
+            // return "Result is undefined"
+            //if (_IsTryingToDivideZeroByZero)
+            //{
+            //    return "Result is undefined";
+            //}
             if (_result != "")
             {
                 return _result;
@@ -143,7 +191,17 @@ namespace Calculator
             return _currentValue;
         }
 
-        //if they have entered a '-' but _currentValue is still 
+        //if waiting for Second Operand, display 
+        // _previousValue rather than _currentValue
+   // {
+     //   if (_IsWaitingForSecondOperand)
+     //   {
+      ///      return _previousValue.ToString();
+      //  }
+
+     ///   return _currentValue.ToString();
+  //  }
+
 
 
     }
