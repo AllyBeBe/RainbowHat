@@ -6,22 +6,26 @@ namespace Calculator
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
     public class CalculatorController
     {
-        private double _currentValue = 0;
-        private double _accumulator = 0;
-        private char _activeOperator = '=';
-        private bool _isBuildingNumber = false ;
-        private bool _isAfterEquals = false;
-        private string _OutOfRangeWarning = "";
+        private double  _currentValue;
+        private double  _accumulator;
+        private char    _activeOperator;
+        private bool    _isBuildingNumber;
+        private bool    _isAfterEquals;
+        private string  _outOfRangeWarning;
 
+        private CalculatorController()
+        {
+            _Reset();
+        }
 
         private void _Reset()   // or initializer - don't know C# approach yet
         {
-            _currentValue = 0;
-            _accumulator = 0;
-            _activeOperator = '=';
-            _OutOfRangeWarning = "";
-            _isAfterEquals  = false;
-
+            _currentValue       = 0;
+            _accumulator        = 0;
+            _activeOperator     = '=';
+            _outOfRangeWarning  = "";
+            _isAfterEquals      = false;
+            _isBuildingNumber   = false;
 
         }
         // This method is the core method of CalculatorController. 
@@ -47,7 +51,7 @@ namespace Calculator
                         _currentValue = 0;
                         _isBuildingNumber = true;
                     }
-                    if (isValidForAppendingDigit(input-'0'))
+                    if (IsValidForAppendingDigit(input-'0'))
                         _currentValue = _currentValue * 10 + (input - '0');
                     break;
                 case '=':
@@ -61,12 +65,13 @@ namespace Calculator
                 case '*':
                     if (_isBuildingNumber)
                         _ApplyPrevOperator();
-                    _currentValue = _accumulator;
+                    _currentValue   = _accumulator;
                     _activeOperator = input;
                     _isBuildingNumber = false;
-                    _isAfterEquals = false;
+                    _isAfterEquals  = false;
                     break;
                 case 'c':
+                case 'C':
                     _Reset();
                     break;
                 // anything else is simply ignored
@@ -82,29 +87,29 @@ namespace Calculator
                     _accumulator = _currentValue;
                     break;
                 case '+':
-                    if (isValidForAddition( _accumulator, _currentValue))
+                    if (IsValidForAddition( _accumulator, _currentValue))
                         _accumulator += _currentValue;
                     break;
                 case '-':
-                    if (isValidForSubtraction( _accumulator, _currentValue))
+                    if (IsValidForSubtraction( _accumulator, _currentValue))
                         _accumulator -= _currentValue;
                     break;
                 case '*':
-                    if (isValidForSubtraction( _accumulator, _currentValue))
+                    if (IsValidForSubtraction( _accumulator, _currentValue))
                         _accumulator *= _currentValue;
                     break;
                 case '/':
-                    if (isValidForDivision(_accumulator, _currentValue))
+                    if (IsValidForDivision(_accumulator, _currentValue))
                         _accumulator /= _currentValue;
                     break;
             }
         }
 
-        private Boolean isValidForAppendingDigit(double newdigit)
+        private Boolean IsValidForAppendingDigit(double newdigit)
         {
             if ((double.MaxValue - newdigit)/10 < _currentValue)
             {
-                _OutOfRangeWarning = "too big"; // calc just plays a 'ding' instead
+                _outOfRangeWarning = "too big"; // calc just plays a 'ding' instead
                 return false;
             }
             if (_currentValue.ToString().Length >= 15)
@@ -114,49 +119,56 @@ namespace Calculator
             return true;
 
         }
-        private Boolean isValidForAddition(double operand1, double operand2)
+        private Boolean IsValidForAddition(double operand1, double operand2)
         {
             if (operand1 > 0 && (double.MaxValue - operand1) < operand2)
             {
-                _OutOfRangeWarning = "overflow"; // calc switches to scientific notation
+                _outOfRangeWarning = "overflow"; // calc switches to scientific notation
                 return false;
             }
             return true;
 
         }
 
-        private Boolean isValidForSubtraction (double operand1, double operand2)
+        private Boolean IsValidForSubtraction (double operand1, double operand2)
         {
             if (operand1 < 0 && (operand1 - double.MinValue) < operand2)
             {
-                _OutOfRangeWarning = "underflow"; // calc switches to scientific notation
+                _outOfRangeWarning = "underflow";   // calc switches to scientific notation
+                                                    // no test cases exist to test this situation
                 return false;
             }
             return true;
 
         }
 
-        private Boolean isValidForMultiplication(double operand1, double operand2)
+        private Boolean IsValidForMultiplication(double operand1, double operand2)
         {
             if (operand1 > 0 && (double.MaxValue/operand1) < operand2)
             {
-                _OutOfRangeWarning = "overflow"; // calc switches to scientific notation
+                _outOfRangeWarning = "overflow"; // calc switches to scientific notation
                 return false;
             }
             return true;
         }
 
-        private Boolean isValidForDivision(double operand1, double operand2)
+        private Boolean IsValidForDivision(double operand1, double operand2)
         {
-            if (operand1 == 0 && operand2 == 0)
+            // complaint of testing double precision == 0 implies that there is a test condition 
+            // needed to make sure math precision tests exist when working with numbers that could very close to zero.
+            // obviously need to decide how to handle (or not handle) numbers this small.
+            //  http://www.bayesserver.com/Techniques/NumericalCode.aspx
+            //  interesting info about System.Double.NaN and what this implies for handling these situations.
+            //  
+            if ((int) operand1 == 0 && (int) operand2 == 0)
             {
-                _OutOfRangeWarning = "Result is undefined";
+                _outOfRangeWarning = "Result is undefined";
                 return false;
             }
 
-            if (operand2 == 0)
+            if ((int) operand2 == 0)
             {
-                _OutOfRangeWarning = "Cannot divide by zero";
+                _outOfRangeWarning = "Cannot divide by zero";
                 return false;
             }
 
@@ -165,21 +177,22 @@ namespace Calculator
 
         public string GetOutput()
         {
-            string _returnstring;
+            string returnstring;
 
             // test if _currentValue is out of range or an error before returning it.
-            if (_OutOfRangeWarning.Length > 0)
+            if (_outOfRangeWarning.Length > 0)
             {
-                _returnstring = _OutOfRangeWarning;
-                _OutOfRangeWarning = ""; 
+                returnstring = _outOfRangeWarning;
+                _outOfRangeWarning = ""; 
                 // just report once and then clear warning.
             }
             else if (_isBuildingNumber)
-                _returnstring = _currentValue.ToString(); // + _activeOperator;
+                returnstring = _currentValue.ToString(); 
+                      // warning about culture & 3 overloads - don't understand enough to know if this should be tweaked or not
             else
-                _returnstring = _accumulator.ToString(); // + _activeOperator; 
+                returnstring = _accumulator.ToString(); 
 
-            return _returnstring;
+            return returnstring;
         }
     }
 }
