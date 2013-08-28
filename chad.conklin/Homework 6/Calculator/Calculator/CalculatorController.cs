@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Resources;
 using System.Windows.Forms;
@@ -13,11 +14,14 @@ namespace Calculator
         private string _currentValueString="0";
         private double _currentValue=0;
         private double _previousValue=0;
+        private double _result = 0;
         private string _operator = null;
         private string _previousOperator=null;
         private bool _isWaitingForNExtNumberToStart=false;
         private bool _isAfterEquals=false;
         private string _previousInput = null;
+        private int _calcCount = 0;
+       
 
         // This method is the core method of CalculatorController.  In Homework 5, when you are making
         // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
@@ -38,8 +42,7 @@ namespace Calculator
                 case '8':
                 case '9':
                     _previousInput = Convert.ToString(input);
-                    //_isAfterEquals = false;
-                    if (_isWaitingForNExtNumberToStart == false && _isAfterEquals==false && _currentValueString.Length < 15)
+                    if (_isWaitingForNExtNumberToStart == false && _isAfterEquals == false && _currentValueString.Length < 15)
                     {
                         if (_currentValueString == "0")
                         {
@@ -63,9 +66,9 @@ namespace Calculator
                         _currentValue = Convert.ToDouble(_currentValueString);
                         _isAfterEquals = false;
                     }
-                    else //if (_isWaitingForNExtNumberToStart == true && _isAfterEquals == false && _currentValueString.Length < 15)
+                    else if (_isWaitingForNExtNumberToStart == true && _isAfterEquals == false && _currentValueString.Length <= 15)
                     {
-                        _previousValue = _currentValue;
+                        _previousValue = Convert.ToDouble(_currentValueString);
                         _currentValue = 0;
                         _currentValueString = null;
                         _currentValueString = _currentValueString + Convert.ToString(input);
@@ -76,7 +79,6 @@ namespace Calculator
                 case '+':
                     _previousInput = Convert.ToString(input);
                     _isAfterEquals = false;
-                    //_previousValue = _currentValue;
                     if (_operator == null)
                     {
                         _operator = Convert.ToString(input);
@@ -93,17 +95,11 @@ namespace Calculator
                 case '-':
                     _previousInput = Convert.ToString(input);
                     _isAfterEquals = false;
-                    //_previousValue = _currentValue;
-                    if (_operator == null && _currentValueString == "0")
+                    if (_operator == null)
                     {
-                        //_currentValueString = Convert.ToString(input);
-                    }
-                    else if (_operator == null && _currentValueString != "0")
-                    {
-                        //_operator = Convert.ToString(input);
+                        _operator = Convert.ToString(input);
                         _isWaitingForNExtNumberToStart = true;
                     }
-
                     else
                     {
                         _previousOperator = _operator;
@@ -115,7 +111,6 @@ namespace Calculator
                 case '*':
                     _previousInput = Convert.ToString(input);
                     _isAfterEquals = false;
-                    //_previousValue = _currentValue;
                     if (_operator == null)
                     {
                         _operator = Convert.ToString(input);
@@ -132,7 +127,6 @@ namespace Calculator
                 case '/':
                     _previousInput = Convert.ToString(input);
                     _isAfterEquals = false;
-                    //_previousValue = _currentValue;
                     if (_operator == null)
                     {
                         _operator = Convert.ToString(input);
@@ -147,11 +141,19 @@ namespace Calculator
                     }
                     break;
                 case '=':
-                        _isAfterEquals = true;
-                        _isWaitingForNExtNumberToStart = false;
-                        DoMath();
-                        _previousOperator = null;
-                        _operator = null;    
+                    _isAfterEquals = true;
+                    _isWaitingForNExtNumberToStart = false;
+                    if (_previousInput == "+" || _previousInput == "-" || _previousInput == "*" || _previousInput == "/" || _previousInput == "=")
+                    {
+                        DoUnaryMath();
+                        _calcCount = _calcCount + 1;
+                    }
+                    else
+                    {
+                        DoMath();  
+                    }
+                        //_previousOperator = null;
+                        //_operator = null;    
                     break;
                 case 'c':
                     Reset();
@@ -177,43 +179,105 @@ namespace Calculator
             _previousOperator = null;
             _isAfterEquals = false;
             _isWaitingForNExtNumberToStart = false;
+            _previousInput = null;
+            _result = 0;
+            _calcCount = 0;
         }
         private void DoMath()
         {
             switch (_operator)
             {
                 case "+":
-                        _currentValue = _previousValue + _currentValue;
-                        _currentValueString = Convert.ToString(_currentValue);
+                    _result = _previousValue + _currentValue;
+                    _currentValueString = Convert.ToString(_result);
                     break;
                 case "-":
-                        _currentValue = _previousValue - _currentValue;
-                        _currentValueString = Convert.ToString(_currentValue);
-                        //_previousValue = 0;
+                    _result = _previousValue - _currentValue;
+                    _currentValueString = Convert.ToString(_result);
                     break;
                 case "*":
-                        _currentValue = _previousValue * _currentValue;
-                        _currentValueString = Convert.ToString(_currentValue);
-                        //_previousValue = 0;
+                    _result = _previousValue*_currentValue;
+                    _currentValueString = Convert.ToString(_result);
                     break;
                 case "/":
                     if (_currentValue == 0 && _previousValue != 0)
                     {
                         _currentValueString = "Cannot divide by zero";
-                        //Reset();
                     }
                     else if (_previousValue == 0 && _currentValue == 0)
                     {
-                        _currentValueString = "Result is undefined"; 
-                    } 
+                        _currentValueString = "Result is undefined";
+                    }
                     else
                     {
-                        _currentValue = _previousValue / _currentValue;
-                        _currentValueString = Convert.ToString(_currentValue);
-                        //_previousValue = 0;
+                        _result = _previousValue/_currentValue;
+                        _currentValueString = Convert.ToString(_result);
                     }
                     break;
-            }                
+            }
         }
+        private void DoUnaryMath()
+        {
+            switch (_operator)
+            {
+                case "+":
+                    if (_result == 0)
+                    {
+                        _result = _currentValue + _currentValue;
+                        _currentValueString = Convert.ToString(_result);   
+                    }
+                    else
+                    {
+                        _result = _result + _currentValue;
+                        _currentValueString = Convert.ToString(_result); 
+                    }
+                    break;
+                case "-":
+                    if (_calcCount == 0)
+                    {
+                        _result = _currentValue - _currentValue;
+                        _currentValueString = Convert.ToString(_result);
+                    }
+                    else
+                    {
+                        _result = _result - _currentValue;
+                        _currentValueString = Convert.ToString(_result); 
+                    }
+                    break;
+                case "*":
+                   if (_result == 0)
+                    {
+                        _result = _currentValue * _currentValue;
+                        _currentValueString = Convert.ToString(_result);   
+                    }
+                    else
+                    {
+                        _result = _result * _currentValue;
+                        _currentValueString = Convert.ToString(_result); 
+                    }
+                    break;
+                case "/":
+                    if (_currentValue == 0 && _previousValue != 0)
+                    {
+                        _currentValueString = "Cannot divide by zero";
+                    }
+                    else if (_previousValue == 0 && _currentValue == 0)
+                    {
+                        _currentValueString = "Result is undefined";
+                    }
+                    else if (_result==0)
+                    {
+                        _result = _currentValue / _currentValue;
+                        _currentValueString = Convert.ToString(_result);   
+                    }
+                    else
+                    {
+                        _result = _result / _currentValue;
+                        _currentValueString = Convert.ToString(_result); 
+                    }
+                    break;
+            }
+        }
+
     }
 }
