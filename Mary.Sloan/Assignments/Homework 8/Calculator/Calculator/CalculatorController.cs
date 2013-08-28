@@ -45,7 +45,6 @@ namespace Calculator
                 switch (input)
                 {
                     case '=':
-                        GetOutput(); // don't do anything if equals used without having a saved operator first.
                         break;
                     case 'c':
                         ClearValues();
@@ -55,11 +54,8 @@ namespace Calculator
                         _savedOperator = input;
                         _firstValue = _currentValue;
                         _displayString = _currentValue.ToString();
-
-                        GetOutput();
-
-                        _firstChar = true; //leading zero prevention for 2nd value.
-                        _currentValue = null; //empty for 2nd value.
+                        _firstChar = true;
+                        _currentValue = null;
                         break;
                 }
             }
@@ -70,19 +66,34 @@ namespace Calculator
                     case '=':
                         if (_currentValue.HasValue)
                         {
+                            if (_currentValue == 0 && _savedOperator == '/')
+                            {
+                                if (_firstValue == 0)
+                                {
+                                   _displayString = "Result is undefined"; // zero / zero
+;                               }
+                                else
+                                {
+                                    _displayString = "Cannot divide by zero"; // number / zero
+                                }
+
+                            }
+                            else
+                            {
                             _secondValue = _currentValue;
-                            DoMath();
+                            }
+
                             _equalsUsed = true;
                         }
                         else
                         {
                             _secondValue = _firstValue;
-                            DoMath();
+
                         }
+                        DoMath();
                         break;
                     case 'c':
                         ClearValues();
-                        GetOutput();
                         break;
                     default: // using a 2nd operator.  Should act like equals.
 
@@ -146,19 +157,10 @@ namespace Calculator
                     result = _firstValue*_secondValue;
                     break;
                 case '/':
-                    if (_secondValue == 0)
-                    {
-                        _displayString = "Cannot divide by zero";
-                        break;
-                    }
-                    else
-                    {
-                        result = _firstValue / _secondValue;
-                        break; 
-                    }
- 
+                     result = _firstValue / _secondValue;
+                     break; 
                 default:
-                    MessageBox.Show("How'd you get here?");
+                    MessageBox.Show("How'd you get here!?");
                     break;
 
             }
