@@ -38,8 +38,8 @@ namespace Calculator
                 case '8':
                 case '9':
                     _previousInput = Convert.ToString(input);
-                    _isAfterEquals = false;
-                    if (_isWaitingForNExtNumberToStart == false & _isAfterEquals==false & _currentValueString.Length < 15)
+                    //_isAfterEquals = false;
+                    if (_isWaitingForNExtNumberToStart == false && _isAfterEquals==false && _currentValueString.Length < 15)
                     {
                         if (_currentValueString == "0")
                         {
@@ -53,7 +53,7 @@ namespace Calculator
                             _currentValue = Convert.ToDouble(_currentValueString);
                         }
                     }
-                    else if (_isWaitingForNExtNumberToStart == false & _isAfterEquals == true & _currentValueString.Length < 15)
+                    else if (_isWaitingForNExtNumberToStart == false && _isAfterEquals == true && _currentValueString.Length < 15)
                     {
                         _previousOperator = null;
                         _previousValue = 0;
@@ -63,7 +63,7 @@ namespace Calculator
                         _currentValue = Convert.ToDouble(_currentValueString);
                         _isAfterEquals = false;
                     }
-                    else if (_isWaitingForNExtNumberToStart == true & _isAfterEquals == false & _currentValueString.Length < 15)
+                    else //if (_isWaitingForNExtNumberToStart == true && _isAfterEquals == false && _currentValueString.Length < 15)
                     {
                         _previousValue = _currentValue;
                         _currentValue = 0;
@@ -76,7 +76,7 @@ namespace Calculator
                 case '+':
                     _previousInput = Convert.ToString(input);
                     _isAfterEquals = false;
-                    _previousValue = _currentValue;
+                    //_previousValue = _currentValue;
                     if (_operator == null)
                     {
                         _operator = Convert.ToString(input);
@@ -93,12 +93,17 @@ namespace Calculator
                 case '-':
                     _previousInput = Convert.ToString(input);
                     _isAfterEquals = false;
-                    _previousValue = _currentValue;
-                    if (_operator == null)
-                   { 
-                        _operator = Convert.ToString(input);
+                    //_previousValue = _currentValue;
+                    if (_operator == null && _currentValueString == "0")
+                    {
+                        //_currentValueString = Convert.ToString(input);
+                    }
+                    else if (_operator == null && _currentValueString != "0")
+                    {
+                        //_operator = Convert.ToString(input);
                         _isWaitingForNExtNumberToStart = true;
                     }
+
                     else
                     {
                         _previousOperator = _operator;
@@ -110,7 +115,7 @@ namespace Calculator
                 case '*':
                     _previousInput = Convert.ToString(input);
                     _isAfterEquals = false;
-                    _previousValue = _currentValue;
+                    //_previousValue = _currentValue;
                     if (_operator == null)
                     {
                         _operator = Convert.ToString(input);
@@ -127,7 +132,7 @@ namespace Calculator
                 case '/':
                     _previousInput = Convert.ToString(input);
                     _isAfterEquals = false;
-                    _previousValue = _currentValue;
+                    //_previousValue = _currentValue;
                     if (_operator == null)
                     {
                         _operator = Convert.ToString(input);
@@ -142,19 +147,11 @@ namespace Calculator
                     }
                     break;
                 case '=':
-                    if (_previousInput == "+" | _previousInput == "-" | _previousInput == "/" | _previousInput == "*" | _previousInput== "=")
-                    {
-                        //_operator = _previousOperator;
-                        DoMath();
-                    }
-                    else
-                    {
                         _isAfterEquals = true;
                         _isWaitingForNExtNumberToStart = false;
                         DoMath();
                         _previousOperator = null;
                         _operator = null;    
-                    }
                     break;
                 case 'c':
                     Reset();
@@ -200,19 +197,15 @@ namespace Calculator
                         //_previousValue = 0;
                     break;
                 case "/":
-                    if (_currentValue == 0 && _previousValue!=0)
+                    if (_currentValue == 0 && _previousValue != 0)
                     {
                         _currentValueString = "Cannot divide by zero";
                         //Reset();
                     }
-                    else if (_previousValue == 0 && _currentValue!=0)
+                    else if (_previousValue == 0 && _currentValue == 0)
                     {
-                        _currentValue = _previousValue / _currentValue;
-                        _currentValueString = Convert.ToString(_currentValue);
-                        //_previousValue = 0;
-                    }
-                    else if (_previousValue==0 &&_currentValue==0)
-                        _currentValueString = "Result is undefined";
+                        _currentValueString = "Result is undefined"; 
+                    } 
                     else
                     {
                         _currentValue = _previousValue / _currentValue;
