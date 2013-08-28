@@ -15,7 +15,7 @@ namespace Calculator
 
         private double? _currentValue;
         bool _firstChar;
-        private char _savedOperator;  //char doesn't have a null/empty value to check from what I could find.
+        private char? _savedOperator;
         private double? _firstValue;
         private double? _secondValue;
         private string _displayString;
@@ -26,9 +26,6 @@ namespace Calculator
             ClearValues();
         }
 
-        // This method is the core method of CalculatorController.  In Homework 5, when you are making
-        // the tests we co-create in Homework 4 pass, you'll write code in this method (and probably in
-        // helper methods that it calls) to make the calculator behave according to the tests.
         public void AcceptCharacter(char input)
         {            
             if (char.IsNumber(input))
@@ -43,7 +40,7 @@ namespace Calculator
 
         private void HandleOperatorInput(char input)
         {
-            if (_savedOperator == 'e')
+            if (_savedOperator == null)
             {
                 switch (input)
                 {
@@ -106,11 +103,11 @@ namespace Calculator
 
         private void HandleDigitInput(char input)
         {
-            if ((input == '0' && _firstChar == true) || (_currentValue.ToString().Length > 14))
+            if ((_currentValue == 0 && _firstChar == true) || (_currentValue.ToString().Length > 14))
             {
                 //leading zero or greater than 15 digits.
                 _displayString = _currentValue.ToString();
-                GetOutput();
+
             }
             else
             {
@@ -176,7 +173,7 @@ namespace Calculator
             _firstChar = true;
             _firstValue = null;
             _secondValue = null;
-            _savedOperator = 'e';
+            _savedOperator = null;
             _equalsUsed = false;
         }
         
