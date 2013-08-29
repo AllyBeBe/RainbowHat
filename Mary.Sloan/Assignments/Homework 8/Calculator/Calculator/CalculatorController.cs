@@ -59,7 +59,7 @@ namespace Calculator
                         break;
                 }
             }
-            else // there's a saved operator and a firstValue.
+            else // there's a saved operator
             {
                 switch (input)
                 {
@@ -68,40 +68,32 @@ namespace Calculator
                         {
                             if (_currentValue == 0 && _savedOperator == '/')
                             {
-                                if (_firstValue == 0)
-                                {
-                                   _displayString = "Result is undefined"; // zero / zero
-;                               }
-                                else
-                                {
-                                    _displayString = "Cannot divide by zero"; // number / zero
-                                }
-
+                                _displayString = _firstValue == 0 ? "Result is undefined" : "Cannot divide by zero";
+                                break;
                             }
                             else
                             {
-                            _secondValue = _currentValue;
+                                _secondValue = _currentValue;
                             }
-
-                            _equalsUsed = true;
                         }
                         else
                         {
                             _secondValue = _firstValue;
-
                         }
+                        _equalsUsed = true;
                         DoMath();
+                        _currentValue = null;
                         break;
                     case 'c':
                         ClearValues();
                         break;
                     default: // using a 2nd operator.  Should act like equals.
-
                         if (_currentValue.HasValue)
                         {
                             _secondValue = _currentValue;
                             DoMath();
                             _savedOperator = input;
+                            _currentValue = null;
                         }
                         else
                         {
@@ -135,15 +127,13 @@ namespace Calculator
                 }
                 _currentValue = (_currentValue*10) + dblInput;
                 _displayString = _currentValue.ToString();
-                GetOutput();
-
                 _firstChar = false;
             }
         }
 
         void DoMath()
         {
-            double? result = 0;
+            double? result = null;
 
             switch (_savedOperator)
             {
