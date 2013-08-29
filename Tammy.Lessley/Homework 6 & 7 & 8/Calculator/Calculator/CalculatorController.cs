@@ -12,172 +12,178 @@ namespace Calculator
 
         private double _currentValue;
         private double _previousValue;
-        private string _operator;
+        private char _operator;
         private bool _isWaitingForSecondOperator;
-        private bool _divideZeroByZero;
         private bool _equalButtonPushed;
-        private bool _divideNumbersByZero;
+        private string _beyondScope;
 
-        private void ResetCalculator()
+        private void _ResetCalculator()
         {
             _currentValue = 0;
             _previousValue = 0;
-            _operator = null;
+            _operator = '=';
             _isWaitingForSecondOperator = false;
             _equalButtonPushed = false;
+            _beyondScope = "";
         }
 
-         private void DoMathWithSavedOperator()
-        {
-            if (_operator == "+")
-            { 
-                _currentValue = _previousValue + _currentValue;
-            }
-            if (_operator == "-")
-            {
-                _currentValue = _previousValue - _currentValue;
-            }
-            if (_operator == "*")
-            {
-                _currentValue = _previousValue * _currentValue;
-            }
-            if (_operator == "/")
-            {
-                if (_currentValue == 0)
-                {
-                    if (_previousValue == 0)
-                    {
-                        _divideZeroByZero = true;
-                    }
-                    else
-                    {
-                        _divideNumbersByZero = true;
-                    }
-                }
-                else
-                {
-                    _currentValue = _previousValue / _currentValue;
-                }
-            }
-        }
+        
         public CalculatorController()
         {
-            ResetCalculator();
+            _ResetCalculator();
         }
 
         public void AcceptCharacter(char input)
         {
             switch (input)
             {
+               
                 case 'c':
-                    ResetCalculator();
+                    _ResetCalculator();
                     break;
                 case '+':
-                    if (_operator != null)
-                    {
-                        DoMathWithSavedOperator();
-                    }
-                    _previousValue = _currentValue;
-                    _currentValue = 0;
-                    _operator = "+";
-                    _isWaitingForSecondOperator = true;
-                    _equalButtonPushed = false;
-                    break;
                 case '-':
-                    if (_operator != null)
-                    {
-                        DoMathWithSavedOperator();
-                    }
-                    _previousValue = _currentValue;
-                    _currentValue = 0;
-                    _operator = "-";
-                    _isWaitingForSecondOperator = true;
-                    _equalButtonPushed = false;
-                    break;
                 case '*':
-                    if (_operator != null)
-                    {
-                        DoMathWithSavedOperator();
-                    }
-                    _previousValue = _currentValue;
-                    _currentValue = 0;
-                    _operator = "*";
-                    _isWaitingForSecondOperator = true;
-                    _equalButtonPushed = false;
-                    break;
                 case '/':
-                    if (_operator != null)
-                    {
-                        DoMathWithSavedOperator();
-                    }
-                    _previousValue = _currentValue;
-                    _currentValue = 0;
-                    _operator = "/";
-                    _isWaitingForSecondOperator = true;
+                    if (_isWaitingForSecondOperator)
+                        _getPreviousOperator();
+                    _currentValue = _previousValue;
+                    _operator = input;
+                    _isWaitingForSecondOperator = false;
                     _equalButtonPushed = false;
                     break;
                 case '=':
-                    if (_operator != null)
-                    {
-                        DoMathWithSavedOperator();
-                    }
-                    _previousValue = _currentValue;
-                    _currentValue = 0;
-                    _operator = "=";
-                    _isWaitingForSecondOperator = true;
-                    _equalButtonPushed = false;
-                    break;
-                default:
+                    _getPreviousOperator();
                     _isWaitingForSecondOperator = false;
-                    _equalButtonPushed = false;
-                    if (_currentValue.ToString().Length < 16)
+                    _equalButtonPushed = true;
+                    break;
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    if (_equalButtonPushed)
+                        _ResetCalculator();
+                    if (! _isWaitingForSecondOperator)
                     {
-                        if (_equalButtonPushed == false)
-                        {
-                            _currentValue = _currentValue*10 + int.Parse(input.ToString());
-                        }
-                        else
-                        {
-                            _previousValue = _currentValue;
-                            double d = _currentValue - int.Parse(input.ToString());
-                        }
+                        _currentValue = 0;
+                        _isWaitingForSecondOperator = true;
                     }
+                    
+                    if (NextDigit(input - '0'))
+                        _currentValue = _currentValue*10 + (input - '0');
                     break;
             }
         }
 
+        private Boolean NextDigit(double nextNumber)
+        {
+            if ((double.MaxValue - nextNumber)/10 < _currentValue)
+            {
+                _beyondScope = "";
+                return false;
+            }
+            if (_currentValue.ToString().Length >= 15 )
+            {
+                return false;
+              }
+            return true;
+            }
 
+        private void _getPreviousOperator()
+        {
+            switch (_operator)
+            {
+                case '/':
+                    if (IsDivision(_previousValue, _currentValue))
+                        _previousValue /= _currentValue;
+                    break;
+                case '+':
+                    if (IsAddition(_previousValue, _currentValue))
+                        _previousValue += _currentValue;
+                    break;
+                case '-':
+                    if (IsSubtraction(_previousValue, _currentValue))
+                        _previousValue -= _currentValue;
+                    break;
+                case '*':
+                    if (IsMultiplication(_previousValue, _currentValue))
+                        _previousValue *= _currentValue;
+                    break;
+                case '=':
+                    _previousValue = _currentValue;
+                    break;
 
+            }
+        }
 
+        private Boolean IsAddition(double number1, double number2)
+        {
+            if (number1 > 0 && (double.MaxValue - number1) < number2)
+            {
+                _beyondScope = "";
+                return false;
+            }
+            return true;
+        }
 
-        //ignore leading zeros... if the first digit is zero... if the sum of the first N digits is zero... disregard, else currentvalue...
+        private Boolean IsSubtraction(double number1, double number2)
+        {
+            if (number1 < 0 && (number1 - double.MinValue) < number2)
+            {
+                _beyondScope = "";
+                return false;
+            }
+            return true;
+        }
 
+        private Boolean IsMultiplication(double number1, double number2)
+        {
+            if (number1 > 0 && (double.MaxValue / number2) < number2)
+            {
+               return false;
+            }
+            return true;
 
-                // Your code will eventually go here, to make all of the tests pass.
+        }
 
-                // DO NOT WRITE THIS CODE YET!  WRITING THIS CODE WILL BE HOMEWORK 5!
+        private Boolean IsDivision(double number1, double number2)
+        {
+            if ((int) number1 == 0 && (int) number2 == 0)
+            {
+                _beyondScope = "Result is undefined";
+                return false;
+            }
+            if ((int) number2 == 0)
+            {
+                _beyondScope = "Cannot divide by zero";
+                return false;
+            }
+            return true;
+        }
 
-
-                // Someday, this method will return the string that should be displayed in the "output window" of the 
-                // calculator.  For now, it just returns a dummy value of "13", since the compiler requires that it
-                // return something.
+      
             public
             string GetOutput()
-          
-        {
-            if (_divideNumbersByZero)
+
             {
-                return "Cannot divide by zero";
-            }
-            if (_divideZeroByZero)
+                string getString;
+           
+                if (_beyondScope.Length > 0)
             {
-                return "Result is undefined";
+                getString = _beyondScope;
+                _beyondScope = "";
             }
-            if (_isWaitingForSecondOperator)
-            {
-                return _previousValue.ToString();
-            }
-            return _currentValue.ToString();
+            else if (_isWaitingForSecondOperator)
+                getString = _currentValue.ToString();
+            else getString = _previousValue.ToString();
+           
+            return getString;
         }
     }
 }
