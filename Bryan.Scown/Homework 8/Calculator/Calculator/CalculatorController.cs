@@ -50,7 +50,8 @@ namespace Calculator
                     else
                     {
                         _currentValue = Convert.ToString(input);
-                        _lastInput = _currentValue;    
+                        _lastInput = _currentValue;
+                        _lastOperation = null;
                     }
                     _isAfterEquals = false;
                     break;
@@ -62,6 +63,7 @@ namespace Calculator
                     if ((_lastOperation != null) && (_currentValue != null))
                     {
                         DoMath();
+                        _lastOperation = null;
                     }
                     _lastOperation = '+';
                     _lastInput = _currentValue;
@@ -73,20 +75,25 @@ namespace Calculator
                     if ((_lastOperation != null) && (_currentValue != null))
                     {
                         DoMath();
+                        _lastOperation = null;
                     }
                     _lastOperation = '-';
                     _lastInput = _currentValue;
                     _clearCurrentValue = true;
                     _isWaitingForNextNumToStart = true;
                     _isAfterEquals = false;
+                    if ((_lastOperation == '-') && (_currentValue == "-"))
+                    {
+                        _currentValue = null;
+                    }
                     break;
                 case '*':
-                    // Q: How do you tell if you have a pending operation?
-                    // A: You have a _lastOperation, and some second
-                    // number has been entered
                     if ((_lastOperation != null) && (_currentValue != null))
                     {
+                        
                         DoMath();
+                        _lastOperation = null;
+
                     }
                     _lastOperation = '*';
                     _lastInput = _currentValue;
@@ -98,6 +105,7 @@ namespace Calculator
                     if ((_lastOperation != null) && (_currentValue != null))
                     {
                         DoMath();
+                        _lastOperation = null;
                     }
                     _lastOperation = '/';
                     _lastInput = _currentValue;
@@ -130,7 +138,7 @@ namespace Calculator
                     if (Convert.ToDouble(_currentValue) != 0)
                     {
                         _currentValue = Convert.ToString(Convert.ToDouble(_lastInput)/(Convert.ToDouble(_currentValue)));
-                        
+                        _lastOperation = null;
                     }
                     else
                     {
