@@ -57,7 +57,7 @@ namespace CalculatorControllerTests
             ForInputExpect("-", "-9");
             ForInputExpect("8", "8");
             ForInputExpect("=", "-17");
-            ForInputExpect("-9-8=", "-34");
+            ForInputExpect("-9-8=", "-17");
         }
     }
 }
