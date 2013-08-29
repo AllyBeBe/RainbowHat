@@ -77,7 +77,7 @@ namespace Calculator
             }
             if (_equalsWasJustPressed)
             {
-                DoMathWithSavedOperator();
+                
             }
             DoMathWithSavedOperator();
             _operator = null;
@@ -85,7 +85,6 @@ namespace Calculator
             _previousValue = _currentValue;
             _equalsWasJustPressed = true;
         }
-
         private void DivisionState()
         {
             if (_operator != null)
@@ -156,7 +155,7 @@ namespace Calculator
         private void DoMathWithSavedOperator()
         {
             if (_operator == "+")
-            { 
+            {
                 _currentValue = _previousValue + _currentValue;
             }
             if (_operator == "-")
@@ -189,8 +188,6 @@ namespace Calculator
 
         public string GetOutput()
         {
-            // If we are waiting for a second operand, display
-            // _previousValue rather than _currentValue
             if (_isDivideNumberByZero)
             {
                 return "Cannot divide by zero";
