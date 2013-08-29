@@ -52,7 +52,7 @@ namespace Calculator
                         break;
                     default: //if the operator is hit without entering non-zero number, this will use the zero.
                         _savedOperator = input;
-                        _firstValue = _currentValue;
+                        _firstValue = _currentValue ?? 0;
                         _displayString = _currentValue.ToString();
                         _firstChar = true;
                         _currentValue = null;
