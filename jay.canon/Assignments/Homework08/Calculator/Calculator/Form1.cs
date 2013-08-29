@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Windows.Input;
+
 
 namespace Calculator
 {
@@ -29,20 +31,48 @@ namespace Calculator
             output.Text = _controller.GetOutput();
         }
 
-
-        // Condensed button_click handler
-
+        // condensed button_click handler
         private void _buttonHolder_Click(object sender, EventArgs e)
         {
             Button sourceButton = (sender as Button);
             char buttonContent = Convert.ToChar(sourceButton.Text);
 
             HandleInput(buttonContent);
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            _controller.Clear();
         }
+
+        // keypress button handlers for operators
+        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar >= 48 && e.KeyChar <= 57) // ASCII values for digits 0 - 9
+            {
+                HandleInput(e.KeyChar);
+            }
+            switch (e.KeyChar) // ASCII value for c,+,-,*,/,= operators
+            {
+                case (char)42: // multiplication symbol
+                case (char)43: // addition symbol
+                case (char)45: // subraction symbol
+                case (char)47: // division symbol
+                case (char)61: // equals symbol
+                case (char)67: // 'C' for clear
+                case (char)99: // 'c' for clear
+                    HandleInput(e.KeyChar);
+                    break;
+            }
+        }
+//        Inoperable attempt to trap Enter key press to model '=' keypress
+//        private void output_KeyDown(object sender, KeyEventArgs e)
+//        {
+//            if (e.KeyValue == 13)
+//            {
+//                MessageBox.Show("Hey, you pressed the Enter key");
+//                HandleInput('=');
+//            }
+//        }
     }
 }

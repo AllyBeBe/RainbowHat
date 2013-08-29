@@ -14,15 +14,17 @@ namespace Calculator
         private bool _errorFlag = false;            // indicates state of errors
         private char _currentOperator = '=';        /* indicates type of operation to drive switch-case decision for calculations; 
                                                        must be initialized to '=' to drive transfer of inputted to intermediate storage */
-        public string displayResult = "";           // string holder to store double variables
+        public string DisplayResult = "";           // string holder to store double variables
         private string _errorText;                  // holds string describing errors
-        
+        private const int MaxDigitDisplay = 15; // maximum digits to display
+
         public void AcceptCharacter(char input)
+        
         {
             switch (input)
             {
                 case 'c':
-                    _Clear();
+                    Clear();
                     break;
                 case '0':
                 case '1':
@@ -36,7 +38,7 @@ namespace Calculator
                 case '9':
                     if (_shouldShowResults)
                     {
-                        _Clear();
+                        Clear();
                     }
                     if (! _isOperandEntry)
                     {
@@ -75,7 +77,7 @@ namespace Calculator
         private Boolean _digitMaxReached(double digitEntry) 
                                                             
         {
-            if (_displayReadout.ToString().Length >= 15)
+            if (_displayReadout.ToString().Length >= MaxDigitDisplay)
             {
                 SystemSounds.Beep.Play();
                 return false;
@@ -83,7 +85,7 @@ namespace Calculator
             return true;
         }
 
-        private void _Clear() // reinitialize variables and flags.
+        public void Clear() // reinitialize variables and flags.
         {
             _displayReadout = 0;
             _currentTotal = 0;
@@ -92,7 +94,7 @@ namespace Calculator
             _isOperandEntry = false;
             _errorFlag = false;
             _errorText = string.Empty;
-            displayResult = "0";
+            DisplayResult = "0";
         }
 
         private void _Calculate()
@@ -134,17 +136,17 @@ namespace Calculator
         {
             if (_errorFlag)
             {
-                displayResult = _errorText;
+                DisplayResult = _errorText;
             }
             else if (_isOperandEntry)
             {
-                displayResult = _displayReadout.ToString();
+                DisplayResult = _displayReadout.ToString();
             }
             else
             {
-                displayResult = _currentTotal.ToString();
+                DisplayResult = _currentTotal.ToString();
             }
-            return displayResult;
+            return DisplayResult;
          }
     }
 }

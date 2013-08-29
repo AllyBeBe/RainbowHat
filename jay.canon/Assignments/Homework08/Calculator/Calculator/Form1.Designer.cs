@@ -1,4 +1,6 @@
-﻿namespace Calculator
+﻿using System.Windows.Forms;
+
+namespace Calculator
 {
     partial class Form1
     {
@@ -18,6 +20,13 @@
                 components.Dispose();
             }
             base.Dispose(disposing);
+        }
+        protected void buttonEquals_OnKeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                MessageBox.Show("Enter pressed", "Attention");
+            }
         }
 
         #region Windows Form Designer generated code
@@ -67,6 +76,7 @@
             this.button1.Text = "1";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.button1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
             // button2
             // 
@@ -78,6 +88,7 @@
             this.button2.Text = "2";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.button2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
             // button3
             // 
@@ -89,6 +100,7 @@
             this.button3.Text = "3";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.button3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
             // button4
             // 
@@ -100,6 +112,7 @@
             this.button4.Text = "4";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.button4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
             // button5
             // 
@@ -111,6 +124,7 @@
             this.button5.Text = "5";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.button5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
             // button6
             // 
@@ -122,6 +136,7 @@
             this.button6.Text = "6";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.button6.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
             // button7
             // 
@@ -133,6 +148,7 @@
             this.button7.Text = "7";
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.button7.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
             // button8
             // 
@@ -144,6 +160,7 @@
             this.button8.Text = "8";
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.button8.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
             // button9
             // 
@@ -155,6 +172,7 @@
             this.button9.Text = "9";
             this.button9.UseVisualStyleBackColor = true;
             this.button9.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.button9.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
             // button0
             // 
@@ -166,17 +184,19 @@
             this.button0.Text = "0";
             this.button0.UseVisualStyleBackColor = true;
             this.button0.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.button0.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
             // buttonPlus
             // 
-            this.buttonPlus.Location = new System.Drawing.Point(52, 177);
+            this.buttonPlus.Location = new System.Drawing.Point(53, 177);
             this.buttonPlus.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonPlus.Name = "buttonPlus";
-            this.buttonPlus.Size = new System.Drawing.Size(118, 38);
+            this.buttonPlus.Size = new System.Drawing.Size(117, 38);
             this.buttonPlus.TabIndex = 11;
             this.buttonPlus.Text = "+";
             this.buttonPlus.UseVisualStyleBackColor = true;
             this.buttonPlus.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.buttonPlus.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
             // buttonMinus
             // 
@@ -188,6 +208,7 @@
             this.buttonMinus.Text = "-";
             this.buttonMinus.UseVisualStyleBackColor = true;
             this.buttonMinus.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.buttonMinus.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
             // buttonTimes
             // 
@@ -199,6 +220,7 @@
             this.buttonTimes.Text = "*";
             this.buttonTimes.UseVisualStyleBackColor = true;
             this.buttonTimes.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.buttonTimes.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
             // buttonDivide
             // 
@@ -210,6 +232,7 @@
             this.buttonDivide.Text = "/";
             this.buttonDivide.UseVisualStyleBackColor = true;
             this.buttonDivide.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.buttonDivide.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
             // buttonEquals
             // 
@@ -221,6 +244,7 @@
             this.buttonEquals.Text = "=";
             this.buttonEquals.UseVisualStyleBackColor = true;
             this.buttonEquals.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.buttonEquals.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.buttonEquals_OnKeyPress);
             // 
             // buttonClear
             // 
@@ -232,12 +256,13 @@
             this.buttonClear.Text = "c";
             this.buttonClear.UseVisualStyleBackColor = true;
             this.buttonClear.Click += new System.EventHandler(this._buttonHolder_Click);
+            this.buttonClear.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(227, 233);
+            this.ClientSize = new System.Drawing.Size(227, 230);
             this.Controls.Add(this.buttonClear);
             this.Controls.Add(this.buttonEquals);
             this.Controls.Add(this.buttonDivide);
@@ -283,6 +308,7 @@
         private System.Windows.Forms.Button buttonDivide;
         private System.Windows.Forms.Button buttonEquals;
         private System.Windows.Forms.Button buttonClear;
+        
     }
 }
 
