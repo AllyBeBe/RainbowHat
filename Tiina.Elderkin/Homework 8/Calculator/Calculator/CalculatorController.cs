@@ -13,7 +13,7 @@ namespace Calculator
         private bool    _isAfterEquals;
         private string  _outOfRangeWarning;
 
-        private CalculatorController()
+        public CalculatorController()
         {
             _Reset();
         }
