@@ -13,6 +13,16 @@ namespace Calculator
         private string _operator = String.Empty;   // the last operator entered (should ignore any operators entered immediately before)
         private string _answer = String.Empty; // The result of doing the math on "equals"
 
+        // Create a collection of integers, zero through 9
+                
+        Collection<string> numberbuttons = new Collection<string>{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    
+
+        // Create a collection of strings of the operators: 
+            {
+                Collection<string> operators = new Collection<string>{'+', '-', '*', '/'};
+            }
+
         // Defines a method to clear the variables. 
         // Called before each test. AMY Where else do I need it?
         public void Clear()
@@ -50,7 +60,7 @@ namespace Calculator
 //                
 //            }
 
-// Here will go assigning a value to _answer
+// Here will go assigning a value to _answer, the last step in AcceptCharacter (?)
         }
 
         public string GetOutput()
