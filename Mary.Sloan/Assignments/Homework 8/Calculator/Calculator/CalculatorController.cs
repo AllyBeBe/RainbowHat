@@ -50,11 +50,15 @@ namespace Calculator
                         ClearValues();
                         GetOutput();
                         break;
-                    default: //if the operator is hit without entering non-zero number, this will use the zero.
+                    default: 
                         _savedOperator = input;
                         _firstValue = _currentValue ?? 0;
                         _displayString = _currentValue.ToString();
                         _firstChar = true;
+                        if (_equalsUsed)
+                        {
+                            _equalsUsed = false;
+                        }
                         _currentValue = null;
                         break;
                 }
@@ -71,10 +75,7 @@ namespace Calculator
                                 _displayString = _firstValue == 0 ? "Result is undefined" : "Cannot divide by zero";
                                 break;
                             }
-                            else
-                            {
-                                _secondValue = _currentValue;
-                            }
+                            _secondValue = _currentValue;
                         }
                         else
                         {
@@ -92,6 +93,7 @@ namespace Calculator
                         {
                             _secondValue = _currentValue;
                             DoMath();
+
                             _savedOperator = input;
                             _currentValue = null;
                         }
@@ -99,6 +101,7 @@ namespace Calculator
                         {
                             _savedOperator = input;
                         }
+                        _equalsUsed = false;
                         break;
                 }
             }
@@ -108,9 +111,7 @@ namespace Calculator
         {
             if ((_currentValue == 0 && _firstChar == true) || (_currentValue.ToString().Length > 14))
             {
-                //leading zero or greater than 15 digits.
                 _displayString = _currentValue.ToString();
-
             }
             else
             {
