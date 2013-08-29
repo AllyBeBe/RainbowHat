@@ -41,10 +41,22 @@ namespace CalculatorControllerTests
 
         // Tiina
         [Test]
-        public void IgnoresExtraneousOperators()
+        public void IgnoresExtraneousOperatorsForAdditionAndSubtraction()
         {
             ForInputExpect("1+2+++-1=", "2");
+        }
+
+        // Tiina
+        [Test]
+        public void IgnoresExtraneousOperatorsForMultiplicationAndDivision()
+        {
             ForInputExpect("3-*2+8/-1=", "13");
+        }
+
+        // Tiina
+        [Test]
+        public void IgnoresExtraneousOperatorsForAdditionAndDivision()
+        {
             ForInputExpect("33+/11=", "3");
         }
 

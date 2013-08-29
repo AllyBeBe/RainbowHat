@@ -16,6 +16,8 @@ namespace Calculator
         private bool _equalsWasJustPressed;
         private bool _isDivideZeroByZero;
         private bool _isDivideNumberByZero;
+        private string _lastOperatorBeforeEquals;
+        private double _currentValueBeforeEquals;
 
         public CalculatorController()
         {
@@ -77,9 +79,16 @@ namespace Calculator
             }
             if (_equalsWasJustPressed)
             {
+                string temp = _operator;
+                _currentValue = _currentValueBeforeEquals;
+                _operator = _lastOperatorBeforeEquals;
                 DoMathWithSavedOperator();
+                _operator = temp;
+                return;
             }
+            _currentValueBeforeEquals = _currentValue;
             DoMathWithSavedOperator();
+            _lastOperatorBeforeEquals = _operator;
             _operator = null;
             _isWaitingForSecondOperand = false;
             _previousValue = _currentValue;
@@ -88,6 +97,11 @@ namespace Calculator
 
         private void DivisionState()
         {
+            if (_isWaitingForSecondOperand)
+            {
+                _operator = "/";
+                return;
+            }
             if (_operator != null)
             {
                 DoMathWithSavedOperator();
@@ -102,6 +116,11 @@ namespace Calculator
 
         private void MultiplicationState()
         {
+            if (_isWaitingForSecondOperand)
+            {
+                _operator = "*";
+                return;
+            }
             if (_operator != null)
             {
                 DoMathWithSavedOperator();
@@ -116,6 +135,11 @@ namespace Calculator
 
         private void SubtractionState()
         {
+            if (_isWaitingForSecondOperand)
+            {
+                _operator = "-";
+                return;
+            }
             if (_operator != null)
             {
                 DoMathWithSavedOperator();
@@ -130,6 +154,11 @@ namespace Calculator
 
         private void AdditionState()
         {
+            if (_isWaitingForSecondOperand)
+            {
+                _operator = "+";
+                return;
+            }
             if (_operator != null)
             {
                 DoMathWithSavedOperator();
