@@ -221,13 +221,13 @@ namespace Calculator
             switch (_operator)
             {
                 case "+":
-                    if (_result == 0)
+                    if (_calcCount == 0)
                     {
                         _result = _currentValue + _currentValue;
                         _currentValueString = Convert.ToString(_result);   
                     }
                     else
-                    {
+                    {   
                         _result = _result + _currentValue;
                         _currentValueString = Convert.ToString(_result); 
                     }
@@ -245,7 +245,7 @@ namespace Calculator
                     }
                     break;
                 case "*":
-                   if (_result == 0)
+                   if (_calcCount == 0)
                     {
                         _result = _currentValue * _currentValue;
                         _currentValueString = Convert.ToString(_result);   
@@ -265,7 +265,7 @@ namespace Calculator
                     {
                         _currentValueString = "Result is undefined";
                     }
-                    else if (_result==0)
+                    else if (_calcCount==0)
                     {
                         _result = _currentValue / _currentValue;
                         _currentValueString = Convert.ToString(_result);   
