@@ -189,8 +189,6 @@ namespace Calculator
 
         public string GetOutput()
         {
-            // If we are waiting for a second operand, display
-            // _previousValue rather than _currentValue
             if (_isDivideNumberByZero)
             {
                 return "Cannot divide by zero";
