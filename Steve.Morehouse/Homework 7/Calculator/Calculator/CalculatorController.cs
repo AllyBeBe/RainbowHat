@@ -23,7 +23,7 @@ namespace Calculator
         private string _lastValue = String.Empty;
 
         /*
-         * we need a memory in the Polish notation of what the operation is
+         * we need a memory in the infix notation of what the operation is
          */
         private char _lastOperation;
 
@@ -36,20 +36,16 @@ namespace Calculator
          */
         private bool clearCurrentValue = true;
 
-        /*
-         * if a decimal was entered
-         */
-        private bool isDecimal = false;
+        private bool _isNegative = false;
 
         /*
-         * This currently performes arithmetic in a Polish notation format
+         * This currently performes arithmetic in a infix notation format
          * 
          * This performs limited capability in the following areas:
          * - signed
          * - decimal
          * 
          * This does NOT perform (yet)
-         *  - reverse Polish
          *  - multiple operations
          *  - large numbers
          *  - rounding
@@ -59,10 +55,7 @@ namespace Calculator
         {
             switch (input)
             {
-                case '.': // decimal notation
-                    isDecimal = true;
-                    _currentValue += input;
-                    break;
+                case '.': 
                 case '0':
                 case '1':
                 case '2':
@@ -73,30 +66,38 @@ namespace Calculator
                 case '7':
                 case '8':
                 case '9':
-                    numberEntered(input);
+                    if (++currentDisplayCharacters <= MAXDISPLAYCHARACTERS)
+                    {
+                        numberEntered(input);
+                    }
                     break;
                 case 'c':
                     clear();
                     break;
                 case '+':
+                    currentDisplayCharacters = 0;
                     _lastOperation = '+';
                     _lastValue = String.Copy(_currentValue);
                     clearCurrentValue = true;
                     break;
                 case '-':
+                    currentDisplayCharacters = 0;
                     dashEntered(input);
                     break;
                 case '*':
+                    currentDisplayCharacters = 0;
                     _lastOperation = '*';
                     _lastValue = String.Copy(_currentValue);
                     clearCurrentValue = true;
                     break;
                 case '/':
+                    currentDisplayCharacters = 0;
                     _lastOperation = '/';
                     _lastValue = String.Copy(_currentValue);
                     clearCurrentValue = true;
                     break;
                 case '=':
+                    currentDisplayCharacters = 0;
                     equalsEntered();
                     break;
             }
@@ -127,6 +128,8 @@ namespace Calculator
         _currentValue = "0";
         _lastValue = String.Empty;
         clearCurrentValue = true;
+        _isNegative = false;
+        currentDisplayCharacters = 0;
     }
 
     /*
@@ -155,6 +158,11 @@ namespace Calculator
         }
         else
         {
+            if (_isNegative == true)
+            {
+                _isNegative = false;
+                _currentValue += "-";
+            }
             // keep on adding to the current string
             _currentValue += input;
         }
@@ -169,59 +177,22 @@ namespace Calculator
         switch (_lastOperation)
         {
             case '+':
-                if (isDecimal == true)
-                {
-                    _currentValue =
-                        Convert.ToString(Convert.ToDouble(_currentValue) + (Convert.ToDouble(_lastValue)));
-                    isDecimal = false;
-                }
-                else
-                {
-                    _currentValue =
-                           Convert.ToString(Convert.ToInt64(_currentValue) + (Convert.ToInt64(_lastValue)));
-                }
+                _currentValue =
+                    Convert.ToString(Convert.ToDouble(_currentValue) + (Convert.ToDouble(_lastValue)));
                 break;
             case '-':
-                if (isDecimal == true)
-                {
-                    _currentValue =
-                        Convert.ToString(Convert.ToDouble(_currentValue) - (Convert.ToDouble(_lastValue)));
-                    isDecimal = false;
-                }
-                else
-                {
-                    _currentValue =
-                        Convert.ToString(Convert.ToInt64(_currentValue) - (Convert.ToInt64(_lastValue)));
-                }
+                _currentValue =
+                    Convert.ToString(Convert.ToDouble(_lastValue) - (Convert.ToDouble(_currentValue)));
                 break;
             case '*':
-                if (isDecimal == true)
-                {
-                    _currentValue =
-                        Convert.ToString(Convert.ToDouble(_currentValue) * (Convert.ToDouble(_lastValue)));
-                    isDecimal = false;
-                }
-                else
-                {
-                    _currentValue =
-                        Convert.ToString(Convert.ToInt64(_currentValue) * (Convert.ToInt64(_lastValue)));
-                }
+                _currentValue =
+                    Convert.ToString(Convert.ToDouble(_currentValue) * (Convert.ToDouble(_lastValue)));
                 break;
             case '/':
                 if (Convert.ToInt64(_currentValue) != 0)
                 {
-                    if (isDecimal == true)
-                    {
-                        _currentValue =
-                            Convert.ToString(Convert.ToDouble(_currentValue) /
-                                             (Convert.ToDouble(_lastValue)));
-                        isDecimal = false;
-                    }
-                    else
-                    {
-                        _currentValue =
-                            Convert.ToString(Convert.ToDecimal(_lastValue) / (Convert.ToDecimal(_currentValue))); ;
-                    }
+                    _currentValue =
+                        Convert.ToString(Convert.ToDouble(_lastValue) / (Convert.ToDouble(_currentValue)));
                 }
                 else // got a problem (double zero or zero divisor)
                 {
@@ -236,7 +207,8 @@ namespace Calculator
                     }
                 }
                 break;
-
+            case '=':
+                break;
             default: // there is no previous operation specified
                 clearCurrentValue = true;
                 break;
@@ -254,6 +226,10 @@ namespace Calculator
             _currentValue = String.Empty;
             clearCurrentValue = false;
             _currentValue += input;
+            /*_lastOperation = '-';
+            _lastValue = "0";
+            clearCurrentValue = true;
+            _isNegative = true;*/
         }
         else // this is a minus
         {
