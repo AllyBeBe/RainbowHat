@@ -1,0 +1,61 @@
+        {
+        Collection<string> numberbuttons = new Collection<string>();
+        numberbuttons.Add("0");
+        numberbuttons.Add("1");
+        numberbuttons.Add("2");
+        numberbuttons.Add("3");
+        numberbuttons.Add("4");
+        numberbuttons.Add("5");
+        numberbuttons.Add("6");
+        numberbuttons.Add("7");
+        numberbuttons.Add("8");
+        numberbuttons.Add("9");
+    }
+
+        // Create a collection of strings of the operators: 
+            {
+                Collection<string> operators = new Collection<string>();
+                operators.Add("+");
+                operators.Add("-");
+                operators.Add("*");
+                operators.Add("/");
+            }
+			
+			
+
+        // Pseudocode and notes for AcceptCharacter() :
+        // For simplicity, assuming user inputs only these, in this order: number, operator, number, equals.
+        // (Later, when user can enter anything in any order, will I have to keep track of each input in order for each round until equals?)
+        // 1. Take input until equals is the input.
+        //      A Input is 0-9:
+        //          Is this the first or second number entered? How to tell?  Try "Is there something in Operator?" (this eventually won't work as a check.  what if user hits an operator as his first key?)
+        //              If no, store or append input in NE1
+        //              If yes, store or append input in NE2
+        //
+        //                  Was NE1/NE2 (whichever we're about to store in) empty?
+        //                      If yes,
+        //                          Store input in NE.
+        //                          Go back and take more input.
+        //                      If no,
+        //                          Append input to what's in NE.
+        //                          Go back and take more input.
+        //      B Input is Operator
+        //          Store input in Operator
+        //
+        // 2. If input is equals, "do the math": 
+        //      convert strings in the vars to decimals
+        //      convert the operator string to a math operator
+        //      combine them to produce a math (decimal) answer
+        //      store the answer in Answer as a string
+        // 3. Then, go to GetOutput, which returns the value of Answer to the text
+		
+		        public void Clear()
+        {
+            _currentValue = 0;
+            _numberEntered1 = String.Empty;
+            _numberEntered2 = String.Empty;
+            _operator = String.Empty;
+            _answer = String.Empty;
+        }
+		
+		

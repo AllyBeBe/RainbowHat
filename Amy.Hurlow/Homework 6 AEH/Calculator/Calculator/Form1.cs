@@ -16,6 +16,7 @@ namespace Calculator
             output.Text = _controller.GetOutput(); // AEH Do GetOutput and put what it returns in textbox.
         }
 
+
         private void HandleInput(char input)    // AEH Defines a helper method for each button click.
         {
             _controller.AcceptCharacter(input); // AEH Call AcceptCharacter (and its return).
