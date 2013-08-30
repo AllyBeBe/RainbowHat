@@ -16,6 +16,8 @@ namespace Calculator
         
         private char _operator;
 
+        private char _lastInput;
+
         /*TODO: these should be domain objects, oh well... */
 
         private String _inputCurrent;
@@ -63,12 +65,15 @@ namespace Calculator
             
             if ('c' == input)
             {
-                Console.WriteLine("CLEAR");
                 Init();
             }
             else if (IsValidInputNumber(input))
             {
                 Console.WriteLine("IsValidInputNumber");
+
+                if(_lastInput == '=')
+                    Init();
+
                 /* Ignore attempts to add leading zeroes */
                 if (!IsAddingLeadingZero(input))
                 {
@@ -98,6 +103,9 @@ namespace Calculator
                 Console.WriteLine("EQUALS");
                 Console.WriteLine("PRE: " + _inputPreviousDouble + " " + _operator + " " + _inputCurrent + "=");
 
+                if (String.IsNullOrEmpty(_inputPrevious))
+                    _inputPrevious = "0";
+
                 if(String.IsNullOrEmpty(_inputCurrent))
                     _inputCurrent = _inputPrevious;
 
@@ -108,62 +116,37 @@ namespace Calculator
 
                 Console.WriteLine("PRE2: " + left + " " + _operator + " " + right + "=");
 
-                switch (_operator)
-                {
-                    case '+':
-                    {
-                        _result = left + right;
-                        _outputValue = _result.ToString("G");
-                        break;
-                    }
-                    case '-':
-                    {
-                        _result = left - right;
-                        _outputValue = _result.ToString("G");
-                        break;
-                    }
-                    case '/':
-                    {
-                        _result = left / right;
+                _result = calculate(input, left, right);
 
-                        if (Double.IsNaN(_result))
-                            _outputValue = DivideNanMessage;
-                        else if (Double.IsInfinity(_result))
-                            _outputValue = DivideInfinityMessage;
-                        else
-                            _outputValue = _result.ToString("G");
-
-                        break;
-                    }
-                    case '*':
-                    {
-                        _result = left * right;
-                        _outputValue = _result.ToString("G");
-                        break;
-                    }
-                    default:
-                    {
-                        _result = right;
-                        _outputValue = _result.ToString("G");
-                        break;
-                    }
-                }
+                if (Double.IsNaN(_result))
+                    _outputValue = DivideNanMessage;
+                else if (Double.IsInfinity(_result))
+                    _outputValue = DivideInfinityMessage;
+                else
+                    _outputValue = _result.ToString("G");
 
                 Console.WriteLine("POST: " + _inputPreviousDouble.ToString("G") + _operator + _inputCurrentDouble.ToString("G") + "=" + _result.ToString("G"));
 
-                /*_inputPrevious = result.ToString("G");
-               _inputPreviousDouble = result;
-               
-                               _inputCurrent = String.Empty;
-                               _inputCurrentDouble = 0; */
-                _inputCurrentDigitCounter = 0;
-              
-                //_operator = ' ';
+                _inputCurrentDigitCounter = 0;              
             }
             else
             {
-                Console.WriteLine("ELSE");
                 
+                Console.WriteLine("ELSE");
+
+                if (!String.IsNullOrEmpty(_inputPrevious) && !String.IsNullOrEmpty(_inputCurrent))
+                {
+                    _inputCurrentDouble = Double.Parse(_inputCurrent);
+                    _result = calculate(input, _inputPreviousDouble, _inputCurrentDouble);
+
+                    Console.WriteLine("ELSE 2: " + _inputPreviousDouble + " " + _operator + " " + _inputCurrentDouble + "=" + _result);
+
+                    //_inputPreviousDouble = _result;
+                    //_inputPrevious = _result.ToString("G");
+                    _inputCurrent = _result.ToString("G");
+                    _outputValue = _inputCurrent;
+                }
+
                 _operator = input;
                 _inputPrevious = _inputCurrent;
                 _inputPreviousDouble = String.Empty.Equals(_inputPrevious) ? 0 : Double.Parse(_inputPrevious);
@@ -171,7 +154,11 @@ namespace Calculator
                 _inputCurrent = String.Empty;
                 _inputCurrentDouble = 0;
                 _inputCurrentDigitCounter = 0;
+
+                _outputValue = _inputPrevious;
             }
+
+            _lastInput = input;
         }
 
         public string GetOutput()
@@ -193,6 +180,42 @@ namespace Calculator
         private bool IsReplaceZero(char input)
         {
             return ZeroString.Equals(_inputCurrent);
+        }
+
+        private double calculate(char input, double left, double right)
+        {
+            double result;
+            
+            switch (_operator)
+            {
+                case '+':
+                    {
+                        result = left + right;
+                        break;
+                    }
+                case '-':
+                    {
+                        result = left - right;
+                        break;
+                    }
+                case '/':
+                    {
+                        result = left / right;
+                        break;
+                    }
+                case '*':
+                    {
+                        result = left * right;
+                        break;
+                    }
+                default:
+                    {
+                        result = right;
+                        break;
+                    }
+            }
+
+            return result;
         }
     }
 }
