@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 namespace Calculator
 {
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
-    public class CalculatorController
+    public class CalculatorController : ICalculatorController
     {
         private const int CurrentValueMaxPresicion = 17;
         private double? _previousValue;

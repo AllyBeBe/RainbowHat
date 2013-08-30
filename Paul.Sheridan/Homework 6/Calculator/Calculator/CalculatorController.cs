@@ -32,16 +32,10 @@ namespace Calculator
                     ResetCalculatorState();
                     break;
                 case '+':
-                    AdditionState();
-                    break;
                 case '-':
-                    SubtractionState();
-                    break;
                 case '*':
-                    MultiplicationState();
-                    break;
                 case '/':
-                    DivisionState();
+                    OperatorState(input.ToString());
                     break;
                 case '=':
                     EqualsState();
@@ -84,6 +78,7 @@ namespace Calculator
                 _operator = _lastOperatorBeforeEquals;
                 DoMathWithSavedOperator();
                 _operator = temp;
+                _previousValue = _currentValue;
                 return;
             }
             _currentValueBeforeEquals = _currentValue;
@@ -95,11 +90,11 @@ namespace Calculator
             _equalsWasJustPressed = true;
         }
 
-        private void DivisionState()
+        private void OperatorState(string op)
         {
             if (_isWaitingForSecondOperand)
             {
-                _operator = "/";
+                _operator = op;
                 return;
             }
             if (_operator != null)
@@ -109,66 +104,24 @@ namespace Calculator
             }
             _previousValue = _currentValue;
             _currentValue = 0;
-            _operator = "/";
+            _operator = op;
             _isWaitingForSecondOperand = true;
             _equalsWasJustPressed = false;
         }
 
         private void MultiplicationState()
         {
-            if (_isWaitingForSecondOperand)
-            {
-                _operator = "*";
-                return;
-            }
-            if (_operator != null)
-            {
-                DoMathWithSavedOperator();
-                _operator = null;
-            }
-            _previousValue = _currentValue;
-            _currentValue = 0;
-            _operator = "*";
-            _isWaitingForSecondOperand = true;
-            _equalsWasJustPressed = false;
+            OperatorState("*");
         }
 
         private void SubtractionState()
         {
-            if (_isWaitingForSecondOperand)
-            {
-                _operator = "-";
-                return;
-            }
-            if (_operator != null)
-            {
-                DoMathWithSavedOperator();
-                _operator = null;
-            }
-            _operator = "-";
-            _isWaitingForSecondOperand = true;
-            _previousValue = _currentValue;
-            _currentValue = 0;
-            _equalsWasJustPressed = false;
+            OperatorState("-");
         }
 
         private void AdditionState()
         {
-            if (_isWaitingForSecondOperand)
-            {
-                _operator = "+";
-                return;
-            }
-            if (_operator != null)
-            {
-                DoMathWithSavedOperator();
-                _operator = null;
-            }
-            _previousValue = _currentValue;
-            _currentValue = 0;
-            _operator = "+";
-            _isWaitingForSecondOperand = true;
-            _equalsWasJustPressed = false;
+            OperatorState("+");
         }
 
         private void ResetCalculatorState()

@@ -5,7 +5,7 @@ namespace Calculator
 {
     public partial class Form1 : Form
     {
-        private readonly CalculatorController _controller = new CalculatorController();
+        private readonly ICalculatorController _controller = new CalculatorController();
 
         public Form1()
         {
