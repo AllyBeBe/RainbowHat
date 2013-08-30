@@ -8,13 +8,12 @@ namespace Calculator
 {
     // NOTE: this class has to be marked with "public" so that it is visible to the CalculatorControllerTests project.
 
-    // my problem is I think in static classes. 
+    // (one) of my problem is I think in static classes. 
     public class CalculatorController
     {
 
 
         private double? _currentValue;
-        bool _firstChar;
         private char? _savedOperator;
         private double? _firstValue;
         private double? _secondValue;
@@ -42,94 +41,93 @@ namespace Calculator
         {
             if (_savedOperator == null)
             {
-                switch (input)
-                {
-                    case '=':
-                        break;
-                    case 'c':
-                        ClearValues();
-                        GetOutput();
-                        break;
-                    default: 
-                        _savedOperator = input;
-                        _firstValue = _currentValue ?? 0;
-                        _displayString = _currentValue.ToString();
-                        _firstChar = true;
-                        if (_equalsUsed)
-                        {
-                            _equalsUsed = false;
-                        }
-                        _currentValue = null;
-                        break;
-                }
+                HandleNoSavedOperator(input);
             }
-            else // there's a saved operator
+            else
             {
-                switch (input)
-                {
-                    case '=':
-                        if (_currentValue.HasValue)
-                        {
-                            if (_currentValue == 0 && _savedOperator == '/')
-                            {
-                                _displayString = _firstValue == 0 ? "Result is undefined" : "Cannot divide by zero";
-                                break;
-                            }
-                            _secondValue = _currentValue;
-                        }
-                        else
-                        {
-                            _secondValue = _firstValue;
-                        }
-                        _equalsUsed = true;
-                        DoMath();
-                        _currentValue = null;
-                        break;
-                    case 'c':
-                        ClearValues();
-                        break;
-                    default: // using a 2nd operator.  Should act like equals.
-                        if (_currentValue.HasValue)
-                        {
-                            _secondValue = _currentValue;
-                            DoMath();
+                HandleSavedOperator(input);
+            }
+        }
 
-                            _savedOperator = input;
-                            _currentValue = null;
-                        }
-                        else
+        private void HandleSavedOperator(char input)
+        {
+            switch (input)
+            {
+                case '=':
+                    if (_currentValue.HasValue)
+                    {
+                        if (_currentValue == 0 && _savedOperator == '/')
                         {
-                            _savedOperator = input;
+                            _displayString = _firstValue == 0 ? "Result is undefined" : "Cannot divide by zero";
+                            break;
                         }
-                        _equalsUsed = false;
-                        break;
-                }
+                        _secondValue = _currentValue;
+                    }
+                    else
+                    {
+                        _secondValue = _firstValue;
+                    }
+
+                    DoMath();
+                    _equalsUsed = true;
+                    _currentValue = null;
+                    break;
+                case 'c':
+                    ClearValues();
+                    break;
+                default:
+                    if (_currentValue.HasValue)
+                    {
+                        _secondValue = _currentValue;
+                        DoMath();
+                        _savedOperator = input;
+                        _currentValue = null;
+                    }
+                    else
+                    {
+                        _savedOperator = input;
+                    }
+                    _equalsUsed = false;
+                    break;
+            }
+        }
+
+        private void HandleNoSavedOperator(char input)
+        {
+            switch (input)
+            {
+                case '=':
+                    _currentValue = null;
+                    break;
+                case 'c':
+                    ClearValues();
+                    break;
+                default:
+                    _savedOperator = input;
+                    _firstValue = _currentValue ?? 0;  // I have difficulty "reading" this line once I had resharper "fix" it.
+                    _displayString = _currentValue.ToString();
+                    _currentValue = null;
+                    _equalsUsed = false;
+                    break;
             }
         }
 
         private void HandleDigitInput(char input)
         {
-            if ((_currentValue == 0 && _firstChar == true) || (_currentValue.ToString().Length > 14))
+            if (_currentValue.ToString().Length > 14) return;
+            if (_equalsUsed)
             {
-                _displayString = _currentValue.ToString();
+                ClearValues();
             }
-            else
+            double dblInput;
+            double.TryParse(input.ToString(), out dblInput);
+            if (_currentValue == null)
+                // Discovered that I can't add a number to null - it just stays null.  I wish I were smarter. 
             {
-                if (_equalsUsed)
-                {
-                    ClearValues();
-                }
-                double dblInput;
-                double.TryParse(input.ToString(), out dblInput);
-                if (_currentValue == null)
-                    // Discovered that I can't add a number to null - it just stays null.  I wish I were smarter.
-                {
-                    _currentValue = 0;
-                }
-                _currentValue = (_currentValue*10) + dblInput;
-                _displayString = _currentValue.ToString();
-                _firstChar = false;
+                _currentValue = 0;
             }
+            _currentValue = (_currentValue*10) + dblInput;
+            _displayString = _currentValue.ToString();
         }
 
         void DoMath()
@@ -142,7 +140,7 @@ namespace Calculator
                     result = _firstValue + _secondValue;
                     break;
                 case '-':
-                    result = _firstValue - _secondValue;
+                    result = _firstValue - _secondValue;  // with subtracting two negatives, I'm ending up with a positive. :(
                     break;
                 case '*':
                     result = _firstValue*_secondValue;
@@ -163,7 +161,6 @@ namespace Calculator
         {
             _currentValue = null;
             _displayString = "0";
-            _firstChar = true;
             _firstValue = null;
             _secondValue = null;
             _savedOperator = null;

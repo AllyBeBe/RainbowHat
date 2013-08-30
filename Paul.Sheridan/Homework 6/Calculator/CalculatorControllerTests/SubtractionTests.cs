@@ -50,13 +50,19 @@ namespace CalculatorControllerTests
 
         // Ahsan
         [Test]
-        public void DoesNegativeFirstDigitSubtractionWork()
+        public void DoesNegativeFirstDigitSubtractionWorkExpandedForm()
         {
             ForInputExpect("-", "0");
             ForInputExpect("9", "9");
             ForInputExpect("-", "-9");
             ForInputExpect("8", "8");
             ForInputExpect("=", "-17");
+        }
+
+        // Ahsan
+        [Test]
+        public void DoesNegativeFirstDigitSubtractionWorkShortForm()
+        {
             ForInputExpect("-9-8=", "-17");
         }
     }

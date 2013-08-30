@@ -1,38 +1,27 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Forms;
 
 namespace Calculator
+// AEH: Form1 is a class.  CalculatorController is a class.  How do they talk?  How do classes relate to objects?
 {
     public partial class Form1 : Form
     {
         private readonly CalculatorController _controller = new CalculatorController();
-
-        public Form1()
+        
+        // AEH: Form1 is a method? Also an object?  How does it talk to CalculatorController?  Why are they separate files?
+        public Form1() // Defines Form1
         {
-            InitializeComponent();
-            output.Text = _controller.GetOutput();
-        }
-
-        // I noticed that the same basic code was showing up in all of the methods:
-        //      output.Text = _controller.AcceptCharacter('?')
-        // Whenever I see duplicated code, I want to get rid of it -- it's more places where
-        // errors can occur, more things I have to read over to find the "meat" of the code,
-        // more stuff to modify and maintain if I want to make a change later.
-        //
-        // So, I wrote this "helper method" to encapsulate the redundant "boiler-plate" parts of
-        // that code.  Now, each button-click handler just says 
-        //      handleInput('?')"
-        // and it's really easy to visually verify that each method does the intended thing.
-        private void HandleInput(char input)
-        {
-            _controller.AcceptCharacter(input);
-            output.Text = _controller.GetOutput();
+            InitializeComponent(); // AEH Initialize the buttons and textbox
+            output.Text = _controller.GetOutput(); // AEH Do GetOutput and put what it returns in textbox.
         }
 
 
-        // This still seems awfully wordy.  You might think about some ways that we could make this 
-        // code shorter and cleaner as well, so that we didn't spend quite so many lines of code just
-        // hooking these buttons up to the HandleInput function with the appropriate input character.
+        private void HandleInput(char input)    // AEH Defines a helper method for each button click.
+        {
+            _controller.AcceptCharacter(input); // AEH Call AcceptCharacter (and its return).
+            output.Text = _controller.GetOutput();  // AEH Call GetOutput, and put its return in the textbox.
+        }
 
         private void Button1Click(object sender, EventArgs e)
         {
