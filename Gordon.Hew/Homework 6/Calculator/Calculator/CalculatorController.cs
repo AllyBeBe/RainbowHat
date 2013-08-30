@@ -30,6 +30,10 @@ namespace Calculator
 
         private int _inputCurrentDigitCounter;
 
+        private double _result;
+
+        private String _debugString;
+
         public CalculatorController()
         {
             Init();
@@ -44,6 +48,8 @@ namespace Calculator
             _inputPreviousDouble = 0;
             _outputValue = ZeroString;
             _inputCurrentDigitCounter = 0;
+            _debugString = String.Empty;
+            _result = Double.NaN;
         }
 
         // This method is the core method of CalculatorController.  In Homework 5, when you are making
@@ -51,12 +57,18 @@ namespace Calculator
         // helper methods that it calls) to make the calculator behave according to the tests.
         public void AcceptCharacter(char input)
         {
+            _debugString += input;
+
+            Console.WriteLine(_debugString);
+            
             if ('c' == input)
             {
+                Console.WriteLine("CLEAR");
                 Init();
             }
             else if (IsValidInputNumber(input))
             {
+                Console.WriteLine("IsValidInputNumber");
                 /* Ignore attempts to add leading zeroes */
                 if (!IsAddingLeadingZero(input))
                 {
@@ -71,7 +83,9 @@ namespace Calculator
                         if (_inputCurrentDigitCounter < 15)
                         {
                             _inputCurrent += input;
-                            _outputValue = _inputCurrent;
+
+                            /* do not display the negative sign if we are still constructing the number */
+                            _outputValue = "-".Equals(_inputCurrent) ? ZeroString : _inputCurrent.Replace("-", "");
 
                             if (Char.IsDigit(input))
                                 _inputCurrentDigitCounter++;
@@ -81,62 +95,79 @@ namespace Calculator
             }
             else if ('=' == input)
             {
-                _inputCurrentDouble = Double.Parse(_inputCurrent);
+                Console.WriteLine("EQUALS");
+                Console.WriteLine("PRE: " + _inputPreviousDouble + " " + _operator + " " + _inputCurrent + "=");
 
-                double result = 0;
+                if(String.IsNullOrEmpty(_inputCurrent))
+                    _inputCurrent = _inputPrevious;
+
+                _inputCurrentDouble =  Double.Parse(_inputCurrent);
+
+                var left = !Double.IsNaN(_result) ? _result : _inputPreviousDouble;
+                var right = _inputCurrentDouble;
+
+                Console.WriteLine("PRE2: " + left + " " + _operator + " " + right + "=");
 
                 switch (_operator)
                 {
                     case '+':
                     {
-                        result = _inputPreviousDouble + _inputCurrentDouble;
-                        _outputValue = result.ToString("G");
+                        _result = left + right;
+                        _outputValue = _result.ToString("G");
                         break;
                     }
                     case '-':
                     {
-                        result = _inputPreviousDouble - _inputCurrentDouble;
-                        _outputValue = result.ToString("G");
+                        _result = left - right;
+                        _outputValue = _result.ToString("G");
                         break;
                     }
                     case '/':
                     {
-                        result = _inputPreviousDouble / _inputCurrentDouble;
+                        _result = left / right;
 
-                        if (Double.IsNaN(result))
+                        if (Double.IsNaN(_result))
                             _outputValue = DivideNanMessage;
-                        else if (Double.IsInfinity(result))
+                        else if (Double.IsInfinity(_result))
                             _outputValue = DivideInfinityMessage;
                         else
-                            _outputValue = result.ToString("G");
+                            _outputValue = _result.ToString("G");
 
                         break;
                     }
                     case '*':
                     {
-                        result = _inputPreviousDouble * _inputCurrentDouble;
-                        _outputValue = result.ToString("G");
+                        _result = left * right;
+                        _outputValue = _result.ToString("G");
                         break;
                     }
                     default:
                     {
-                        result = _inputCurrentDouble;
-                        _outputValue = result.ToString("G");
+                        _result = right;
+                        _outputValue = _result.ToString("G");
                         break;
                     }
                 }
 
-                Console.WriteLine(_inputPreviousDouble.ToString("G") + " " + _operator + " " + _inputCurrentDouble.ToString("G") + "=" + result.ToString("G"));
+                Console.WriteLine("POST: " + _inputPreviousDouble.ToString("G") + _operator + _inputCurrentDouble.ToString("G") + "=" + _result.ToString("G"));
+
+                /*_inputPrevious = result.ToString("G");
+               _inputPreviousDouble = result;
                
-                _inputPrevious = result.ToString("G");
+                               _inputCurrent = String.Empty;
+                               _inputCurrentDouble = 0; */
                 _inputCurrentDigitCounter = 0;
-                _operator = ' ';
+              
+                //_operator = ' ';
             }
             else
             {
+                Console.WriteLine("ELSE");
+                
                 _operator = input;
                 _inputPrevious = _inputCurrent;
-                _inputPreviousDouble = Double.Parse(_inputPrevious);
+                _inputPreviousDouble = String.Empty.Equals(_inputPrevious) ? 0 : Double.Parse(_inputPrevious);
+                
                 _inputCurrent = String.Empty;
                 _inputCurrentDouble = 0;
                 _inputCurrentDigitCounter = 0;
@@ -148,25 +179,20 @@ namespace Calculator
             return _outputValue;
         }
 
-        private Boolean IsValidInputNumber(char input)
+        private bool IsValidInputNumber(char input)
         {
             /* Checks if the value is a digit, decimal point, or the start of a negative number */
             return Char.IsDigit(input) || input == '.' || String.Empty.Equals(_inputCurrent) && input == '-'; ;
         }
 
-        private Boolean IsAddingLeadingZero(char input)
+        private bool IsAddingLeadingZero(char input)
         {
             return input == '0' && _inputCurrent.Equals(ZeroString);
         }
 
-        private Boolean IsReplaceZero(char input)
+        private bool IsReplaceZero(char input)
         {
             return ZeroString.Equals(_inputCurrent);
-        }
-
-        private Boolean IsUnaryOperation(char input)
-        {
-            return false;
         }
     }
 }
