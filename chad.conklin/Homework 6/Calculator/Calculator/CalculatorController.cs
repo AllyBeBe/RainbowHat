@@ -52,6 +52,7 @@ namespace Calculator
                         }
                         else
                         {
+                            //_previousValue = _currentValue;
                             _currentValueString = _currentValueString + Convert.ToString(input);
                             _currentValue = Convert.ToDouble(_currentValueString);
                         }
@@ -59,6 +60,7 @@ namespace Calculator
                     else if (_isWaitingForNExtNumberToStart == false && _isAfterEquals == true && _currentValueString.Length < 15)
                     {
                         _previousOperator = null;
+                        _operator = null;
                         _previousValue = 0;
                         _currentValue = 0;
                         _currentValueString = null;
@@ -84,6 +86,11 @@ namespace Calculator
                         _operator = Convert.ToString(input);
                         _isWaitingForNExtNumberToStart = true;
                     }
+                    //else if (_previousInput == "+" || _previousInput == "-" || _previousInput == "*" || _previousInput == "/")
+                    //{
+                    //    _operator = Convert.ToString(input);
+                    //    _isWaitingForNExtNumberToStart = true;
+                    //}
                     else
                     {
                         _previousOperator = _operator;
@@ -100,6 +107,11 @@ namespace Calculator
                         _operator = Convert.ToString(input);
                         _isWaitingForNExtNumberToStart = true;
                     }
+                    //else if (_previousInput == "+" || _previousInput == "-" || _previousInput == "*" || _previousInput == "/")
+                    //{
+                    //    _operator = Convert.ToString(input);
+                    //    _isWaitingForNExtNumberToStart = true;
+                    //}
                     else
                     {
                         _previousOperator = _operator;
@@ -116,6 +128,11 @@ namespace Calculator
                         _operator = Convert.ToString(input);
                         _isWaitingForNExtNumberToStart = true;
                     }
+                    //else if (_previousInput == "+" || _previousInput == "-" || _previousInput == "*" || _previousInput == "/")
+                    //{
+                    //    _operator = Convert.ToString(input);
+                    //    _isWaitingForNExtNumberToStart = true;
+                    //}
                     else
                     {
                         _previousOperator = _operator;
@@ -132,6 +149,11 @@ namespace Calculator
                         _operator = Convert.ToString(input);
                         _isWaitingForNExtNumberToStart = true;
                     }
+                    //else if (_previousInput == "+" || _previousInput == "-" || _previousInput == "*" || _previousInput == "/")
+                    //{
+                    //    _operator = Convert.ToString(input);
+                    //    _isWaitingForNExtNumberToStart = true;
+                    //}
                     else
                     {
                         _previousOperator = _operator;
