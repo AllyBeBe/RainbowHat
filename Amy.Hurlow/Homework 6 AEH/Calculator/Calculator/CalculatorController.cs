@@ -56,6 +56,15 @@ namespace Calculator
         public void AcceptCharacter(char inputChar) // Defines AcceptCharacter, which is called by HandleInput
             // in each button's click event handler.
             // For Mickey: couldn't I make AcceptCharacter's type string, since all my variables are strings?
+            //
+            // A: You could, except that the type of AcceptCharacter's parameter (note: you said "AcceptCharacter's
+            // type", but the technically correct phrase would be "the type of AcceptCharacter's parameter") is part
+            // of CalculatorController's external interface, which everything that calls it relies on.  If you were
+            // to change that, you would need to also change Form1.cs and all of the tests that call AcceptCharacter.
+            //
+            // That's why, instead, I just renamed it to "inputChar", and introduced the local variable "input" to hold
+            // the string version of the value.  Note: the *name* of AcceptCharacter's parameter is *not* part of the
+            // external interface of CalculatorController, so you can change it freely."
         {
             string input = inputChar.ToString();
 
@@ -111,4 +120,9 @@ namespace Calculator
 //      convert the operator string to a math operator
 //      combine them to produce a math (decimal) answer
 //      store the answer in Answer as a string
-// 3. Then, go to GetOutput, which returns the value of Answer to the text
+
+
+// At some future point, some other piece of code may call GetOutput(), which will
+// return the value of _answer.  That other piece of code may display that value 
+// in a TextBox, or compare it to an "expected" value in a test.  But all GetOutput()
+// needs to do is return the value of _answer.
