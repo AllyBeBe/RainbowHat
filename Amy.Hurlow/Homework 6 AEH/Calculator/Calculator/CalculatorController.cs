@@ -72,21 +72,15 @@ namespace Calculator
             {
                 Clear();
             }
-
-            if (NumberButtons.Contains(input)) // if input is a number
+            else if (NumberButtons.Contains(input)) // if input is a number
             {
                 _numberEntered1 = _numberEntered1 + input;
                 _answer = _numberEntered1;
             }
+            else if (OperatorButtons.Contains(input))
             {
-                if (OperatorButtons.Contains(input))
-                {
-                    _operator = input;
-                }
-                
+                _operator = input;
             }
-
-// Here will go assigning a value to _answer, the last step in AcceptCharacter (?)
         }
 
         public string GetOutput()
