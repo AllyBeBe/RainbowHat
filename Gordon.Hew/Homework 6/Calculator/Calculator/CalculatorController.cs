@@ -69,93 +69,15 @@ namespace Calculator
             }
             else if (IsValidInputNumber(input))
             {
-                Console.WriteLine("IsValidInputNumber");
-
-                if(_lastInput == '=')
-                    Init();
-
-                /* Ignore attempts to add leading zeroes */
-                if (!IsAddingLeadingZero(input))
-                {
-                    /* Replace value wholesale if previous value is zero */
-                    if (IsReplaceZero(input))
-                    {
-                        _inputCurrent = input.ToString(CultureInfo.InvariantCulture);
-                        _outputValue = _inputCurrent;
-                    }
-                    else
-                    {
-                        if (_inputCurrentDigitCounter < 15)
-                        {
-                            _inputCurrent += input;
-
-                            /* do not display the negative sign if we are still constructing the number */
-                            _outputValue = "-".Equals(_inputCurrent) ? ZeroString : _inputCurrent.Replace("-", "");
-
-                            if (Char.IsDigit(input))
-                                _inputCurrentDigitCounter++;
-                        }
-                    }
-                }
+                ProcessNumber(input);
             }
             else if ('=' == input)
             {
-                Console.WriteLine("EQUALS");
-                Console.WriteLine("PRE: " + _inputPreviousDouble + " " + _operator + " " + _inputCurrent + "=");
-
-                if (String.IsNullOrEmpty(_inputPrevious))
-                    _inputPrevious = "0";
-
-                if(String.IsNullOrEmpty(_inputCurrent))
-                    _inputCurrent = _inputPrevious;
-
-                _inputCurrentDouble =  Double.Parse(_inputCurrent);
-
-                var left = !Double.IsNaN(_result) ? _result : _inputPreviousDouble;
-                var right = _inputCurrentDouble;
-
-                Console.WriteLine("PRE2: " + left + " " + _operator + " " + right + "=");
-
-                _result = calculate(input, left, right);
-
-                if (Double.IsNaN(_result))
-                    _outputValue = DivideNanMessage;
-                else if (Double.IsInfinity(_result))
-                    _outputValue = DivideInfinityMessage;
-                else
-                    _outputValue = _result.ToString("G");
-
-                Console.WriteLine("POST: " + _inputPreviousDouble.ToString("G") + _operator + _inputCurrentDouble.ToString("G") + "=" + _result.ToString("G"));
-
-                _inputCurrentDigitCounter = 0;              
+                ProcessEquals();
             }
             else
             {
-                
-                Console.WriteLine("ELSE");
-
-                if (!String.IsNullOrEmpty(_inputPrevious) && !String.IsNullOrEmpty(_inputCurrent))
-                {
-                    _inputCurrentDouble = Double.Parse(_inputCurrent);
-                    _result = calculate(input, _inputPreviousDouble, _inputCurrentDouble);
-
-                    Console.WriteLine("ELSE 2: " + _inputPreviousDouble + " " + _operator + " " + _inputCurrentDouble + "=" + _result);
-
-                    //_inputPreviousDouble = _result;
-                    //_inputPrevious = _result.ToString("G");
-                    _inputCurrent = _result.ToString("G");
-                    _outputValue = _inputCurrent;
-                }
-
-                _operator = input;
-                _inputPrevious = _inputCurrent;
-                _inputPreviousDouble = String.Empty.Equals(_inputPrevious) ? 0 : Double.Parse(_inputPrevious);
-                
-                _inputCurrent = String.Empty;
-                _inputCurrentDouble = 0;
-                _inputCurrentDigitCounter = 0;
-
-                _outputValue = _inputPrevious;
+                ProcessOperator(input);
             }
 
             _lastInput = input;
@@ -169,7 +91,7 @@ namespace Calculator
         private bool IsValidInputNumber(char input)
         {
             /* Checks if the value is a digit, decimal point, or the start of a negative number */
-            return Char.IsDigit(input) || input == '.' || String.Empty.Equals(_inputCurrent) && input == '-'; ;
+            return Char.IsDigit(input) || input == '.' || (String.Empty.Equals(_inputCurrent) && input == '-' && !IsOperator(_lastInput));
         }
 
         private bool IsAddingLeadingZero(char input)
@@ -182,11 +104,11 @@ namespace Calculator
             return ZeroString.Equals(_inputCurrent);
         }
 
-        private double calculate(char input, double left, double right)
+        private double Calculate(char input, double left, double right)
         {
             double result;
-            
-            switch (_operator)
+
+            switch (input)
             {
                 case '+':
                     {
@@ -210,12 +132,131 @@ namespace Calculator
                     }
                 default:
                     {
-                        result = right;
+                        result = left + right;
                         break;
                     }
             }
 
             return result;
+        }
+
+        private bool IsOperator(char input)
+        {
+            switch (input)
+            {
+                case '+':
+                {
+                    return true;
+                }
+                case '-':
+                {
+                    return true;
+                }
+                case '/':
+                {
+                    return true;
+                }
+                case '*':
+                {
+                    return true;
+                }
+                default:
+                {
+                    return false;
+                }
+            }
+        }
+
+        private void ProcessNumber(char input)
+        {
+            if (_lastInput == '=')
+                Init();
+
+            /* Ignore attempts to add leading zeroes */
+            if (!IsAddingLeadingZero(input))
+            {
+                /* Replace value wholesale if previous value is zero */
+                if (IsReplaceZero(input))
+                {
+                    _inputCurrent = input.ToString(CultureInfo.InvariantCulture);
+                    _outputValue = _inputCurrent;
+                }
+                else
+                {
+                    if (_inputCurrentDigitCounter < 15)
+                    {
+                        _inputCurrent += input;
+
+                        /* do not display the negative sign if we are still constructing the number */
+                        _outputValue = "-".Equals(_inputCurrent) ? ZeroString : _inputCurrent.Replace("-", "");
+
+                        if (Char.IsDigit(input))
+                            _inputCurrentDigitCounter++;
+                    }
+                }
+            }
+        }
+
+        private void ProcessEquals()
+        {
+            Console.WriteLine("EQUALS");
+            Console.WriteLine("PRE: " + _inputPreviousDouble + " " + _operator + " " + _inputCurrent + "=");
+
+            if (String.IsNullOrEmpty(_inputPrevious))
+                _inputPrevious = "0";
+
+            if (String.IsNullOrEmpty(_inputCurrent))
+                _inputCurrent = _inputPrevious;
+
+            _inputPreviousDouble = Double.Parse(_inputPrevious);
+            _inputCurrentDouble = Double.Parse(_inputCurrent);
+
+            var left = !Double.IsNaN(_result) ? _result : _inputPreviousDouble;
+            var right = _inputCurrentDouble;
+
+            Console.WriteLine("PRE2: " + left + " " + _operator + " " + right + "=");
+
+            _result = Calculate(_operator, left, right);
+
+            if (Double.IsNaN(_result))
+                _outputValue = DivideNanMessage;
+            else if (Double.IsInfinity(_result))
+                _outputValue = DivideInfinityMessage;
+            else
+                _outputValue = _result.ToString("G");
+
+            Console.WriteLine("POST: " + left.ToString("G") + _operator + right.ToString("G") + "=" + _result.ToString("G"));
+
+            _inputCurrentDigitCounter = 0;
+        }
+
+        private void ProcessOperator(char input)
+        {
+            if (IsOperator(_lastInput))
+            {
+                _operator = input;
+            }
+            else
+            {
+                if (!String.IsNullOrEmpty(_inputPrevious) && !String.IsNullOrEmpty(_inputCurrent))
+                {
+                    _inputCurrentDouble = Double.Parse(_inputCurrent);
+                    _result = Calculate(_operator, _inputPreviousDouble, _inputCurrentDouble);
+
+                    _inputCurrent = _result.ToString("G");
+                    _outputValue = _inputCurrent;
+                }
+
+                _operator = input;
+                _inputPrevious = _inputCurrent;
+                _inputPreviousDouble = String.Empty.Equals(_inputPrevious) ? 0 : Double.Parse(_inputPrevious);
+
+                _inputCurrent = String.Empty;
+                _inputCurrentDouble = 0;
+                _inputCurrentDigitCounter = 0;
+
+                _outputValue = _inputPrevious;
+            }
         }
     }
 }
