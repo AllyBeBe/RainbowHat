@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace Calculator
 {
@@ -9,54 +8,53 @@ namespace Calculator
          * the maximum number of characters to be displayed
          */
         private const int MAXDISPLAYCHARACTERS = 15;
-        private int currentDisplayCharacters = 0;
+        private const int MAX_PRECISION = 17;
 
-        /*
-         * the current value of the displayed register
-         */
-        private string _currentValue = "0";
+        // nullable types
+        private double? _previousValue;
+        private double? _currentValue;
+        private double? _lastValue;
+        private double? _resultValue;
 
-        /*
-         * this is the second register, the value which was previously entered but we need to perform the
-         * selected operation upon
-         */
-        private string _lastValue = String.Empty;
+        private char? _previousOperator;
+        private char? _currentOperator;
 
-        /*
-         * we need a memory in the infix notation of what the operation is
-         */
-        private char _lastOperation;
+        private char? _equalityOperator;
+        private bool _expectDuplicateOperatorInput;
+        private bool _useImplicitZero;
 
-        /*
-         * when an operation is made, the current value still needs to be displayed.
-         * however a flag is set so upon entry of a new number, the new current Value is cleared
-         * 
-         * this flag is initially set since the initial value is ZERO but when a user enters a number
-         * it clears to what the user enters, so there are no leading zeros.
-         */
-        private bool clearCurrentValue = true;
+        // new
+        private string _errorMessage;
 
-        private bool _isNegative = false;
+        public CalculatorController()
+        {
+            clear();
+        }
 
-        /*
-         * This currently performes arithmetic in a infix notation format
-         * 
-         * This performs limited capability in the following areas:
-         * - signed
-         * - decimal
-         * 
-         * This does NOT perform (yet)
-         *  - multiple operations
-         *  - large numbers
-         *  - rounding
-         * 
-         */
+        private void clear()
+        {
+            _previousValue = null;
+            _currentValue = 0;
+            _previousOperator = null;
+            _currentOperator = null;
+            _equalityOperator = null;
+            _expectDuplicateOperatorInput = false;
+            _errorMessage = null;
+            _resultValue = 0;
+            _useImplicitZero = true;
+        }
+
         public void AcceptCharacter(char input)
         {
+            if (_errorMessage != null && input != 'c')
+                return;
+
             switch (input)
             {
-                case '.': 
-                case '0':
+                case 'c':
+                case 'C':
+                    clear();
+                    break;
                 case '1':
                 case '2':
                 case '3':
@@ -66,178 +64,113 @@ namespace Calculator
                 case '7':
                 case '8':
                 case '9':
-                    if (++currentDisplayCharacters <= MAXDISPLAYCHARACTERS)
-                    {
-                        numberEntered(input);
-                    }
-                    break;
-                case 'c':
-                    clear();
+                case '0':
+                    numberEntered(input);
                     break;
                 case '+':
-                    currentDisplayCharacters = 0;
-                    _lastOperation = '+';
-                    _lastValue = String.Copy(_currentValue);
-                    clearCurrentValue = true;
-                    break;
                 case '-':
-                    currentDisplayCharacters = 0;
-                    dashEntered(input);
-                    break;
                 case '*':
-                    currentDisplayCharacters = 0;
-                    _lastOperation = '*';
-                    _lastValue = String.Copy(_currentValue);
-                    clearCurrentValue = true;
-                    break;
                 case '/':
-                    currentDisplayCharacters = 0;
-                    _lastOperation = '/';
-                    _lastValue = String.Copy(_currentValue);
-                    clearCurrentValue = true;
+                    ProcessOperatorInput(input);
                     break;
                 case '=':
-                    currentDisplayCharacters = 0;
-                    equalsEntered();
+                    equalsEntered(input);
                     break;
             }
         }
 
-    public string GetOutput()
-    {
-        if (_currentValue == "")
+        private void equalsEntered(char input)
         {
-            return null;
-        }
-        else
-        {
-            return _currentValue;
-        }
-    }
-
-    /*
-     * CLEAR
-     * 
-     * clear the current value
-     * display zero
-     * set flag to clear to what user enters
-     */
-    public void clear()
-    {
-        _currentValue = String.Empty;
-        _currentValue = "0";
-        _lastValue = String.Empty;
-        clearCurrentValue = true;
-        _isNegative = false;
-        currentDisplayCharacters = 0;
-    }
-
-    /*
-     * if there was an operation made where the current contents needs to be cleared, do so now
-     * before entry is made
-     */
-    public void numberEntered(char input)
-    {
-        if (clearCurrentValue == true)
-        {
-            /*
-             * now check for leading zeros.  if so, do not reset flag
-             */
-            if (input != '0')
+            if (!_useImplicitZero)
             {
-                _currentValue = String.Empty;
-                clearCurrentValue = false;
-                _currentValue += input;
+                _currentValue = _lastValue;
             }
-            else
-            {
-                // even though this is still zero, still have to note this 
-                _currentValue = "0";
-                // don't reset flag in case there are subsequent zero entries
-            }
-        }
-        else
-        {
-            if (_isNegative == true)
-            {
-                _isNegative = false;
-                _currentValue += "-";
-            }
-            // keep on adding to the current string
-            _currentValue += input;
-        }
-    }
+            _equalityOperator = input;
+            _previousOperator = _currentOperator;
 
-    /*
-     * if an equal is entered, we have to collect everything and determine the operation
-     * to perform.  If there was no previous operation entered, clear the last command
-     */
-    public void equalsEntered()
-    {
-        switch (_lastOperation)
+            DoMath();
+            _previousValue = _resultValue;
+            _expectDuplicateOperatorInput = true;
+        }
+
+        private void ProcessOperatorInput(char input)
         {
-            case '+':
-                _currentValue =
-                    Convert.ToString(Convert.ToDouble(_currentValue) + (Convert.ToDouble(_lastValue)));
-                break;
-            case '-':
-                _currentValue =
-                    Convert.ToString(Convert.ToDouble(_lastValue) - (Convert.ToDouble(_currentValue)));
-                break;
-            case '*':
-                _currentValue =
-                    Convert.ToString(Convert.ToDouble(_currentValue) * (Convert.ToDouble(_lastValue)));
-                break;
-            case '/':
-                if (Convert.ToInt64(_currentValue) != 0)
+            _useImplicitZero = false;
+            _equalityOperator = null;
+            _currentOperator = input;
+
+            if (!_expectDuplicateOperatorInput)
+            {
+                if (_previousOperator.HasValue && _previousValue.HasValue)
                 {
-                    _currentValue =
-                        Convert.ToString(Convert.ToDouble(_lastValue) / (Convert.ToDouble(_currentValue)));
+                    DoMath();
+                    _lastValue = _resultValue;
                 }
-                else // got a problem (double zero or zero divisor)
-                {
-                    // both values are zero
-                    if (Convert.ToInt64(_lastValue) == 0)
-                    {
-                        _currentValue = String.Copy("Result is undefined");
-                    }
-                    else // divisor only is zero
-                    {
-                        _currentValue = String.Copy("Cannot divide by zero");
-                    }
-                }
-                break;
-            case '=':
-                break;
-            default: // there is no previous operation specified
-                clearCurrentValue = true;
-                break;
+            }
+            _previousValue = _resultValue;
+            _currentValue = 0;
+            _previousOperator = _currentOperator;
+            _expectDuplicateOperatorInput = true;
         }
-    }
 
-    /*
-     * minus sign (overload)
-     * determine if this is minus or negative
-     */
-    public void dashEntered(char input)
-    {
-        if (clearCurrentValue == true)
+        private void numberEntered(char input)
         {
-            _currentValue = String.Empty;
-            clearCurrentValue = false;
-            _currentValue += input;
-            /*_lastOperation = '-';
-            _lastValue = "0";
-            clearCurrentValue = true;
-            _isNegative = true;*/
+            _useImplicitZero = true;
+            _expectDuplicateOperatorInput = false;
+            if (_equalityOperator.HasValue)
+            {
+                clear();
+            }
+            if (_currentValue.ToString().Length < MAXDISPLAYCHARACTERS)
+            {
+                _currentValue = Double.Parse(_currentValue.ToString() + input.ToString());
+                _lastValue = _currentValue;
+                _resultValue = _currentValue;
+            }
         }
-        else // this is a minus
-        {
-            _lastOperation = '-';
-            _lastValue = String.Copy(_currentValue);
-            clearCurrentValue = true;
-        }
-    }
 
+        private void DoMath()
+        {
+            switch (_previousOperator)
+            {
+                case '+':
+                    _resultValue = _previousValue + _currentValue;
+                    return;
+                case '-':
+                    _resultValue = _previousValue - _currentValue;
+                    return;
+                case '*':
+                    _resultValue = _previousValue * _currentValue;
+                    return;
+                case '/':
+                    if (_previousValue == 0 && _currentValue == 0)
+                        _errorMessage = "Result is undefined";
+                    else if (_currentValue == 0)
+                        _errorMessage = "Cannot divide by zero";
+                    else
+                        _resultValue = _previousValue / _currentValue;
+                    return;
+            }
+        }
+
+        public string GetOutput()
+        {
+            if (_errorMessage != null)
+                return _errorMessage;
+
+            var firstSignificantDigitMultiplier = 1;
+            if (_resultValue != 0)
+            {
+                var resultExponent = Math.Ceiling(Math.Log10((double)_resultValue));
+                if (resultExponent < 0)
+                    firstSignificantDigitMultiplier = (int)Math.Pow(10, -1 * resultExponent);
+            }
+            var precision = MAX_PRECISION - ((long)_resultValue).ToString().Length - 1;//-1 for comma
+            string result = (precision > 0) ?
+                (Math.Round((double)_resultValue * firstSignificantDigitMultiplier, precision) /
+                firstSignificantDigitMultiplier).ToString()
+                : _resultValue.ToString();
+            return result;
+        }
     }
 }
