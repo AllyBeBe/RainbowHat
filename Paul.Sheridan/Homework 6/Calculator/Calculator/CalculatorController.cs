@@ -149,23 +149,21 @@ namespace Calculator
             {
                 _currentValue = _previousValue * _currentValue;
             }
-            if (_operator == "/")
+            if (_operator != "/") return;
+            if (_currentValue == 0)
             {
-                if (_currentValue == 0)
+                if (_previousValue == 0)
                 {
-                    if (_previousValue == 0)
-                    {
-                        _isDivideZeroByZero = true;
-                    }
-                    else
-                    {
-                        _isDivideNumberByZero = true;
-                    }
+                    _isDivideZeroByZero = true;
                 }
                 else
                 {
-                    _currentValue = _previousValue / _currentValue;
+                    _isDivideNumberByZero = true;
                 }
+            }
+            else
+            {
+                _currentValue = _previousValue / _currentValue;
             }
         }
 
