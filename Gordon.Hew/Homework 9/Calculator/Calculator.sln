@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator", "Calculator\Calculator.csproj", "{560A4CC4-CBE5-47A2-9E35-8360428234BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorControllerTests", "CalculatorControllerTests\CalculatorControllerTests.csproj", "{B9F5D5CC-8AF4-4F7C-BA4D-4DB7303679B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirkGentlyCalculatorControllerTests", "CalculatorControllerTests\DirkGentlyCalculatorControllerTests.csproj", "{B9F5D5CC-8AF4-4F7C-BA4D-4DB7303679B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

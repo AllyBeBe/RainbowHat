@@ -10,7 +10,8 @@ namespace Calculator
         public Form1()
         {
             InitializeComponent();
-            output.Text = _controller.GetOutput();
+            var htmlOutput = "<body style=\"background-color:#ccffcc;\">" + _controller.GetOutput() + "</body>";
+            webBrowser1.DocumentText = htmlOutput;
         }
 
         // I noticed that the same basic code was showing up in all of the methods:
@@ -26,7 +27,13 @@ namespace Calculator
         private void HandleInput(char input)
         {
             _controller.AcceptCharacter(input);
-            output.Text = _controller.GetOutput();
+            webBrowser1.DocumentText =  _controller.GetOutput();
+        }
+
+        private void DisplayIChing(int firstNumber, int secondNumber)
+        {
+            _controller.Init();
+            webBrowser1.Navigate(string.Format("http://www.thateden.co.uk/dirk/pred.php?ching1={0}&ching2={1}", firstNumber, secondNumber));
         }
 
 
@@ -112,6 +119,17 @@ namespace Calculator
         private void ButtonEqualsClick(object sender, EventArgs e)
         {
             HandleInput('=');
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            var r = new Random();
+            DisplayIChing(r.Next(1, 9), r.Next(1, 9));
         }
     }
 }

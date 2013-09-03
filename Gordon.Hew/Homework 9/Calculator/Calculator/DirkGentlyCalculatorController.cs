@@ -10,6 +10,10 @@ namespace Calculator
     {
         private const string ZeroString = "0";
 
+        private const string YellowSuffusionUrl =
+            "<body style=\"background-color:#ffff99; background-image: url(http://www.thateden.co.uk/dirk/images/yellowbg.gif); text-align:center;\">"
+            + "<div><img src=\"http://www.thateden.co.uk/dirk/images/yellow.gif\" width=\"146\" height=\"69\" alt=\"a suffusion of yellow ...\"></div></body>";
+
         private const string DivideNanMessage = "Result is undefined";
 
         private const string DivideInfinityMessage = "Cannot divide by zero";
@@ -41,7 +45,7 @@ namespace Calculator
             Init();
         }
 
-        private void Init()
+        public void Init()
         {
             _operator = ' ';
             _inputCurrent = String.Empty;
@@ -85,6 +89,9 @@ namespace Calculator
 
         public string GetOutput()
         {
+            if (!YellowSuffusionUrl.Equals(_outputValue))
+                _outputValue = String.Format("<body style=\"background-color:#ccffcc;\">{0}</body>",_outputValue);
+            
             return _outputValue;
         }
 
@@ -104,7 +111,7 @@ namespace Calculator
             return ZeroString.Equals(_inputCurrent);
         }
 
-        private double Calculate(char input, double left, double right)
+        private static double Calculate(char input, double left, double right)
         {
             double result;
 
@@ -199,8 +206,7 @@ namespace Calculator
 
         private void ProcessEquals()
         {
-            Console.WriteLine("EQUALS");
-            Console.WriteLine("PRE: " + _inputPreviousDouble + " " + _operator + " " + _inputCurrent + "=");
+            Console.WriteLine("EQUALS PRE: {0}{1}{2}=", _inputPreviousDouble, _operator, _inputCurrent);
 
             if (String.IsNullOrEmpty(_inputPrevious))
                 _inputPrevious = "0";
@@ -214,7 +220,7 @@ namespace Calculator
             var left = !Double.IsNaN(_result) ? _result : _inputPreviousDouble;
             var right = _inputCurrentDouble;
 
-            Console.WriteLine("PRE2: " + left + " " + _operator + " " + right + "=");
+            Console.WriteLine("EQUALS PRE2: {0}{1}{2}=", left, _operator, right);
 
             _result = Calculate(_operator, left, right);
 
@@ -222,10 +228,14 @@ namespace Calculator
                 _outputValue = DivideNanMessage;
             else if (Double.IsInfinity(_result))
                 _outputValue = DivideInfinityMessage;
+            else if(_result > 4)
+            {
+                Init();
+                _outputValue = "<body style=\"background-color:#ffff99; background-image: url(http://www.thateden.co.uk/dirk/images/yellowbg.gif); text-align:center;\">"
+                + "<div><img src=\"http://www.thateden.co.uk/dirk/images/yellow.gif\" width=\"146\" height=\"69\" alt=\"a suffusion of yellow ...\"></div></body>";
+            }
             else
                 _outputValue = _result.ToString("G");
-
-            Console.WriteLine("POST: " + left.ToString("G") + _operator + right.ToString("G") + "=" + _result.ToString("G"));
 
             _inputCurrentDigitCounter = 0;
         }
