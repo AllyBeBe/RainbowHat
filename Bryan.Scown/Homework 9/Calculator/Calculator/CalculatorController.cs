@@ -41,13 +41,14 @@ namespace Calculator
                     {
                         _currentValue = String.Empty;
                     }
-                    if (_isAfterEquals == false)
+                    if ((_isAfterEquals == false) && (_currentValue.Length < 16))
                     {
                         _isWaitingForSecondOperand = true;
                         _isWaitingForNextNumToStart = true;
                         _currentValue += input;    
                     }
                     else
+                    if (_currentValue.Length < 16)
                     {
                         _currentValue = Convert.ToString(input);
                         _lastInput = _currentValue;
@@ -158,14 +159,6 @@ namespace Calculator
 
         public string GetOutput()
         {
-            if (_currentValue == "")
-            {
-                return null;
-            }
-            if (_currentValue.Length > 16 && _currentValue != _cantDivideByZero && _currentValue != _resultUndefined)
-            {
-                return _currentValue.Substring(0, 16);
-            }
             return _currentValue;
         }
         
