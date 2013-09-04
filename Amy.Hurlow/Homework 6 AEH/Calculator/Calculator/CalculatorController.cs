@@ -64,7 +64,7 @@ namespace Calculator
         public void Clear()
         {
             _digitsEnteredShouldGoIntoFirstNumber = true;
-            _firstNumberEntered = String.Empty;
+            _firstNumberEntered = "0";
             _secondNumberEntered = String.Empty;
             _operator = String.Empty;
             _display = "0";
@@ -94,12 +94,12 @@ namespace Calculator
             {
                 if (_digitsEnteredShouldGoIntoFirstNumber)
                 {
-                    _firstNumberEntered = _firstNumberEntered + input;
+                    _firstNumberEntered = AppendDigit(_firstNumberEntered, input);
                     _display = _firstNumberEntered;
                 }
-                else                
+                else
                 {
-                    _secondNumberEntered = _secondNumberEntered + input;
+                    _secondNumberEntered = AppendDigit(_secondNumberEntered, input);
                     _display = _secondNumberEntered;                    
                 }
             }
@@ -119,6 +119,19 @@ namespace Calculator
                     _answer = (double.Parse(_firstNumberEntered) - double.Parse(_secondNumberEntered)).ToString();
                 }
             }
+        }
+
+        private string AppendDigit(string existingNumber, string digit)
+        {
+            if (existingNumber == "0")
+            {
+                return digit;
+            }
+            if (existingNumber.Length == 15)
+            {
+                return existingNumber;
+            }
+            return existingNumber + digit;
         }
 
         public string GetOutput()

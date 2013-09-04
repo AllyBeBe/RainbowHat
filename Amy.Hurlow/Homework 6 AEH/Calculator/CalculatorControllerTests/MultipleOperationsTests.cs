@@ -113,5 +113,12 @@ namespace CalculatorControllerTests
             ForInputExpect("2342-342=", "2000");
             ForInputExpect("6000/30=", "200");
         }
+
+        // Ahsan
+        [Test]
+        public void DoesNegativeFirstDigitSubtractionWork()
+        {
+            ForInputExpect("-9-8=", "-17");
+        }
     }
 }

@@ -47,12 +47,5 @@ namespace CalculatorControllerTests
         {
             ForInputExpect("91-0=", "91");
         }
-
-        // Ahsan
-        [Test]
-        public void DoesNegativeFirstDigitSubtractionWork()
-        {
-            ForInputExpect("-9-8=", "-17");
-        }
     }
 }
