@@ -15,16 +15,30 @@ namespace Calculator
 
         private string _numberEntered1; // The first number in the calculation (before the first operator)
         private string _numberEntered2; // The number after the first operator
-        private string _operator;   // the last operator entered (should ignore any operators entered immediately before)
+        private string _operator; // the last operator entered (should ignore any operators entered immediately before)
         private string _answer; // The result of doing the math on "equals"
+        private string _display;
 
         // Static variables are shared by all instances of the class, and are only initialized once, 
         // when the class is first loaded. 
         // Readonly variables can only have their value set once, when they are first initialized, in
         // an initializer statement or in a constructor.  The "readonly" keyword helps to indicate that 
         // you don't expect a value to ever be changed.
-        private static readonly Collection<string> NumberButtons = new Collection<string>{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
-        private static readonly Collection<string> OperatorButtons = new Collection<string>{"+", "-", "*", "/"};
+        private static readonly Collection<string> NumberButtons = new Collection<string>
+        {
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9"
+        };
+
+        private static readonly Collection<string> OperatorButtons = new Collection<string> {"+", "-", "*", "/"};
 
         // A contructor is a method whose name is the same as the name of the class.
         // A constructor has no return type (not even "void").
@@ -42,7 +56,7 @@ namespace Calculator
         {
             Clear();
         }
-    
+
         // Defines a method to clear the variables. 
         // Called before each test. Where else do I need it?
         public void Clear()
@@ -50,6 +64,7 @@ namespace Calculator
             _numberEntered1 = String.Empty;
             _numberEntered2 = String.Empty;
             _operator = String.Empty;
+            _display = String.Empty;
             _answer = String.Empty;
         }
 
@@ -75,17 +90,40 @@ namespace Calculator
             else if (NumberButtons.Contains(input)) // if input is a number
             {
                 _numberEntered1 = _numberEntered1 + input;
-                _answer = _numberEntered1;
+                _display = _numberEntered1;
             }
             else if (OperatorButtons.Contains(input))
             {
                 _operator = input;
             }
+            // If input is a number and there's something already in NE1, store input in NE2 or add it to the end
+            if (NumberButtons.Contains(input) && (_numberEntered1 != string.Empty))
+            {
+                _numberEntered2 = _numberEntered2 + input;
+                _display = _numberEntered2;
+            }
+            if (input == "=")
+            {
+                if (_operator == "+")
+                {
+                    _answer = (double.Parse(_numberEntered1) + double.Parse(_numberEntered2)).ToString();
+                }
+                else if (_operator == "-")
+                {
+                    _answer = (double.Parse(_numberEntered1) - double.Parse(_numberEntered2)).ToString();
+                }
+            }
         }
 
         public string GetOutput()
         {
-            return _answer;
+            if (_answer == String.Empty)
+            {
+                return _display;
+            }
+            {
+                return _answer;
+            }
         }
     }
 }
