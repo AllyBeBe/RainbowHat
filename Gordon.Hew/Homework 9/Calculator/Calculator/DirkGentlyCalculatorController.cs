@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace Calculator
@@ -9,36 +7,22 @@ namespace Calculator
     public class DirkGentlyCalculatorController
     {
         private const string ZeroString = "0";
-
-        private const string YellowSuffusionUrl =
-            "<body style=\"background-color:#ffff99; background-image: url(http://www.thateden.co.uk/dirk/images/yellowbg.gif); text-align:center;\">"
-            + "<div><img src=\"http://www.thateden.co.uk/dirk/images/yellow.gif\" width=\"146\" height=\"69\" alt=\"a suffusion of yellow ...\"></div></body>";
-
         private const string DivideNanMessage = "Result is undefined";
 
-        private const string DivideInfinityMessage = "Cannot divide by zero";
-        
         private char _operator;
-
         private char _lastInput;
 
-        /*TODO: these should be domain objects, oh well... */
-
         private String _inputCurrent;
+        private String _inputPrevious;
+        private String _outputValue;
 
         private double _inputCurrentDouble;
-
-        private String _inputPrevious;
-
         private double _inputPreviousDouble;
-
-        private String _outputValue;
+        private double _result;
 
         private int _inputCurrentDigitCounter;
 
-        private double _result;
-
-        private String _debugString;
+        private bool _justCalculated;
 
         public DirkGentlyCalculatorController()
         {
@@ -54,7 +38,6 @@ namespace Calculator
             _inputPreviousDouble = 0;
             _outputValue = ZeroString;
             _inputCurrentDigitCounter = 0;
-            _debugString = String.Empty;
             _result = Double.NaN;
         }
 
@@ -63,13 +46,15 @@ namespace Calculator
         // helper methods that it calls) to make the calculator behave according to the tests.
         public void AcceptCharacter(char input)
         {
-            _debugString += input;
+            _justCalculated = false;
 
-            Console.WriteLine(_debugString);
-            
             if ('c' == input)
             {
                 Init();
+            }
+            else if (IsFunction(input))
+            {
+                ProcessFunction(input);
             }
             else if (IsValidInputNumber(input))
             {
@@ -89,16 +74,19 @@ namespace Calculator
 
         public string GetOutput()
         {
-            if (!YellowSuffusionUrl.Equals(_outputValue))
-                _outputValue = String.Format("<body style=\"background-color:#ccffcc;\">{0}</body>",_outputValue);
-            
             return _outputValue;
+        }
+
+        public bool GetJustCalculated()
+        {
+            return _justCalculated;
         }
 
         private bool IsValidInputNumber(char input)
         {
             /* Checks if the value is a digit, decimal point, or the start of a negative number */
-            return Char.IsDigit(input) || input == '.' || (String.Empty.Equals(_inputCurrent) && input == '-' && !IsOperator(_lastInput));
+            return Char.IsDigit(input) || input == '.' ||
+                   (String.Empty.Equals(_inputCurrent) && input == '-' && !IsOperator(_lastInput));
         }
 
         private bool IsAddingLeadingZero(char input)
@@ -106,9 +94,9 @@ namespace Calculator
             return input == '0' && _inputCurrent.Equals(ZeroString);
         }
 
-        private bool IsReplaceZero(char input)
+        private static bool IsReplaceZero(String input)
         {
-            return ZeroString.Equals(_inputCurrent);
+            return ZeroString.Equals(input);
         }
 
         private static double Calculate(char input, double left, double right)
@@ -118,36 +106,36 @@ namespace Calculator
             switch (input)
             {
                 case '+':
-                    {
-                        result = left + right;
-                        break;
-                    }
+                {
+                    result = left + right;
+                    break;
+                }
                 case '-':
-                    {
-                        result = left - right;
-                        break;
-                    }
+                {
+                    result = left - right;
+                    break;
+                }
                 case '/':
-                    {
-                        result = left / right;
-                        break;
-                    }
+                {
+                    result = left/right;
+                    break;
+                }
                 case '*':
-                    {
-                        result = left * right;
-                        break;
-                    }
+                {
+                    result = left*right;
+                    break;
+                }
                 default:
-                    {
-                        result = left + right;
-                        break;
-                    }
+                {
+                    result = left + right;
+                    break;
+                }
             }
 
             return result;
         }
 
-        private bool IsOperator(char input)
+        private static bool IsOperator(char input)
         {
             switch (input)
             {
@@ -174,6 +162,45 @@ namespace Calculator
             }
         }
 
+        private static bool IsFunction(char input)
+        {
+            switch (input)
+            {
+                case 's':
+                {
+                    return true;
+                }
+                case 'o':
+                {
+                    return true;
+                }
+                case 't':
+                {
+                    return true;
+                }
+                case 'q':
+                {
+                    return true;
+                }
+                case 'r':
+                {
+                    return true;
+                }
+                case '%':
+                {
+                    return true;
+                }
+                case '#':
+                {
+                    return true;
+                }
+                default:
+                {
+                    return false;
+                }
+            }
+        }
+
         private void ProcessNumber(char input)
         {
             if (_lastInput == '=')
@@ -183,7 +210,7 @@ namespace Calculator
             if (!IsAddingLeadingZero(input))
             {
                 /* Replace value wholesale if previous value is zero */
-                if (IsReplaceZero(input))
+                if (IsReplaceZero(_inputCurrent))
                 {
                     _inputCurrent = input.ToString(CultureInfo.InvariantCulture);
                     _outputValue = _inputCurrent;
@@ -206,10 +233,8 @@ namespace Calculator
 
         private void ProcessEquals()
         {
-            Console.WriteLine("EQUALS PRE: {0}{1}{2}=", _inputPreviousDouble, _operator, _inputCurrent);
-
             if (String.IsNullOrEmpty(_inputPrevious))
-                _inputPrevious = "0";
+                _inputPrevious = ZeroString;
 
             if (String.IsNullOrEmpty(_inputCurrent))
                 _inputCurrent = _inputPrevious;
@@ -220,24 +245,11 @@ namespace Calculator
             var left = !Double.IsNaN(_result) ? _result : _inputPreviousDouble;
             var right = _inputCurrentDouble;
 
-            Console.WriteLine("EQUALS PRE2: {0}{1}{2}=", left, _operator, right);
-
             _result = Calculate(_operator, left, right);
-
-            if (Double.IsNaN(_result))
-                _outputValue = DivideNanMessage;
-            else if (Double.IsInfinity(_result))
-                _outputValue = DivideInfinityMessage;
-            else if(_result > 4)
-            {
-                Init();
-                _outputValue = "<body style=\"background-color:#ffff99; background-image: url(http://www.thateden.co.uk/dirk/images/yellowbg.gif); text-align:center;\">"
-                + "<div><img src=\"http://www.thateden.co.uk/dirk/images/yellow.gif\" width=\"146\" height=\"69\" alt=\"a suffusion of yellow ...\"></div></body>";
-            }
-            else
-                _outputValue = _result.ToString("G");
+            _outputValue = ProcessResult(_result);
 
             _inputCurrentDigitCounter = 0;
+            _justCalculated = true;
         }
 
         private void ProcessOperator(char input)
@@ -255,6 +267,7 @@ namespace Calculator
 
                     _inputCurrent = _result.ToString("G");
                     _outputValue = _inputCurrent;
+                    _justCalculated = true;
                 }
 
                 _operator = input;
@@ -267,6 +280,65 @@ namespace Calculator
 
                 _outputValue = _inputPrevious;
             }
+        }
+
+        private String ProcessResult(double result)
+        {
+            return Double.IsNaN(result) ? DivideNanMessage : result.ToString("G");
+        }
+
+        private void ProcessFunction(char input)
+        {
+            _inputCurrentDouble = String.IsNullOrEmpty(_inputCurrent) ? 0 : Double.Parse(_inputCurrent);
+            _result = CalculateFunction(input, _inputCurrentDouble);
+            _outputValue = ProcessResult(_result);
+            _justCalculated = true;
+        }
+
+        private static double CalculateFunction(char function, double input)
+        {
+            double result;
+
+            switch (function)
+            {
+                case 's':
+                {
+                    result = Math.Sin(input);
+                    break;
+                }
+                case 'o':
+                {
+                    result = Math.Cos(input);
+                    break;
+                }
+                case 't':
+                {
+                    result = Math.Tan(input);
+                    break;
+                }
+                case 'q':
+                {
+                    result = input * input;
+                    break;
+                }
+                case 'r':
+                {
+                    result = 1 / input;
+                    break;
+                }
+                case '#':
+                {
+                    result = -1 * input;
+                    break;
+                }
+                default:
+                {
+                    result = input;
+                    break;
+                }
+            }
+
+            return result;
         }
     }
 }

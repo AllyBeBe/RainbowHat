@@ -244,7 +244,7 @@
             this.button10.TabIndex = 17;
             this.button10.Text = "RED";
             this.button10.UseVisualStyleBackColor = false;
-            this.button10.Click += new System.EventHandler(this.button10_Click);
+            this.button10.Click += new System.EventHandler(this.ButtonRedClick);
             // 
             // button11
             // 
@@ -255,7 +255,7 @@
             this.button11.TabIndex = 18;
             this.button11.Text = ".";
             this.button11.UseVisualStyleBackColor = true;
-            this.button11.Click += new System.EventHandler(this.button11_Click);
+            this.button11.Click += new System.EventHandler(this.ButtonDecimalClick);
             // 
             // button12
             // 
@@ -266,6 +266,7 @@
             this.button12.TabIndex = 19;
             this.button12.Text = "+-";
             this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.ButtonNegateClick);
             // 
             // button13
             // 
@@ -276,6 +277,7 @@
             this.button13.TabIndex = 20;
             this.button13.Text = "%";
             this.button13.UseVisualStyleBackColor = true;
+            this.button13.Click += new System.EventHandler(this.ButtonPercentageClick);
             // 
             // button14
             // 
@@ -286,6 +288,7 @@
             this.button14.TabIndex = 21;
             this.button14.Text = "1/x";
             this.button14.UseVisualStyleBackColor = true;
+            this.button14.Click += new System.EventHandler(this.ButtonReciprocalClick);
             // 
             // button15
             // 
@@ -296,6 +299,7 @@
             this.button15.TabIndex = 22;
             this.button15.Text = "X^2";
             this.button15.UseVisualStyleBackColor = true;
+            this.button15.Click += new System.EventHandler(this.ButtonSquareClick);
             // 
             // button16
             // 
@@ -306,6 +310,7 @@
             this.button16.TabIndex = 23;
             this.button16.Text = "sin";
             this.button16.UseVisualStyleBackColor = true;
+            this.button16.Click += new System.EventHandler(this.ButtonSineClick);
             // 
             // button17
             // 
@@ -316,6 +321,7 @@
             this.button17.TabIndex = 24;
             this.button17.Text = "cos";
             this.button17.UseVisualStyleBackColor = true;
+            this.button17.Click += new System.EventHandler(this.ButtonCosineClick);
             // 
             // button18
             // 
@@ -326,6 +332,7 @@
             this.button18.TabIndex = 25;
             this.button18.Text = "tan";
             this.button18.UseVisualStyleBackColor = true;
+            this.button18.Click += new System.EventHandler(this.ButtonTanClick);
             // 
             // webBrowser1
             // 

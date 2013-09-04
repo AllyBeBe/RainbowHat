@@ -7,6 +7,10 @@ namespace Calculator
     {
         private readonly DirkGentlyCalculatorController _controller = new DirkGentlyCalculatorController();
 
+        private const string YellowSuffusion =
+        "<body style=\"background-color:#ffff99; background-image: url(http://www.thateden.co.uk/dirk/images/yellowbg.gif); text-align:center;\">"
+        + "<div><img src=\"http://www.thateden.co.uk/dirk/images/yellow.gif\" width=\"146\" height=\"69\" alt=\"a suffusion of yellow ...\"></div></body>";
+
         public Form1()
         {
             InitializeComponent();
@@ -27,7 +31,20 @@ namespace Calculator
         private void HandleInput(char input)
         {
             _controller.AcceptCharacter(input);
-            webBrowser1.DocumentText =  _controller.GetOutput();
+
+            var output = _controller.GetOutput();
+
+            double result;
+
+            if (Double.TryParse(output, out result) && result > 4 && _controller.GetJustCalculated())
+            {
+                webBrowser1.DocumentText = YellowSuffusion;
+                _controller.Init();
+            }
+            else
+            {
+                webBrowser1.DocumentText = String.Format("<body style=\"background-color:#ccffcc;\">{0}</body>", output);
+            }
         }
 
         private void DisplayIChing(int firstNumber, int secondNumber)
@@ -121,15 +138,50 @@ namespace Calculator
             HandleInput('=');
         }
 
-        private void button11_Click(object sender, EventArgs e)
+        private void ButtonDecimalClick(object sender, EventArgs e)
         {
-
+            HandleInput('.');
         }
 
-        private void button10_Click(object sender, EventArgs e)
+        private void ButtonRedClick(object sender, EventArgs e)
         {
             var r = new Random();
             DisplayIChing(r.Next(1, 9), r.Next(1, 9));
+        }
+
+        private void ButtonSineClick(object sender, EventArgs e)
+        {
+            HandleInput('s');
+        }
+
+        private void ButtonCosineClick(object sender, EventArgs e)
+        {
+            HandleInput('o');
+        }
+
+        private void ButtonTanClick(object sender, EventArgs e)
+        {
+            HandleInput('t');
+        }
+
+        private void ButtonSquareClick(object sender, EventArgs e)
+        {
+            HandleInput('q');
+        }
+
+        private void ButtonReciprocalClick(object sender, EventArgs e)
+        {
+            HandleInput('r');
+        }
+
+        private void ButtonPercentageClick(object sender, EventArgs e)
+        {
+            HandleInput('%');
+        }
+
+        private void ButtonNegateClick(object sender, EventArgs e)
+        {
+            HandleInput('#');
         }
     }
 }

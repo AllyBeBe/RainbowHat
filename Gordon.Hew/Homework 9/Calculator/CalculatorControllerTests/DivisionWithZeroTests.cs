@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace CalculatorControllerTests
 {
@@ -9,7 +10,7 @@ namespace CalculatorControllerTests
         [Test]
         public void CanNotDivideByZero()
         {
-            ForInputExpect("5/0=", "Cannot divide by zero");
+            ForInputExpect("5/0=", Double.PositiveInfinity.ToString("G"));
         }
 
         // Ahsan, Jay, Jeff, Michael, Tammy
