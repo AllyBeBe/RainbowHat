@@ -73,7 +73,7 @@ namespace Calculator
         {
             using (var client = new WebClient())
             {
-                var contents = client.DownloadString("http://www.google.com");
+                var contents = client.DownloadString("//I Ching website URL, I think.");
                 Console.WriteLine(contents);
             }
         }
@@ -190,7 +190,7 @@ namespace Calculator
             {
                 return "Result is undefined";
             }
-            if (_currentValue <= 4)
+            if ()
             {
                 return _isWaitingForSecondOperand ? _previousValue.ToString() : _currentValue.ToString();
             }

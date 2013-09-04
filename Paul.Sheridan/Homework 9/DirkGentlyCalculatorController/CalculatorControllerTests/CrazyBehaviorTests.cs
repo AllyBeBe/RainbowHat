@@ -28,7 +28,7 @@ namespace CalculatorControllerTests
             AcceptCharacters("=");
             AssertOutput("0");
             AcceptCharacters("=");
-            AssertOutput("-9");
+            AssertOutput("A Suffusion of Yellow ");
         }
 
         // Jay

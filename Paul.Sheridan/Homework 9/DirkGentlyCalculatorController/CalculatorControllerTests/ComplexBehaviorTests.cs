@@ -50,7 +50,7 @@ namespace CalculatorControllerTests
         [Test]
         public void IgnoresExtraneousOperatorsForMultiplicationAndDivision()
         {
-            ForInputExpect("3-*2+8/-1=", "13");
+            ForInputExpect("3-*2+8/-1=", "A Suffusion of Yellow");
         }
 
         // Tiina
@@ -64,9 +64,9 @@ namespace CalculatorControllerTests
         [Test]
         public void CanIgnoreAbsenceOfOperators()
         {
-            ForInputExpect("13=", "13");
-            ForInputExpect("14=", "14");
-            ForInputExpect("59=", "59");
+            ForInputExpect("3=", "3");
+            ForInputExpect("4=", "4");
+            ForInputExpect("59=", "A Suffusion of Yellow");
         }
 
         // Eva (from pseudocode)
@@ -81,14 +81,14 @@ namespace CalculatorControllerTests
         [Test]
         public void PressingEqualsAgainAfterComputationRepeatsOperation()
         {
-            AcceptCharacters("3+4=");
-            AssertOutput("7");
+            AcceptCharacters("1+1=");
+            AssertOutput("2");
             AcceptCharacters("=");
-            AssertOutput("11");
+            AssertOutput("3");
             AcceptCharacters("=");
-            AssertOutput("15");
+            AssertOutput("4");
             AcceptCharacters("=");
-            AssertOutput("19");
+            AssertOutput("A Suffusion of Yellow");
         }
 
         // Eva
@@ -96,9 +96,9 @@ namespace CalculatorControllerTests
         public void PressingEqualsAfterSubtractionFromZeroRepeatsOperation()
         {
             AcceptCharacters("-9=");
-            AssertOutput("-9");
+            AssertOutput("A Suffusion of Yellow");
             AcceptCharacters("=");
-            AssertOutput("-18");
+            AssertOutput("A Suffusion of Yellow");
         }
     }
 }
