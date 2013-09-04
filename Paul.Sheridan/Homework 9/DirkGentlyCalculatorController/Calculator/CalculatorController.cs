@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Mime;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
@@ -16,6 +17,7 @@ namespace Calculator
         private bool _equalsWasJustPressed;
         private bool _isDivideZeroByZero;
         private bool _isDivideNumberByZero;
+        private bool _isSuffusedWithYellow;
         private string _lastOperatorBeforeEquals;
         private double _currentValueBeforeEquals;
 
@@ -40,6 +42,9 @@ namespace Calculator
                 case '=':
                     EqualsState();
                     break;
+                case 'r':
+                    IChingState();
+                    break;
                 default:
                     NumberInputState(input);
                     break;
@@ -63,6 +68,15 @@ namespace Calculator
                 }
             }
             _equalsWasJustPressed = false;
+        }
+
+        private void IChingState()
+        {
+            using (var client = new WebClient())
+            {
+                var contents = client.DownloadString("//I Ching website URL, I think.");
+                Console.WriteLine(contents);
+            }
         }
 
         private void EqualsState()
@@ -131,8 +145,9 @@ namespace Calculator
             _operator = null;
             _isWaitingForSecondOperand = false;
             _equalsWasJustPressed = false;
+            _isDivideZeroByZero = false;
             _isDivideNumberByZero = false;
-            _isDivideNumberByZero = false;
+            _isSuffusedWithYellow = false;
         }
 
         private void DoMathWithSavedOperator()
@@ -141,29 +156,36 @@ namespace Calculator
             { 
                 _currentValue = _previousValue + _currentValue;
             }
-            if (_operator == "-")
+            else if (_operator == "-")
             {
                 _currentValue = _previousValue - _currentValue;
             }
-            if (_operator == "*")
+            else if (_operator == "*")
             {
                 _currentValue = _previousValue * _currentValue;
             }
-            if (_operator != "/") return;
-            if (_currentValue == 0)
+            else if (_operator == "/")
             {
-                if (_previousValue == 0)
+                if (_currentValue == 0)
                 {
-                    _isDivideZeroByZero = true;
+                    if (_previousValue == 0)
+                    {
+                        _isDivideZeroByZero = true;
+                    }
+                    else
+                    {
+                        _isDivideNumberByZero = true;
+                    }
                 }
                 else
                 {
-                    _isDivideNumberByZero = true;
+                    _currentValue = _previousValue/_currentValue;
                 }
             }
-            else
+
+            if (_currentValue > 4.0)
             {
-                _currentValue = _previousValue / _currentValue;
+                _isSuffusedWithYellow = true;
             }
         }
 
@@ -177,6 +199,26 @@ namespace Calculator
             {
                 return "Result is undefined";
             }
+            if (_isSuffusedWithYellow)
+            {
+                return "A Suffusion of Yellow";
+            }
+
+            // NOTE: All three of the following are equivalent, and correct.  It's a matter of taste
+            // which you prefer.
+
+            // This one introduces a local variable.
+//            double output = _isWaitingForSecondOperand ? _previousValue : _currentValue;
+//            return output.ToString();
+
+            // This one duplicates the call to ToString()
+//            return _isWaitingForSecondOperand ? _previousValue.ToString() : _currentValue.ToString();
+
+            // This one is harder to read, because we're calling ".ToString()" on a parenthetical expression.
+//            return (_isWaitingForSecondOperand ? _previousValue : _currentValue).ToString();
+
+            // I'd probably go with this one, preferring readability over eliminating all duplication.
+            // But that's just opinion.
             return _isWaitingForSecondOperand ? _previousValue.ToString() : _currentValue.ToString();
         }
     }

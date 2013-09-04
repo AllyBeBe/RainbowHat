@@ -13,18 +13,34 @@ namespace Calculator
 //            return x * y;
 //        }
 
-        private string _numberEntered1; // The first number in the calculation (before the first operator)
-        private string _numberEntered2; // The number after the first operator
-        private string _operator;   // the last operator entered (should ignore any operators entered immediately before)
+        private string _firstNumberEntered; // The first number in the calculation (before the first operator)
+        private string _secondNumberEntered; // The number after the first operator
+        private string _operator; // the last operator entered (should ignore any operators entered immediately before)
         private string _answer; // The result of doing the math on "equals"
+        private string _display;
+
+        private bool _digitsEnteredShouldGoIntoFirstNumber; // True if we're entering the first number, false if we're entering the second.
 
         // Static variables are shared by all instances of the class, and are only initialized once, 
         // when the class is first loaded. 
         // Readonly variables can only have their value set once, when they are first initialized, in
         // an initializer statement or in a constructor.  The "readonly" keyword helps to indicate that 
         // you don't expect a value to ever be changed.
-        private static readonly Collection<string> NumberButtons = new Collection<string>{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
-        private static readonly Collection<string> OperatorButtons = new Collection<string>{"+", "-", "*", "/"};
+        private static readonly Collection<string> Digits = new Collection<string>
+        {
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9"
+        };
+
+        private static readonly Collection<string> Operators = new Collection<string> {"+", "-", "*", "/"};
 
         // A contructor is a method whose name is the same as the name of the class.
         // A constructor has no return type (not even "void").
@@ -42,14 +58,16 @@ namespace Calculator
         {
             Clear();
         }
-    
+
         // Defines a method to clear the variables. 
         // Called before each test. Where else do I need it?
         public void Clear()
         {
-            _numberEntered1 = String.Empty;
-            _numberEntered2 = String.Empty;
+            _digitsEnteredShouldGoIntoFirstNumber = true;
+            _firstNumberEntered = "0";
+            _secondNumberEntered = String.Empty;
             _operator = String.Empty;
+            _display = "0";
             _answer = String.Empty;
         }
 
@@ -72,20 +90,59 @@ namespace Calculator
             {
                 Clear();
             }
-            else if (NumberButtons.Contains(input)) // if input is a number
+            else if (Digits.Contains(input))
             {
-                _numberEntered1 = _numberEntered1 + input;
-                _answer = _numberEntered1;
+                if (_digitsEnteredShouldGoIntoFirstNumber)
+                {
+                    _firstNumberEntered = AppendDigit(_firstNumberEntered, input);
+                    _display = _firstNumberEntered;
+                }
+                else
+                {
+                    _secondNumberEntered = AppendDigit(_secondNumberEntered, input);
+                    _display = _secondNumberEntered;                    
+                }
             }
-            else if (OperatorButtons.Contains(input))
+            else if (Operators.Contains(input))
             {
                 _operator = input;
+                _digitsEnteredShouldGoIntoFirstNumber = false;
             }
+            else if (input == "=")
+            {
+                if (_operator == "+")
+                {
+                    _answer = (double.Parse(_firstNumberEntered) + double.Parse(_secondNumberEntered)).ToString();
+                }
+                else if (_operator == "-")
+                {
+                    _answer = (double.Parse(_firstNumberEntered) - double.Parse(_secondNumberEntered)).ToString();
+                }
+            }
+        }
+
+        private string AppendDigit(string existingNumber, string digit)
+        {
+            if (existingNumber == "0")
+            {
+                return digit;
+            }
+            if (existingNumber.Length == 15)
+            {
+                return existingNumber;
+            }
+            return existingNumber + digit;
         }
 
         public string GetOutput()
         {
-            return _answer;
+            if (_answer == String.Empty)
+            {
+                return _display;
+            }
+            {
+                return _answer;
+            }
         }
     }
 }

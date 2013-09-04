@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace Calculator
@@ -9,39 +7,29 @@ namespace Calculator
     public class DirkGentlyCalculatorController
     {
         private const string ZeroString = "0";
-
         private const string DivideNanMessage = "Result is undefined";
 
-        private const string DivideInfinityMessage = "Cannot divide by zero";
-        
         private char _operator;
-
         private char _lastInput;
 
-        /*TODO: these should be domain objects, oh well... */
-
         private String _inputCurrent;
+        private String _inputPrevious;
+        private String _outputValue;
 
         private double _inputCurrentDouble;
-
-        private String _inputPrevious;
-
         private double _inputPreviousDouble;
-
-        private String _outputValue;
+        private double _result;
 
         private int _inputCurrentDigitCounter;
 
-        private double _result;
-
-        private String _debugString;
+        private bool _justCalculated;
 
         public DirkGentlyCalculatorController()
         {
             Init();
         }
 
-        private void Init()
+        public void Init()
         {
             _operator = ' ';
             _inputCurrent = String.Empty;
@@ -50,7 +38,6 @@ namespace Calculator
             _inputPreviousDouble = 0;
             _outputValue = ZeroString;
             _inputCurrentDigitCounter = 0;
-            _debugString = String.Empty;
             _result = Double.NaN;
         }
 
@@ -59,13 +46,15 @@ namespace Calculator
         // helper methods that it calls) to make the calculator behave according to the tests.
         public void AcceptCharacter(char input)
         {
-            _debugString += input;
+            _justCalculated = false;
 
-            Console.WriteLine(_debugString);
-            
             if ('c' == input)
             {
                 Init();
+            }
+            else if (IsFunction(input))
+            {
+                ProcessFunction(input);
             }
             else if (IsValidInputNumber(input))
             {
@@ -88,10 +77,16 @@ namespace Calculator
             return _outputValue;
         }
 
+        public bool GetJustCalculated()
+        {
+            return _justCalculated;
+        }
+
         private bool IsValidInputNumber(char input)
         {
             /* Checks if the value is a digit, decimal point, or the start of a negative number */
-            return Char.IsDigit(input) || input == '.' || (String.Empty.Equals(_inputCurrent) && input == '-' && !IsOperator(_lastInput));
+            return Char.IsDigit(input) || input == '.' ||
+                   (String.Empty.Equals(_inputCurrent) && input == '-' && !IsOperator(_lastInput));
         }
 
         private bool IsAddingLeadingZero(char input)
@@ -99,48 +94,48 @@ namespace Calculator
             return input == '0' && _inputCurrent.Equals(ZeroString);
         }
 
-        private bool IsReplaceZero(char input)
+        private static bool IsReplaceZero(String input)
         {
-            return ZeroString.Equals(_inputCurrent);
+            return ZeroString.Equals(input);
         }
 
-        private double Calculate(char input, double left, double right)
+        private static double Calculate(char input, double left, double right)
         {
             double result;
 
             switch (input)
             {
                 case '+':
-                    {
-                        result = left + right;
-                        break;
-                    }
+                {
+                    result = left + right;
+                    break;
+                }
                 case '-':
-                    {
-                        result = left - right;
-                        break;
-                    }
+                {
+                    result = left - right;
+                    break;
+                }
                 case '/':
-                    {
-                        result = left / right;
-                        break;
-                    }
+                {
+                    result = left/right;
+                    break;
+                }
                 case '*':
-                    {
-                        result = left * right;
-                        break;
-                    }
+                {
+                    result = left*right;
+                    break;
+                }
                 default:
-                    {
-                        result = left + right;
-                        break;
-                    }
+                {
+                    result = left + right;
+                    break;
+                }
             }
 
             return result;
         }
 
-        private bool IsOperator(char input)
+        private static bool IsOperator(char input)
         {
             switch (input)
             {
@@ -167,6 +162,45 @@ namespace Calculator
             }
         }
 
+        private static bool IsFunction(char input)
+        {
+            switch (input)
+            {
+                case 's':
+                {
+                    return true;
+                }
+                case 'o':
+                {
+                    return true;
+                }
+                case 't':
+                {
+                    return true;
+                }
+                case 'q':
+                {
+                    return true;
+                }
+                case 'r':
+                {
+                    return true;
+                }
+                case '%':
+                {
+                    return true;
+                }
+                case '#':
+                {
+                    return true;
+                }
+                default:
+                {
+                    return false;
+                }
+            }
+        }
+
         private void ProcessNumber(char input)
         {
             if (_lastInput == '=')
@@ -176,7 +210,7 @@ namespace Calculator
             if (!IsAddingLeadingZero(input))
             {
                 /* Replace value wholesale if previous value is zero */
-                if (IsReplaceZero(input))
+                if (IsReplaceZero(_inputCurrent))
                 {
                     _inputCurrent = input.ToString(CultureInfo.InvariantCulture);
                     _outputValue = _inputCurrent;
@@ -199,11 +233,8 @@ namespace Calculator
 
         private void ProcessEquals()
         {
-            Console.WriteLine("EQUALS");
-            Console.WriteLine("PRE: " + _inputPreviousDouble + " " + _operator + " " + _inputCurrent + "=");
-
             if (String.IsNullOrEmpty(_inputPrevious))
-                _inputPrevious = "0";
+                _inputPrevious = ZeroString;
 
             if (String.IsNullOrEmpty(_inputCurrent))
                 _inputCurrent = _inputPrevious;
@@ -214,20 +245,11 @@ namespace Calculator
             var left = !Double.IsNaN(_result) ? _result : _inputPreviousDouble;
             var right = _inputCurrentDouble;
 
-            Console.WriteLine("PRE2: " + left + " " + _operator + " " + right + "=");
-
             _result = Calculate(_operator, left, right);
-
-            if (Double.IsNaN(_result))
-                _outputValue = DivideNanMessage;
-            else if (Double.IsInfinity(_result))
-                _outputValue = DivideInfinityMessage;
-            else
-                _outputValue = _result.ToString("G");
-
-            Console.WriteLine("POST: " + left.ToString("G") + _operator + right.ToString("G") + "=" + _result.ToString("G"));
+            _outputValue = ProcessResult(_result);
 
             _inputCurrentDigitCounter = 0;
+            _justCalculated = true;
         }
 
         private void ProcessOperator(char input)
@@ -245,6 +267,7 @@ namespace Calculator
 
                     _inputCurrent = _result.ToString("G");
                     _outputValue = _inputCurrent;
+                    _justCalculated = true;
                 }
 
                 _operator = input;
@@ -257,6 +280,65 @@ namespace Calculator
 
                 _outputValue = _inputPrevious;
             }
+        }
+
+        private String ProcessResult(double result)
+        {
+            return Double.IsNaN(result) ? DivideNanMessage : result.ToString("G");
+        }
+
+        private void ProcessFunction(char input)
+        {
+            _inputCurrentDouble = String.IsNullOrEmpty(_inputCurrent) ? 0 : Double.Parse(_inputCurrent);
+            _result = CalculateFunction(input, _inputCurrentDouble);
+            _outputValue = ProcessResult(_result);
+            _justCalculated = true;
+        }
+
+        private static double CalculateFunction(char function, double input)
+        {
+            double result;
+
+            switch (function)
+            {
+                case 's':
+                {
+                    result = Math.Sin(input);
+                    break;
+                }
+                case 'o':
+                {
+                    result = Math.Cos(input);
+                    break;
+                }
+                case 't':
+                {
+                    result = Math.Tan(input);
+                    break;
+                }
+                case 'q':
+                {
+                    result = input * input;
+                    break;
+                }
+                case 'r':
+                {
+                    result = 1 / input;
+                    break;
+                }
+                case '#':
+                {
+                    result = -1 * input;
+                    break;
+                }
+                default:
+                {
+                    result = input;
+                    break;
+                }
+            }
+
+            return result;
         }
     }
 }

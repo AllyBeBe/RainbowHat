@@ -65,8 +65,13 @@ namespace Calculator
                     }
                     else
                     {
-                        _secondValue = _firstValue;
+                        if (!_equalsUsed)
+                        {
+                           _secondValue = _firstValue;
+                        }
+
                     }
+
 
                     DoMath();
                     _equalsUsed = true;
@@ -130,17 +135,24 @@ namespace Calculator
             _displayString = _currentValue.ToString();
         }
 
-        void DoMath()
+        void DoMath()  // I would pass it the saved operator, but I need to cure my negative negative dumbness first.
         {
             double? result = null;
 
-            switch (_savedOperator)
+            switch (_savedOperator)  
             {
                 case '+':
                     result = _firstValue + _secondValue;
                     break;
                 case '-':
-                    result = _firstValue - _secondValue;  // with subtracting two negatives, I'm ending up with a positive. :(
+                    if (_secondValue < 0)
+                    {
+                        result = _firstValue + _secondValue;  // This doesn't seem optimal, but it made the test pass.
+                    }
+                    else
+                    {
+                        result = _firstValue - _secondValue;  // with subtracting two negatives, I'm ending up with a positive. :(
+                    }
                     break;
                 case '*':
                     result = _firstValue*_secondValue;

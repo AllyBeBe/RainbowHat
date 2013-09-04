@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace Calculator
 {
     public partial class Form1 : Form
     {
-        private readonly DirkGentlyCalculatorController _controller = new DirkGentlyCalculatorController();
-
-        private const string YellowSuffusion =
-        "<body style=\"background-color:#ffff99; background-image: url(http://www.thateden.co.uk/dirk/images/yellowbg.gif); text-align:center;\">"
-        + "<div><img src=\"http://www.thateden.co.uk/dirk/images/yellow.gif\" width=\"146\" height=\"69\" alt=\"a suffusion of yellow ...\"></div></body>";
+        private readonly CalculatorController _controller = new CalculatorController();
 
         public Form1()
         {
             InitializeComponent();
-            var htmlOutput = "<body style=\"background-color:#ccffcc;\">" + _controller.GetOutput() + "</body>";
-            webBrowser1.DocumentText = htmlOutput;
+            output.Text = _controller.GetOutput();
         }
 
         // I noticed that the same basic code was showing up in all of the methods:
@@ -31,26 +27,7 @@ namespace Calculator
         private void HandleInput(char input)
         {
             _controller.AcceptCharacter(input);
-
-            var output = _controller.GetOutput();
-
-            double result;
-
-            if (Double.TryParse(output, out result) && result > 4 && _controller.GetJustCalculated())
-            {
-                webBrowser1.DocumentText = YellowSuffusion;
-                _controller.Init();
-            }
-            else
-            {
-                webBrowser1.DocumentText = String.Format("<body style=\"background-color:#ccffcc;\">{0}</body>", output);
-            }
-        }
-
-        private void DisplayIChing(int firstNumber, int secondNumber)
-        {
-            _controller.Init();
-            webBrowser1.Navigate(string.Format("http://www.thateden.co.uk/dirk/pred.php?ching1={0}&ching2={1}", firstNumber, secondNumber));
+            output.Text = _controller.GetOutput();
         }
 
 
@@ -138,50 +115,19 @@ namespace Calculator
             HandleInput('=');
         }
 
-        private void ButtonDecimalClick(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
-            HandleInput('.');
+
         }
 
-        private void ButtonRedClick(object sender, EventArgs e)
+        private void output_TextChanged(object sender, EventArgs e)
         {
-            var r = new Random();
-            DisplayIChing(r.Next(1, 9), r.Next(1, 9));
+
         }
 
-        private void ButtonSineClick(object sender, EventArgs e)
-        {
-            HandleInput('s');
-        }
-
-        private void ButtonCosineClick(object sender, EventArgs e)
-        {
-            HandleInput('o');
-        }
-
-        private void ButtonTanClick(object sender, EventArgs e)
-        {
-            HandleInput('t');
-        }
-
-        private void ButtonSquareClick(object sender, EventArgs e)
-        {
-            HandleInput('q');
-        }
-
-        private void ButtonReciprocalClick(object sender, EventArgs e)
+        private void redButton_Click(object sender, EventArgs e)
         {
             HandleInput('r');
-        }
-
-        private void ButtonPercentageClick(object sender, EventArgs e)
-        {
-            HandleInput('%');
-        }
-
-        private void ButtonNegateClick(object sender, EventArgs e)
-        {
-            HandleInput('#');
         }
     }
 }
