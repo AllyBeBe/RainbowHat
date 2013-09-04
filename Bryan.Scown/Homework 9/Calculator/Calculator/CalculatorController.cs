@@ -61,58 +61,10 @@ namespace Calculator
                     ResetCalculatorState();
                     break;
                 case '+':
-                    if ((_lastOperation != null) && (_currentValue != null))
-                    {
-                        DoMath();
-                        _lastOperation = null;
-                    }
-                    _lastOperation = '+';
-                    _lastInput = _currentValue;
-                    _clearCurrentValue = true;
-                    _isWaitingForNextNumToStart = true;
-                    _isAfterEquals = false;
-                    break;
                 case '-':
-                    if ((_lastOperation != null) && (_currentValue != null))
-                    {
-                        DoMath();
-                        _lastOperation = null;
-                    }
-                    _lastOperation = '-';
-                    _lastInput = _currentValue;
-                    _clearCurrentValue = true;
-                    _isWaitingForNextNumToStart = true;
-                    _isAfterEquals = false;
-                    if ((_lastOperation == '-') && (_currentValue == "-"))
-                    {
-                        _currentValue = null;
-                    }
-                    break;
                 case '*':
-                    if ((_lastOperation != null) && (_currentValue != null))
-                    {
-                        
-                        DoMath();
-                        _lastOperation = null;
-
-                    }
-                    _lastOperation = '*';
-                    _lastInput = _currentValue;
-                    _clearCurrentValue = true;
-                    _isWaitingForNextNumToStart = true;
-                    _isAfterEquals = false;
-                    break;
                 case '/':
-                    if ((_lastOperation != null) && (_currentValue != null))
-                    {
-                        DoMath();
-                        _lastOperation = null;
-                    }
-                    _lastOperation = '/';
-                    _lastInput = _currentValue;
-                    _clearCurrentValue = true;
-                    _isWaitingForNextNumToStart = true;
-                    _isAfterEquals = false;
+                    OperationState(input);
                     break;
                 case '=':
                     _isAfterEquals = true;
@@ -147,6 +99,21 @@ namespace Calculator
                     }
                     break;
             }
+        }
+
+        private void OperationState(char operation)
+        {
+            if (_lastOperation != null)
+            {
+                DoMath();
+                _lastOperation = null;
+            }
+            _lastInput = _currentValue;
+            _clearCurrentValue = true;
+            _lastOperation = operation;
+            _isWaitingForSecondOperand = true;
+            _isAfterEquals = false;
+
         }
 
         public void ResetCalculatorState()
