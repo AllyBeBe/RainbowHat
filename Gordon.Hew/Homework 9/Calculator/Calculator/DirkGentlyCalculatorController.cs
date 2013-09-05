@@ -292,6 +292,9 @@ namespace Calculator
             _inputCurrentDouble = String.IsNullOrEmpty(_inputCurrent) ? 0 : Double.Parse(_inputCurrent);
             _result = CalculateFunction(input, _inputCurrentDouble);
             _outputValue = ProcessResult(_result);
+            _inputCurrent = _outputValue;
+
+            _inputCurrentDigitCounter = 0;
             _justCalculated = true;
         }
 
