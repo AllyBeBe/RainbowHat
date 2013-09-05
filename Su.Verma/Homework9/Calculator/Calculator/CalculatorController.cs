@@ -20,8 +20,11 @@ namespace Calculator
         private bool _IsFirstOperatorAddedToCurrentValue;
         private static bool _IsFirstNumberEntered;
         
+        
         private bool _IsTryingToDivideNonZeroByZero;
         private bool _IsTryingToDivideZeroByZero;
+        private bool _isWaitingForNextOperand;
+        private bool _secondOperatorEntered;
 
 
         public CalculatorController()
@@ -38,6 +41,8 @@ namespace Calculator
             _result = "";
             _IsFirstNumberEntered = false;
             _IsFirstOperatorBeforeNumber = false;
+            _isWaitingForNextOperand = false;
+            _secondOperatorEntered = false;
         }
 
 
@@ -55,32 +60,47 @@ namespace Calculator
                 // Record the '+' operator or '-' operator or '*' operator or '/' operator
             else if (input == '+' || input == '-' || input == '*' || input == '/')
             {
-                if (_currentValue == "0" && input != '+' && _IsFirstNumberEntered != true)
+                if (_isWaitingForNextOperand == true)
+                {
+                    _secondOperatorEntered = true;
+                        _previousValue = Convert.ToString(Convert.ToDouble(_previousValue) + (Convert.ToDouble(_currentValue)));
+                    _operator = input;
+                }
+
+                else  if (_currentValue == "0" && input != '+' && _IsFirstNumberEntered != true)
                 {
                     _IsFirstOperatorBeforeNumber = true;
                     _operator = input;
                     return;
                 }
 
-                if (_IsFirstOperatorBeforeNumber == true && _operator == '-')
+                else if (_IsFirstOperatorBeforeNumber == true && _operator == '-')
                 {
                     _currentValue = _operator + _currentValue;
+                    _operator = input;
+                    _previousValue = _currentValue;
+
                 }
 
-                _operator = input;
-                // save the '_currentValue' into '_previousValue'
-                _previousValue = _currentValue;
-                // Clear out the _currentvalue
+                else
+                {
+                    _operator = input;
+                    // save the '_currentValue' into '_previousValue'
+                    _previousValue = _currentValue;
+                    // Clear out the _currentvalue
+                    
+                }
+
                 _currentValue = "";
-                
+
                 _IsFirstOperatorBeforeNumber = false;
-                _IsFirstNumberEntered = false;
+                //_IsFirstNumberEntered = false;
                 _isWaitingForNextOperand = true;
             }
 
             else if (_isWaitingForNextOperand == true && input == '-')
             {
-                _previousValue = Convert.ToString(Convert.ToDouble(_previousValue)  (Convert.ToDouble(_currentValue)));
+                _previousValue = Convert.ToString(Convert.ToDouble(_previousValue) - (Convert.ToDouble(_currentValue)));
             }
 
             else if (input == '=')
@@ -160,7 +180,6 @@ namespace Calculator
                     _currentValue = _currentValue + input;
                     _IsFirstNumberEntered = true;
                 }
-
             }
 
         }
@@ -180,11 +199,11 @@ namespace Calculator
 
              // if we'r trying to Divide Zero By Zero
             // return "Result is undefined"
-           if (_IsTryingToDivideZeroByZero)
+            else  if (_IsTryingToDivideZeroByZero)
             {
                 return "Result is undefined";
             }
-            if (_result != "")
+            else if (_result != "")
             {
                 return _result;
             }
@@ -192,12 +211,17 @@ namespace Calculator
             // if they have entered a '+' but _currentValue is still "", display 
             // the previous value
 
-            if (_operator == '+' && _currentValue == "")
+            else if (_operator == '+' && _currentValue == "")
             {
                 return _previousValue;
             }
 
-            return _currentValue;
+            else if (_secondOperatorEntered == true)
+            {
+                return _previousValue;
+            }
+
+            else { return _currentValue;}
         }
 
         //if waiting for Second Operand, display 
