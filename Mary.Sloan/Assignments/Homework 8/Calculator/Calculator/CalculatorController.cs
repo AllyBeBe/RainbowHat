@@ -18,7 +18,7 @@ namespace Calculator
         private double? _firstValue;
         private double? _secondValue;
         private string _displayString;
-        private bool _equalsUsed;
+        private bool _equalsHasBeenUsed;
 
         public CalculatorController()
         {
@@ -39,7 +39,7 @@ namespace Calculator
 
         private void HandleOperatorInput(char input)
         {
-            if (_savedOperator == null)
+            if (!_savedOperator.HasValue)
             {
                 HandleNoSavedOperator(input);
             }
@@ -54,45 +54,48 @@ namespace Calculator
             switch (input)
             {
                 case '=':
+
+                    if (_currentValue == 0 && _savedOperator == '/')
+                    {
+                        _displayString = _firstValue == 0 ? "Result is undefined" : "Cannot divide by zero";
+                        break;
+                    }
                     if (_currentValue.HasValue)
                     {
-                        if (_currentValue == 0 && _savedOperator == '/')
-                        {
-                            _displayString = _firstValue == 0 ? "Result is undefined" : "Cannot divide by zero";
-                            break;
-                        }
                         _secondValue = _currentValue;
                     }
                     else
                     {
-                        if (!_equalsUsed)
+                        if (!_equalsHasBeenUsed)
                         {
-                           _secondValue = _firstValue;
+                            _secondValue = _firstValue;
                         }
-
                     }
-
-
+                    
                     DoMath();
-                    _equalsUsed = true;
-                    _currentValue = null;
+
+                    _equalsHasBeenUsed = true;
                     break;
+                    
                 case 'c':
                     ClearValues();
                     break;
-                default:
+
+                case '-':
+                case '+':
+                case '/':
+                case '*':
                     if (_currentValue.HasValue)
                     {
                         _secondValue = _currentValue;
                         DoMath();
-                        _savedOperator = input;
-                        _currentValue = null;
                     }
-                    else
-                    {
-                        _savedOperator = input;
-                    }
-                    _equalsUsed = false;
+                    _savedOperator = input;
+                    _equalsHasBeenUsed = false;
+                    break;
+
+                default:  // Decided it would be more readable if I fell through with operators and used an error with the default.
+                    _displayString = "Input not recognized as a valid operator.";
                     break;
             }
         }
@@ -103,16 +106,21 @@ namespace Calculator
             {
                 case '=':
                     _currentValue = null;
+
                     break;
                 case 'c':
                     ClearValues();
+
                     break;
-                default:
+                case '-':
+                case '+':
+                case '/':
+                case '*':
                     _savedOperator = input;
-                    _firstValue = _currentValue ?? 0;  // I have difficulty "reading" this line once I had resharper "fix" it.
-                    _displayString = _currentValue.ToString();
+                    _firstValue = _currentValue ?? 0;  // I have difficulty "reading" this line once Resharper "fixed" it.
                     _currentValue = null;
-                    _equalsUsed = false;
+                    _equalsHasBeenUsed = false;
+
                     break;
             }
         }
@@ -120,7 +128,7 @@ namespace Calculator
         private void HandleDigitInput(char input)
         {
             if (_currentValue.ToString().Length > 14) return;
-            if (_equalsUsed)
+            if (_equalsHasBeenUsed)
             {
                 ClearValues();
             }
@@ -165,8 +173,15 @@ namespace Calculator
                     break;
 
             }
+
+            // considering passing the operator and just adding one if statement for the negative/negative.
+
             _displayString = result.ToString();
+
             _firstValue = result;
+
+            _currentValue = null;
+
         }
 
         void ClearValues()
@@ -176,15 +191,11 @@ namespace Calculator
             _firstValue = null;
             _secondValue = null;
             _savedOperator = null;
-            _equalsUsed = false;
+            _equalsHasBeenUsed = false;
         }
         
         public string GetOutput()
         {
-            if (_displayString == string.Empty)
-            {
-                _displayString = "0";
-            }
             return _displayString;
         }
     }
