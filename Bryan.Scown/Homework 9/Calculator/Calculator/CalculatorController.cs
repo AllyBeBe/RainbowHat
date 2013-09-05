@@ -12,11 +12,11 @@ namespace Calculator
         private bool _clearCurrentValue;
         private string _resultUndefined = "Result is undefined";
         private string _cantDivideByZero = "Cannot divide by zero";
-        private bool _isWaitingForNextNumToStart;
         private bool _isWaitingForSecondOperand;
         private bool _isAfterEquals;
-        private string _resultValue;
-        
+        private string _currentValueBeforeEquals;
+        private char? _lastOperatorBeforeEquals;
+
         public void AcceptCharacter(char input)
         {
             switch (input)
@@ -31,10 +31,8 @@ namespace Calculator
                 case '7':
                 case '8':
                 case '9':
-                
                     NumInputState(input);
                     break;
-                    
                 case 'c':
                     ResetCalculatorState();
                     break;
@@ -45,11 +43,28 @@ namespace Calculator
                     OperationState(input);
                     break;
                 case '=':
-                    _isAfterEquals = true;
-                    _isWaitingForNextNumToStart = false;
-                    DoMath();
+                    EqualsState();
                     break;
             }
+        }
+
+        private void EqualsState()
+        {
+            if (_isAfterEquals)
+            {
+                _currentValue = _currentValueBeforeEquals;
+                _lastOperation = _lastOperatorBeforeEquals;
+                DoMath();
+                _lastInput = _currentValue;
+                return;
+            }
+            _currentValueBeforeEquals = _currentValue;
+            DoMath();
+            _lastOperatorBeforeEquals = _lastOperation;
+            _lastOperation = null;
+            _isWaitingForSecondOperand = false;
+            _lastInput = _currentValue;
+            _isAfterEquals = true;
         }
 
         private void NumInputState(char input)
@@ -67,7 +82,7 @@ namespace Calculator
             if ((_isAfterEquals == false) && (_currentValue.Length < 16))
             {
                 _currentValue += input;
-                _isAfterEquals = false;
+                
             }
             else if (_currentValue.Length < 16)
             {
@@ -92,10 +107,9 @@ namespace Calculator
                     _currentValue = Convert.ToString(Convert.ToDouble(_currentValue) * (Convert.ToDouble(_lastInput)));
                     break;
                 case '/':
-                    if (Convert.ToDouble(_currentValue) != 0)
+                    if (_currentValue != "0")
                     {
                         _currentValue = Convert.ToString(Convert.ToDouble(_lastInput)/(Convert.ToDouble(_currentValue)));
-                        _lastOperation = null;
                     }
                     else
                     {
@@ -132,6 +146,7 @@ namespace Calculator
             _clearCurrentValue = true;
             _lastOperation = null;
             _isWaitingForSecondOperand = false;
+            _isAfterEquals = false;
         }
 
         public string GetOutput()
