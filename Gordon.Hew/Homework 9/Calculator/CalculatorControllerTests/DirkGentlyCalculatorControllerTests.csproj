@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTestFixture.cs" />
+    <Compile Include="FunctionTests.cs" />
     <Compile Include="CrazyBehaviorTests.cs" />
     <Compile Include="MultipleOperationsTests.cs" />
     <Compile Include="ComplexBehaviorTests.cs" />
