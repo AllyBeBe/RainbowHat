@@ -14,11 +14,13 @@ namespace Calculator
         private string _currentValueString="0";
         private double _currentValue=0;
         private double _previousValue=0;
+        private double _previousValueBeforeEquals = 0;
         private double _result = 0;
         private string _operator = null;
         private string _previousOperator=null;
         private bool _isWaitingForNExtNumberToStart=false;
         private bool _isAfterEquals=false;
+        private bool _previousInputIsOperator = false;
         private string _previousInput = null;
         private int _calcCount = 0;
        
@@ -86,17 +88,12 @@ namespace Calculator
                         _operator = Convert.ToString(input);
                         _isWaitingForNExtNumberToStart = true;
                     }
-                    //else if (_previousInput == "+" || _previousInput == "-" || _previousInput == "*" || _previousInput == "/")
-                    //{
-                    //    _operator = Convert.ToString(input);
-                    //    _isWaitingForNExtNumberToStart = true;
-                    //}
                     else
                     {
                         _previousOperator = _operator;
                         DoMath();
                         _operator = Convert.ToString(input);
-                        _isWaitingForNExtNumberToStart = true;
+                       _isWaitingForNExtNumberToStart = true;
                     }
                     break;
                 case '-':
@@ -107,11 +104,6 @@ namespace Calculator
                         _operator = Convert.ToString(input);
                         _isWaitingForNExtNumberToStart = true;
                     }
-                    //else if (_previousInput == "+" || _previousInput == "-" || _previousInput == "*" || _previousInput == "/")
-                    //{
-                    //    _operator = Convert.ToString(input);
-                    //    _isWaitingForNExtNumberToStart = true;
-                    //}
                     else
                     {
                         _previousOperator = _operator;
@@ -128,11 +120,6 @@ namespace Calculator
                         _operator = Convert.ToString(input);
                         _isWaitingForNExtNumberToStart = true;
                     }
-                    //else if (_previousInput == "+" || _previousInput == "-" || _previousInput == "*" || _previousInput == "/")
-                    //{
-                    //    _operator = Convert.ToString(input);
-                    //    _isWaitingForNExtNumberToStart = true;
-                    //}
                     else
                     {
                         _previousOperator = _operator;
@@ -149,11 +136,6 @@ namespace Calculator
                         _operator = Convert.ToString(input);
                         _isWaitingForNExtNumberToStart = true;
                     }
-                    //else if (_previousInput == "+" || _previousInput == "-" || _previousInput == "*" || _previousInput == "/")
-                    //{
-                    //    _operator = Convert.ToString(input);
-                    //    _isWaitingForNExtNumberToStart = true;
-                    //}
                     else
                     {
                         _previousOperator = _operator;
@@ -167,44 +149,43 @@ namespace Calculator
                     _isWaitingForNExtNumberToStart = false;
                     if (_previousInput == "+" || _previousInput == "-" || _previousInput == "*" || _previousInput == "/" || _previousInput == "=")
                     {
+                        _previousValueBeforeEquals = _currentValue;
                         DoUnaryMath();
                         _calcCount = _calcCount + 1;
                     }
                     else
                     {
                         DoMath();  
-                    }
-                        //_previousOperator = null;
-                        //_operator = null;    
+                    }  
                     break;
                 case 'c':
                     Reset();
                     break;
-            }
-            // Your code will eventually go here, to make all of the tests pass.
-            // DO NOT WRITE THIS CODE YET!  WRITING THIS CODE WILL BE HOMEWORK 5!  
+            } 
          }
-        // Someday, this method will return the string that should be displayed in the "output window" of the 
-        // calculator.  For now, it just returns a dummy value of "13", since the compiler requires that it
-        // return something.
+
         public string GetOutput()
         {
             //return "13";
             return Convert.ToString(_currentValueString);
         }
+
         public void Reset()
         {
-            _currentValue = 0;
-            _currentValueString = "0";
-            _previousValue = 0;
-            _operator = null;
-            _previousOperator = null;
-            _isAfterEquals = false;
-            _isWaitingForNExtNumberToStart = false;
-            _previousInput = null;
+            _currentValueString="0";
+            _currentValue=0;
+            _previousValue=0;
+            _previousValueBeforeEquals = 0;
             _result = 0;
+            _operator = null;
+            _previousOperator=null;
+            _isWaitingForNExtNumberToStart=false;
+            _isAfterEquals=false;
+            _previousInputIsOperator = false;
+            _previousInput = null;
             _calcCount = 0;
         }
+
         private void DoMath()
         {
             switch (_operator)
@@ -238,6 +219,7 @@ namespace Calculator
                     break;
             }
         }
+
         private void DoUnaryMath()
         {
             switch (_operator)
