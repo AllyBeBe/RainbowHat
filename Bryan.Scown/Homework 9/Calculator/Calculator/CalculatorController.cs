@@ -32,29 +32,7 @@ namespace Calculator
                 case '8':
                 case '9':
                 
-                    if (_clearCurrentValue)
-                    {
-                        _clearCurrentValue = false;
-                        _currentValue = String.Empty;
-                    }
-                    if (_currentValue == "0")
-                    {
-                        _currentValue = String.Empty;
-                    }
-                    if ((_isAfterEquals == false) && (_currentValue.Length < 16))
-                    {
-                        _isWaitingForSecondOperand = true;
-                        _isWaitingForNextNumToStart = true;
-                        _currentValue += input;    
-                    }
-                    else
-                    if (_currentValue.Length < 16)
-                    {
-                        _currentValue = Convert.ToString(input);
-                        _lastInput = _currentValue;
-                        _lastOperation = null;
-                    }
-                    _isAfterEquals = false;
+                    NumInputState(input);
                     break;
                     
                 case 'c':
@@ -72,6 +50,32 @@ namespace Calculator
                     DoMath();
                     break;
             }
+        }
+
+        private void NumInputState(char input)
+        {
+            _isWaitingForSecondOperand = false;
+            if (_clearCurrentValue)
+            {
+                _clearCurrentValue = false;
+                _currentValue = String.Empty;
+            }
+            if (_currentValue == "0")
+            {
+                _currentValue = String.Empty;
+            }
+            if ((_isAfterEquals == false) && (_currentValue.Length < 16))
+            {
+                _currentValue += input;
+                _isAfterEquals = false;
+            }
+            else if (_currentValue.Length < 16)
+            {
+                _currentValue = Convert.ToString(input);
+                _lastInput = _currentValue;
+                _lastOperation = null;
+            }
+            _isAfterEquals = false;
         }
 
         private void DoMath()
@@ -103,6 +107,11 @@ namespace Calculator
 
         private void OperationState(char operation)
         {
+            if (_isWaitingForSecondOperand)
+            {
+                _lastOperation = operation;
+                return;
+            }
             if (_lastOperation != null)
             {
                 DoMath();
@@ -119,13 +128,18 @@ namespace Calculator
         public void ResetCalculatorState()
         {
             _currentValue = "0";
-            _lastInput = String.Empty;
+            _lastInput = null;
             _clearCurrentValue = true;
             _lastOperation = null;
+            _isWaitingForSecondOperand = false;
         }
 
         public string GetOutput()
         {
+            if (_isWaitingForSecondOperand)
+            {
+                return _lastInput;
+            }
             return _currentValue;
         }
         
