@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirkGentlyCalculator", "DirkGentlyCalculator\DirkGentlyCalculator.csproj", "{2CC85E47-971E-4EAB-8885-BC4E63BF7BA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirkGentlyCalculatorControllerTests", "CalculatorControllerTests\DirkGentlyCalculatorControllerTests.csproj", "{B9F5D5CC-8AF4-4F7C-BA4D-4DB7303679B7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2CC85E47-971E-4EAB-8885-BC4E63BF7BA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CC85E47-971E-4EAB-8885-BC4E63BF7BA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CC85E47-971E-4EAB-8885-BC4E63BF7BA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CC85E47-971E-4EAB-8885-BC4E63BF7BA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9F5D5CC-8AF4-4F7C-BA4D-4DB7303679B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9F5D5CC-8AF4-4F7C-BA4D-4DB7303679B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9F5D5CC-8AF4-4F7C-BA4D-4DB7303679B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9F5D5CC-8AF4-4F7C-BA4D-4DB7303679B7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
