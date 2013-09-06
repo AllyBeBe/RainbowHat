@@ -44,7 +44,7 @@ namespace CalculatorControllerTests
         {
             ForInputExpect("2", "2");
             ForInputExpect("+", "2");
-            ForInputExpect("2", "6");
+            ForInputExpect("2", "2");
             ForInputExpect("=", "4");
         }
 
@@ -64,7 +64,7 @@ namespace CalculatorControllerTests
         [Test]
         public void CanDoMultipleDigitAdd()
         {
-            ForInputExpect("249+14367=", "14616");
+            ForInputExpect("249+14367=", "A Suffusion of Yellow");
         }
 
         // Ahsan

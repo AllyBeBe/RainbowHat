@@ -183,7 +183,7 @@ namespace Calculator
                 }
             }
 
-            if (_currentValue > 4.0)
+            if (_currentValue > 4.0 || _currentValue < -4.0)
             {
                 _isSuffusedWithYellow = true;
             }
@@ -203,22 +203,6 @@ namespace Calculator
             {
                 return "A Suffusion of Yellow";
             }
-
-            // NOTE: All three of the following are equivalent, and correct.  It's a matter of taste
-            // which you prefer.
-
-            // This one introduces a local variable.
-//            double output = _isWaitingForSecondOperand ? _previousValue : _currentValue;
-//            return output.ToString();
-
-            // This one duplicates the call to ToString()
-//            return _isWaitingForSecondOperand ? _previousValue.ToString() : _currentValue.ToString();
-
-            // This one is harder to read, because we're calling ".ToString()" on a parenthetical expression.
-//            return (_isWaitingForSecondOperand ? _previousValue : _currentValue).ToString();
-
-            // I'd probably go with this one, preferring readability over eliminating all duplication.
-            // But that's just opinion.
             return _isWaitingForSecondOperand ? _previousValue.ToString() : _currentValue.ToString();
         }
     }

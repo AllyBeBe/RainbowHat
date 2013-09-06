@@ -47,7 +47,6 @@
     <Compile Include="DecimalTests.cs" />
     <Compile Include="DivisionTests.cs" />
     <Compile Include="DivisionWithZeroTests.cs" />
-    <Compile Include="LargeNumberTests.cs" />
     <Compile Include="MultiplicationTests.cs" />
     <Compile Include="NumberEntryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

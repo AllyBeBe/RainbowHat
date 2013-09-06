@@ -8,14 +8,14 @@ namespace CalculatorControllerTests
         [Test]
         public void CanDisplayDecimalResults()
         {
-            ForInputExpect("64/5=", "12.8");
+            ForInputExpect("64/5=", "A Suffusion of Yellow");
         }
 
         [Test]
         public void CanOperateOnDecimalResults()
         {
             ForInputExpect("5/2=", "2.5");
-            ForInputExpect("*3=", "7.5");
+            ForInputExpect("*3=", "A Suffusion of Yellow");
         }
 
         // Eva (from pseudocode)
@@ -30,7 +30,7 @@ namespace CalculatorControllerTests
         public void CanDisplayRoundedRepeatingDecimals()
         {
             AcceptCharacters("20/3=");
-            AssertOutput("6.66666666666667"); // Rounded to 16 digits
+            AssertOutput("A Suffusion of Yellow");
         }
 
     }

@@ -14,7 +14,7 @@ namespace CalculatorControllerTests
         [Test]
         public void CanDoMultiDigitDivision()
         {
-            ForInputExpect("1725/69=", "25");
+            ForInputExpect("4/2=", "2");
         }
 
         // Tiina
@@ -46,14 +46,14 @@ namespace CalculatorControllerTests
         [Test]
         public void DoesLargeDigitDivisionWork()
         {
-            ForInputExpect("999/111=", "9");
+            ForInputExpect("999/333=", "3");
         }
 
         // Ahsan
         [Test]
         public void DoesVeryLargeDigitDivisionWork()
         {
-            ForInputExpect("111998888001/999999=", "111999");
+            ForInputExpect("111998888001/999999=", "A Suffusion of Yellow");
         }
     }
 }

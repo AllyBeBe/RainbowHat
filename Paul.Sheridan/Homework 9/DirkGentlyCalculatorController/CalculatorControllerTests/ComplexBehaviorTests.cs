@@ -4,39 +4,20 @@ namespace CalculatorControllerTests
 {
     class ComplexBehaviorTests : BaseTestFixture
     {
-        // Tiina
-        [Test]
-        public void CanSubtractFromInitialValueOfZero()
-        {
-            ForInputExpect("-19=", "-19");
-        }
-
-        [Test]
-        public void CanSubtractFromNegativeNumber()
-        {
-            ForInputExpect("-5-5=", "-10");
-        }
-
-        [Test]
-        public void ShouldIgnoreRepeatedOperators()
-        {
-            AcceptCharacters("91--8=");
-            AssertOutput("83"); // 83, not 99, because "--8" is not "minus negative-8", it's "minus 8" (all but the last operator are ignored)
-        }
 
         // Jay, Paul
         [Test]
         public void IgnoresAllButLastOperatorForMultipleOperators()
         {
-            ForInputExpect("25+*69=", "1725");
+            ForInputExpect("25+*69=", "A Suffusion of Yellow");
         }
 
         // Paul
         [Test]
         public void NegativeSignIsTreatedAsOperatorRatherThanNegatingTheNextNumber()
         {
-            AcceptCharacters("-5*-5=");
-            AssertOutput("-10"); // Not "25"
+            AcceptCharacters("-2*-2=");
+            AssertOutput("-4"); 
         }
 
         // Tiina

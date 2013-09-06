@@ -31,7 +31,7 @@ namespace CalculatorControllerTests
         [Test]
         public void CanDivideByNumberWithLeadingZero()
         {
-            ForInputExpect("8/01=", "8");  // the zero should be ignored and not make the calculation fail
+            ForInputExpect("3/01=", "3");  // the zero should be ignored and not make the calculation fail
         }
 
     }

@@ -28,51 +28,49 @@ namespace CalculatorControllerTests
             AcceptCharacters("=");
             AssertOutput("0");
             AcceptCharacters("=");
-            AssertOutput("A Suffusion of Yellow ");
+            AssertOutput("A Suffusion of Yellow");
         }
 
         // Jay
         [Test]
         public void CanDoUnaryMultiply()
         {
-            EnterNumber(9);
+            EnterNumber(2);
             AcceptCharacters("*");
             AcceptCharacters("=");
-            AssertOutput("81");
+            AssertOutput("4");
             AcceptCharacters("=");
-            AssertOutput("729");
+            AssertOutput("A Suffusion of Yellow");
         }
 
         // Jay
         [Test]
         public void CanDoUnaryDivide()
         {
-            EnterNumber(9);
+            EnterNumber(4);
             AcceptCharacters("/");
             AcceptCharacters("=");
             AssertOutput("1");
             AcceptCharacters("=");
-            AssertOutput("0.111111111111111");
+            AssertOutput("0.25");
         }
 
         // Tiina
         [Test]
         public void CanOperateOnLastResult()
-        //  Understands +=  -=  *= and /=  as operating on last result
-        //          1+2+= 6     any number -=  0        4*= 16     any number /=  1
         {
-            ForInputExpect("1+2+=", "6");
-            ForInputExpect("=", "9");
+            ForInputExpect("1+1+=", "4");
+            ForInputExpect("=", "A Suffusion of Yellow");
 
             ForInputExpect("c", "0");
 
             ForInputExpect("45-=", "0");
-            ForInputExpect("=", "-45");
+            ForInputExpect("=", "A Suffusion of Yellow");
 
             ForInputExpect("c", "0");
 
-            ForInputExpect("4*=", "16");
-            ForInputExpect("=", "64");
+            ForInputExpect("2*=", "4");
+            ForInputExpect("=", "A Suffusion of Yellow");
 
             ForInputExpect("c", "0");
 
