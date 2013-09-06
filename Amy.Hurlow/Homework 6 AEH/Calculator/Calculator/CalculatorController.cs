@@ -20,6 +20,7 @@ namespace Calculator
         private string _display;
 
         private bool _digitsEnteredShouldGoIntoFirstNumber; // True if we're entering the first number, false if we're entering the second.
+        private bool _leadingMinusWasEntered; // True only if minus sign is pressed first, after clear
 
         // Static variables are shared by all instances of the class, and are only initialized once, 
         // when the class is first loaded. 
@@ -69,6 +70,8 @@ namespace Calculator
             _operator = String.Empty;
             _display = "0";
             _answer = String.Empty;
+            _leadingMinusWasEntered = false;
+
         }
 
         public void AcceptCharacter(char inputChar) // Defines AcceptCharacter, which is called by HandleInput
@@ -89,7 +92,10 @@ namespace Calculator
             if (input == "c")
             {
                 Clear();
+
             }
+            else if (input == "-")
+                _leadingMinusWasEntered = true;
             else if (Digits.Contains(input))
             {
                 if (_digitsEnteredShouldGoIntoFirstNumber)
@@ -117,6 +123,25 @@ namespace Calculator
                 else if (_operator == "-")
                 {
                     _answer = (double.Parse(_firstNumberEntered) - double.Parse(_secondNumberEntered)).ToString();
+                }
+                else if (_operator == "*")
+                {
+                    _answer = (double.Parse(_firstNumberEntered) * double.Parse(_secondNumberEntered)).ToString();
+                }
+                else if (_operator == "/")
+                {
+                    if (_secondNumberEntered == "0")
+                        switch (_firstNumberEntered)
+                        {
+                            case "0":
+                                _answer = "Result is undefined";
+                                break;
+                            default:
+                                _answer = "Cannot divide by zero";
+                                break;
+                        }
+                    else
+                    _answer = (double.Parse(_firstNumberEntered)/double.Parse(_secondNumberEntered)).ToString();
                 }
             }
         }
