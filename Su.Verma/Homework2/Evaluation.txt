@@ -1,0 +1,10 @@
+Very nice.  Clearly, I am now obligated to grant you an A+ in the class. :-)
+
+I have one question -- the icons for the first name and last name fields 
+are displaying on my computer as a blue question-mark with a small gray
+silhouette of a person next to it.  Is this how they display on your
+computer, or is this an error due to an unavailable image resource?
+
+If it's the latter, I'd like to work with you before class on 
+Thursday to see if we can figure out why your image resource files
+didn't check in with the rest of your code.

@@ -1,0 +1,76 @@
+Excellent work!  I certainly wasn't expecting the kaleidoscope of rapidly
+whirling images at the end there...very amusing.
+
+I'm also very impressed by your use of an array of strings to hold
+the messages, and I think that the use of a NumericUpDown control to
+hold the value is very clever.  And, of course, actually adding an 
+image resource to your app, loading it from the file system with
+System.Drawing.Image.FromFile(), closing the form at the end, etc.  Just a
+very good app overall.
+
+I do have a few minor suggestions:
+
+1) You should probably move the UpdateComponent() method into Form1.cs, as
+that's the more typical place for business logic like that.  The Designer
+file is usually left for the design tool to control.
+
+2) You may want to use an integer instance field instead of the
+NumericUpDown control.  I know that we hadn't covered instance fields
+by Homework 2, but now that we've started looking at them, you might want
+to go back and modify your Homework 2 to use one.
+
+3) Both "filepath" and "messages" remain the same, no matter how many 
+times UpdateComponent() is called.  Thus, they should probably be created
+as "private static readonly" fields, instead of as local variables in 
+UpdateComponent().
+
+"private" means "only instances of this class can see this variable."
+
+"static" means "there is only one copy of this variable for the whole
+class, and it can be accessed by any instance of the class."
+
+"readonly" means "this variable can't be re-assigned after it has had its
+value set the first time."
+
+If you made the above changes, Form1.cs would look something like:
+
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private static readonly string filepath = "../../Properties/light_explosion.gif";
+        private static readonly string[] messages = new string[] 
+        { 
+			"Huh? " + Environment.NewLine + "I told you not to click it! " + Environment.NewLine + "Don't Click it AGAIN!",
+            "Did you do that by accident?" + Environment.NewLine + "No more!",
+            "Uh Oh. Most people will try their best so you may have a computer glitch! " + Environment.NewLine + "Better not click again or your computer might crash!",
+            "Now you've done it!" + Environment.NewLine + "Your computer is wacking out!"
+        };
+
+		private int messageIndex;
+		
+		private void UpdateComponent()
+        {
+            if (messageIndex < messages.Length)
+            {
+                this.MakeMeLaugh.Text = messages[messageIndex];
+            }
+            messageIndex = messageIndex + 1;
+
+            if (messageIndex == messages.Length)
+            {
+                this.MakeMeLaugh.Size = new System.Drawing.Size(200,40);
+                this.MakeMeLaugh.Location = new System.Drawing.Point(50,200);
+                this.pictureBox1.Visible = true;
+                this.pictureBox1.Image =  System.Drawing.Image.FromFile(filepath);
+            }
+            else if (messageIndex > messages.Length)
+            {
+                Form1.ActiveForm.Close();
+            }
+		}
+
+		// and so on...

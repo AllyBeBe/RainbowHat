@@ -1,0 +1,6 @@
+Very nice work.  I particularly like the handling of the KeyDown event
+in the text box, including checking the KeyCode to do the special-case
+handling for Escape and Enter.
+
+Also, updating the form's title when the TextBox value changes is quite 
+nice.
