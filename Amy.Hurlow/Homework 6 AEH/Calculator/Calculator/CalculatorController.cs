@@ -15,12 +15,17 @@ namespace Calculator
 
         private string _firstNumberEntered; // The first number in the calculation (before the first operator)
         private string _secondNumberEntered; // The number after the first operator
-        private string _operator; // the last operator entered (should ignore any operators entered immediately before)
+        private string _thirdNumberEntered; // TODO: But what if the user wants to enter many operations and numbers (more than 3)?
+        private string _firstValidOperator; // "valid" if it's the last operator in a sequence of operators entered (first operation)
+        private string _secondValidOperator; // after second number 
         private string _answer; // The result of doing the math on "equals"
         private string _display;
 
-        private bool _digitsEnteredShouldGoIntoFirstNumber; // True if we're entering the first number, false if we're entering the second.
-        private bool _leadingMinusWasEntered; // True only if minus sign is pressed first, after clear
+        private bool _digitsEnteredShouldGoIntoFirstNumber; // True if we're entering the first number, false if we're entering the second or third.
+        private bool _digitsEnteredShouldGoIntoSecondNumber;
+        private bool _digitsEnteredShouldGoIntoThirdNumber; 
+        private bool _operatorIsEnteredAfterSecondNumber; // True if user enters three numbers and tries multiple operations before equals
+
 
         // Static variables are shared by all instances of the class, and are only initialized once, 
         // when the class is first loaded. 
@@ -43,17 +48,7 @@ namespace Calculator
 
         private static readonly Collection<string> Operators = new Collection<string> {"+", "-", "*", "/"};
 
-        // A contructor is a method whose name is the same as the name of the class.
-        // A constructor has no return type (not even "void").
-        // A conbstructor does not return a value -- its value is simply the new instance of the class
-        // that is being constructed.
-        // A constructor is the method that is called when you say "new SomeClassName()"
-        // A constructor is called only when an instance of the class is created (constructed).
-        // C# creates a "default contstructor" with no arguments, if you haven't defined any constructors.
-        // This is why you can say "new CalculatorController()" even if you haven't written an 
-        // explicit constructor method for CalculatorController.
-        // If you want to do something once and only once in the lifetime of a CalculatorController, when you
-        // first create it, you can define an explicit constructor method and do that something in that method.
+
 
         public CalculatorController()
         {
@@ -64,28 +59,22 @@ namespace Calculator
         // Called before each test. Where else do I need it?
         public void Clear()
         {
-            _digitsEnteredShouldGoIntoFirstNumber = true;
+
+
             _firstNumberEntered = "0";
             _secondNumberEntered = String.Empty;
-            _operator = String.Empty;
+            _firstValidOperator = String.Empty;
+            _secondValidOperator = String.Empty;
             _display = "0";
             _answer = String.Empty;
-            _leadingMinusWasEntered = false;
+            _digitsEnteredShouldGoIntoFirstNumber = true;
+            _digitsEnteredShouldGoIntoSecondNumber = true;
+            _digitsEnteredShouldGoIntoThirdNumber = true;// todo: I might not need a variable if should go into 3rd number
+            _operatorIsEnteredAfterSecondNumber = false;
 
         }
 
-        public void AcceptCharacter(char inputChar) // Defines AcceptCharacter, which is called by HandleInput
-            // in each button's click event handler.
-            // For Mickey: couldn't I make AcceptCharacter's type string, since all my variables are strings?
-            //
-            // A: You could, except that the type of AcceptCharacter's parameter (note: you said "AcceptCharacter's
-            // type", but the technically correct phrase would be "the type of AcceptCharacter's parameter") is part
-            // of CalculatorController's external interface, which everything that calls it relies on.  If you were
-            // to change that, you would need to also change Form1.cs and all of the tests that call AcceptCharacter.
-            //
-            // That's why, instead, I just renamed it to "inputChar", and introduced the local variable "input" to hold
-            // the string version of the value.  Note: the *name* of AcceptCharacter's parameter is *not* part of the
-            // external interface of CalculatorController, so you can change it freely."
+        public void AcceptCharacter(char inputChar) 
         {
             string input = inputChar.ToString();
 
@@ -94,8 +83,6 @@ namespace Calculator
                 Clear();
 
             }
-            else if (input == "-")
-                _leadingMinusWasEntered = true;
             else if (Digits.Contains(input))
             {
                 if (_digitsEnteredShouldGoIntoFirstNumber)
@@ -103,32 +90,46 @@ namespace Calculator
                     _firstNumberEntered = AppendDigit(_firstNumberEntered, input);
                     _display = _firstNumberEntered;
                 }
-                else
+                else if (_digitsEnteredShouldGoIntoSecondNumber)
                 {
                     _secondNumberEntered = AppendDigit(_secondNumberEntered, input);
                     _display = _secondNumberEntered;                    
                 }
+                else if (_digitsEnteredShouldGoIntoThirdNumber)
+                {
+                    _thirdNumberEntered = AppendDigit(_thirdNumberEntered, input);
+                    _display = _secondNumberEntered;     
+                }
             }
             else if (Operators.Contains(input))
             {
-                _operator = input;
+                _firstValidOperator = input;
+                //TODO This should be where now?
                 _digitsEnteredShouldGoIntoFirstNumber = false;
+                {
+                    if (_secondNumberEntered != String.Empty)
+                    {
+                        _digitsEnteredShouldGoIntoSecondNumber = false;
+                    }
+                    if (_thirdNumberEntered != String.Empty)
+                        _digitsEnteredShouldGoIntoThirdNumber = false;
+                }
             }
             else if (input == "=")
             {
-                if (_operator == "+")
+                if (_firstValidOperator == "+")
                 {
                     _answer = (double.Parse(_firstNumberEntered) + double.Parse(_secondNumberEntered)).ToString();
                 }
-                else if (_operator == "-")
+                else if (_firstValidOperator == "-")
                 {
                     _answer = (double.Parse(_firstNumberEntered) - double.Parse(_secondNumberEntered)).ToString();
                 }
-                else if (_operator == "*")
+                else if (_firstValidOperator == "*")
                 {
                     _answer = (double.Parse(_firstNumberEntered) * double.Parse(_secondNumberEntered)).ToString();
                 }
-                else if (_operator == "/")
+                else if (_firstValidOperator == "/")
                 {
                     if (_secondNumberEntered == "0")
                         switch (_firstNumberEntered)

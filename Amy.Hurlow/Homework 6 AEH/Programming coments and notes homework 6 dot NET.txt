@@ -1,0 +1,12 @@
+// Defines AcceptCharacter, which is called by HandleInput
+            // in each button's click event handler.
+            // For Mickey: couldn't I make AcceptCharacter's type string, since all my variables are strings?
+            //
+            // A: You could, except that the type of AcceptCharacter's parameter (note: you said "AcceptCharacter's
+            // type", but the technically correct phrase would be "the type of AcceptCharacter's parameter") is part
+            // of CalculatorController's external interface, which everything that calls it relies on.  If you were
+            // to change that, you would need to also change Form1.cs and all of the tests that call AcceptCharacter.
+            //
+            // That's why, instead, I just renamed it to "inputChar", and introduced the local variable "input" to hold
+            // the string version of the value.  Note: the *name* of AcceptCharacter's parameter is *not* part of the
+            // external interface of CalculatorController, so you can change it freely."
