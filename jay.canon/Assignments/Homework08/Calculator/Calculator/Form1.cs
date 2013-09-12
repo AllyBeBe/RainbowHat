@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -13,6 +14,7 @@ namespace Calculator
             InitializeComponent();
             _controller.AcceptCharacter('c');
             output.Text = _controller.GetOutput();
+            KeyPreview = true;
         }
 
         // I noticed that the same basic code was showing up in all of the methods:
@@ -45,7 +47,6 @@ namespace Calculator
             _controller.Clear();
         }
 
-        // keypress button handlers for operators
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar >= 48 && e.KeyChar <= 57) // ASCII values for digits 0 - 9
@@ -56,23 +57,29 @@ namespace Calculator
             {
                 case (char)42: // multiplication symbol
                 case (char)43: // addition symbol
-                case (char)45: // subraction symbol
+                case (char)45: // subtraction symbol
                 case (char)47: // division symbol
                 case (char)61: // equals symbol
                 case (char)67: // 'C' for clear
                 case (char)99: // 'c' for clear
                     HandleInput(e.KeyChar);
                     break;
+                case (char)27: // Esc key, which should clear
+                    HandleInput('c');
+                    break;
+                case (char)13: // Enter key, which should do '='
+                    HandleInput('=');
+                    break;
             }
         }
-//        Inoperable attempt to trap Enter key press to model '=' keypress
-//        private void output_KeyDown(object sender, KeyEventArgs e)
-//        {
-//            if (e.KeyValue == 13)
-//            {
-//                MessageBox.Show("Hey, you pressed the Enter key");
-//                HandleInput('=');
-//            }
-//        }
+
+        private void TreatEnterAndEscAsNormalKeys(object sender, PreviewKeyDownEventArgs e)
+        {
+            if ((e.KeyCode == Keys.Return) || (e.KeyCode == Keys.Escape))
+            {
+                e.IsInputKey = true;
+            }
+        }
+
     }
 }
