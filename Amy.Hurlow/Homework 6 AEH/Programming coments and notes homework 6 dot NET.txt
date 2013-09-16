@@ -10,3 +10,23 @@
             // That's why, instead, I just renamed it to "inputChar", and introduced the local variable "input" to hold
             // the string version of the value.  Note: the *name* of AcceptCharacter's parameter is *not* part of the
             // external interface of CalculatorController, so you can change it freely."
+			
+			        private static readonly Collection<string> Operators = new Collection<string> {"+", "-", "*", "/"};
+        // A contructor is a method whose name is the same as the name of the class.
+        // A constructor has no return type (not even "void").
+        // A conbstructor does not return a value -- its value is simply the new instance of the class
+        // that is being constructed.
+        // A constructor is the method that is called when you say "new SomeClassName()"
+        // A constructor is called only when an instance of the class is created (constructed).
+        // C# creates a "default contstructor" with no arguments, if you haven't defined any constructors.
+        // This is why you can say "new CalculatorController()" even if you haven't written an 
+        // explicit constructor method for CalculatorController.
+        // If you want to do something once and only once in the lifetime of a CalculatorController, when you
+        // first create it, you can define an explicit constructor method and do that something in that method.
+		
+		        private static readonly Collection<string> Digits = new Collection<string>				
+		// Static variables are shared by all instances of the class, and are only initialized once, 
+        // when the class is first loaded. 
+        // Readonly variables can only have their value set once, when they are first initialized, in
+        // an initializer statement or in a constructor.  The "readonly" keyword helps to indicate that 
+        // you don't expect a value to ever be changed.
