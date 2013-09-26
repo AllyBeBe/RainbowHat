@@ -1,9 +1,12 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
+using NUnit.Framework;
 
 namespace CalculatorControllerTests
 {
     class MultipleOperationsTests : BaseTestFixture
     {
+
         // Jay, Michael, Tiina
         [Test]
         public void CanPerformMultipleOperations()
@@ -120,5 +123,24 @@ namespace CalculatorControllerTests
         {
             ForInputExpect("-9-8=", "-17");
         }
+
+//        public int AmyCounter = 1; // Should this go in BaseTestFixture?  
+//        [Test]
+//        public void CanPerformMoreThanThirtyOperations()
+//            
+//    {
+//
+//            while (AmyCounter <= 31)
+//            {
+//                char charofcounter = // TODO: how to convert integer in AmyCounter to char so AcceptChar can convert it to a str?
+//                AcceptCharacters(fromAmyCounter);
+//                AcceptCharacters("+");
+//                AmyCounter = AmyCounter + 1;
+//            }
+//            
+//            AcceptCharacters("=");
+//            AssertOutput("31");
+//        
+//    }   
     }
 }

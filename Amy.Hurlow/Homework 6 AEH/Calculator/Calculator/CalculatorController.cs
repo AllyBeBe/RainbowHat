@@ -21,11 +21,14 @@ namespace Calculator
         private string _answer; // The result of doing the math on "equals"
         private string _display;
 
+        private double _parseOfFirstNumberEntered;
+
         private bool _digitsEnteredShouldGoIntoFirstNumber; // True if we're entering the first number, false if we're entering the second or third.
         private bool _digitsEnteredShouldGoIntoSecondNumber;
         private bool _digitsEnteredShouldGoIntoThirdNumber; 
-        private bool _operatorIsEnteredAfterSecondNumber; // True if user enters three numbers and tries multiple operations before equals
-
+       // private bool _operatorIsEnteredAfterSecondNumber; // True if user enters three numbers and tries multiple operations before equals
+        private bool _firstEntryInNewCalculationIsMinusSign;
+        private bool _clearWasJustPressed = false;
 
         // Static variables are shared by all instances of the class, and are only initialized once, 
         // when the class is first loaded. 
@@ -53,99 +56,113 @@ namespace Calculator
         public CalculatorController()
         {
             Clear();
+
         }
 
-        // Defines a method to clear the variables. 
-        // Called before each test. Where else do I need it?
         public void Clear()
         {
-
-
             _firstNumberEntered = "0";
             _secondNumberEntered = String.Empty;
             _firstValidOperator = String.Empty;
             _secondValidOperator = String.Empty;
             _display = "0";
             _answer = String.Empty;
+   //         _parseOfFirstNumberEntered = 0;
             _digitsEnteredShouldGoIntoFirstNumber = true;
             _digitsEnteredShouldGoIntoSecondNumber = true;
             _digitsEnteredShouldGoIntoThirdNumber = true;// todo: I might not need a variable if should go into 3rd number
-            _operatorIsEnteredAfterSecondNumber = false;
+        //    _operatorIsEnteredAfterSecondNumber = false;
+            _firstEntryInNewCalculationIsMinusSign = false;
+
 
         }
+        
 
-        public void AcceptCharacter(char inputChar) 
+        public void AcceptCharacter(char inputChar)
         {
             string input = inputChar.ToString();
 
+
             if (input == "c")
             {
+                _clearWasJustPressed = true;
                 Clear();
+                MakeFirstNumberNegativeIfMinusEnteredFirst();
+            }
 
-            }
-            else if (Digits.Contains(input))
-            {
-                if (_digitsEnteredShouldGoIntoFirstNumber)
+
+
+                if (Digits.Contains(input))
+                    // TODO: CHANGE THIS SO IT CAN TAKE AN INFINITE NUMBER OF OPERATIONS AND NUMBERS? DEPENDS ON IF I CAN USE THE VALUE OF A VAR IN THE NAME OF ANOTHER VAR.
                 {
-                    _firstNumberEntered = AppendDigit(_firstNumberEntered, input);
-                    _display = _firstNumberEntered;
-                }
-                else if (_digitsEnteredShouldGoIntoSecondNumber)
-                {
-                    _secondNumberEntered = AppendDigit(_secondNumberEntered, input);
-                    _display = _secondNumberEntered;                    
-                }
-                else if (_digitsEnteredShouldGoIntoThirdNumber)
-                {
-                    _thirdNumberEntered = AppendDigit(_thirdNumberEntered, input);
-                    _display = _secondNumberEntered;     
-                }
-            }
-            else if (Operators.Contains(input))
-            {
-                _firstValidOperator = input;
-                //TODO This should be where now?
-                _digitsEnteredShouldGoIntoFirstNumber = false;
-                {
-                    if (_secondNumberEntered != String.Empty)
+                    if (_digitsEnteredShouldGoIntoFirstNumber)
                     {
+                        _firstNumberEntered = AppendDigit(_firstNumberEntered, input);
+                        _display = _firstNumberEntered;
+                    }
+                    else if (_digitsEnteredShouldGoIntoSecondNumber)
+                    {
+                        _secondNumberEntered = AppendDigit(_secondNumberEntered, input);
+                        _display = _secondNumberEntered;
+                    }
+                    else if (_digitsEnteredShouldGoIntoThirdNumber)
+                    {
+                        _thirdNumberEntered = AppendDigit(_thirdNumberEntered, input);
+                        _display = _thirdNumberEntered;
+                    }
+                }
+                else if (Operators.Contains(input))
+                    //TODO SAME QUESTION AS FOR DIGITS.  WANT TO ALLOW AN INFINITE NUMBER OF numbers and operators.
+                {
+                    if (_firstValidOperator == (String.Empty))
+                    {
+                        _firstValidOperator = input;
+                        _digitsEnteredShouldGoIntoFirstNumber = false;
+                    }
+                    if (_secondValidOperator == String.Empty)
+                    {
+                        _secondValidOperator = input;
                         _digitsEnteredShouldGoIntoSecondNumber = false;
                     }
-                    if (_thirdNumberEntered != String.Empty)
-                        _digitsEnteredShouldGoIntoThirdNumber = false;
+                }
+                else if (input == "=")
+                {
+                    if
+                    _newInstanceOfCalculatorCreated && _firstValidOperator == "-";
+
+                    if (_firstValidOperator == "+")
+                    {
+                        _answer =
+                            (_parseOfFirstNumberEntered + double.Parse(_secondNumberEntered)).ToString();
+                    }
+                    else if (_firstValidOperator == "-")
+                    {
+                        _answer =
+                            (_parseOfFirstNumberEntered - double.Parse(_secondNumberEntered)).ToString();
+                    }
+                    else if (_firstValidOperator == "*")
+                    {
+                        _answer = (_parseOfFirstNumberEntered * double.Parse(_secondNumberEntered)).ToString();
+                    }
+                    else if (_firstValidOperator == "/")
+                    {
+                        if (_secondNumberEntered == "0")
+                            switch (_firstNumberEntered)
+                            {
+                                case "0":
+                                    _answer = "Result is undefined";
+                                    break;
+                                default:
+                                    _answer = "Cannot divide by zero";
+                                    break;
+                            }
+                        else
+                            _answer =
+                                (_parseOfFirstNumberEntered / double.Parse(_secondNumberEntered)).ToString();
+                    }
                 }
             }
-            else if (input == "=")
-            {
-                if (_firstValidOperator == "+")
-                {
-                    _answer = (double.Parse(_firstNumberEntered) + double.Parse(_secondNumberEntered)).ToString();
-                }
-                else if (_firstValidOperator == "-")
-                {
-                    _answer = (double.Parse(_firstNumberEntered) - double.Parse(_secondNumberEntered)).ToString();
-                }
-                else if (_firstValidOperator == "*")
-                {
-                    _answer = (double.Parse(_firstNumberEntered) * double.Parse(_secondNumberEntered)).ToString();
-                }
-                else if (_firstValidOperator == "/")
-                {
-                    if (_secondNumberEntered == "0")
-                        switch (_firstNumberEntered)
-                        {
-                            case "0":
-                                _answer = "Result is undefined";
-                                break;
-                            default:
-                                _answer = "Cannot divide by zero";
-                                break;
-                        }
-                    else
-                    _answer = (double.Parse(_firstNumberEntered)/double.Parse(_secondNumberEntered)).ToString();
-                }
-            }
-        }
+        
 
         private string AppendDigit(string existingNumber, string digit)
         {
@@ -153,11 +170,28 @@ namespace Calculator
             {
                 return digit;
             }
-            if (existingNumber.Length == 15)
+            if (existingNumber != null && existingNumber.Length == 15) // Checked for null because "null reference" error unhandled. How could existingNumber get to be null?
             {
                 return existingNumber;
             }
             return existingNumber + digit;
+        }
+
+        private string MakeFirstNumberNegativeIfMinusEnteredFirst()
+        {
+            if ((_clearWasJustPressed) && (_firstEntryInNewCalculationIsMinusSign))
+            {
+                _parseOfFirstNumberEntered = 0 - double.Parse(_firstNumberEntered); // Change number value to negative
+                _firstNumberEntered = "-" + _firstNumberEntered; // Change string to dispaly minus sign
+                return _firstNumberEntered;
+
+            }
+            else
+            {
+                _parseOfFirstNumberEntered = double.Parse(_firstNumberEntered);
+                return _firstNumberEntered;
+            }
+
         }
 
         public string GetOutput()

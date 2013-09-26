@@ -24,7 +24,7 @@
         // If you want to do something once and only once in the lifetime of a CalculatorController, when you
         // first create it, you can define an explicit constructor method and do that something in that method.
 		
-		        private static readonly Collection<string> Digits = new Collection<string>				
+			
 		// Static variables are shared by all instances of the class, and are only initialized once, 
         // when the class is first loaded. 
         // Readonly variables can only have their value set once, when they are first initialized, in

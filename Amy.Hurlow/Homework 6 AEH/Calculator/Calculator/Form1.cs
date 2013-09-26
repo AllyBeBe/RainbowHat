@@ -8,12 +8,14 @@ namespace Calculator
     public partial class Form1 : Form
     {
         private readonly CalculatorController _controller = new CalculatorController();
-        
-        // AEH: Form1 is a method? Also an object?  How does it talk to CalculatorController?  Why are they separate files?
+        private bool _newInstanceOfCalculatorCreated;
+
+
         public Form1() // Defines Form1
         {
             InitializeComponent(); // AEH Initialize the buttons and textbox
             output.Text = _controller.GetOutput(); // AEH Do GetOutput and put what it returns in textbox.
+            _newInstanceOfCalculatorCreated = true;
         }
 
 
