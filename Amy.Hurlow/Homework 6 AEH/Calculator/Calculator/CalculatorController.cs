@@ -27,7 +27,7 @@ namespace Calculator
         private bool _digitsEnteredShouldGoIntoSecondNumber;
         private bool _digitsEnteredShouldGoIntoThirdNumber; 
        // private bool _operatorIsEnteredAfterSecondNumber; // True if user enters three numbers and tries multiple operations before equals
-        private bool _firstEntryInNewCalculationIsMinusSign;
+        private bool _firstEntryIsMinusSign;
         private bool _clearWasJustPressed = false;
 
         // Static variables are shared by all instances of the class, and are only initialized once, 
@@ -72,7 +72,7 @@ namespace Calculator
             _digitsEnteredShouldGoIntoSecondNumber = true;
             _digitsEnteredShouldGoIntoThirdNumber = true;// todo: I might not need a variable if should go into 3rd number
         //    _operatorIsEnteredAfterSecondNumber = false;
-            _firstEntryInNewCalculationIsMinusSign = false;
+            _firstEntryIsMinusSign = false;
 
 
         }
@@ -127,9 +127,6 @@ namespace Calculator
                 }
                 else if (input == "=")
                 {
-                    if
-                    _newInstanceOfCalculatorCreated && _firstValidOperator == "-";
-
                     if (_firstValidOperator == "+")
                     {
                         _answer =
@@ -147,14 +144,13 @@ namespace Calculator
                     else if (_firstValidOperator == "/")
                     {
                         if (_secondNumberEntered == "0")
-                            switch (_firstNumberEntered)
+                            if (_parseOfFirstNumberEntered == 0.0)
                             {
-                                case "0":
-                                    _answer = "Result is undefined";
-                                    break;
-                                default:
-                                    _answer = "Cannot divide by zero";
-                                    break;
+                                _answer = "Result is undefined";
+                            }
+                            else
+                            {
+                                _answer = "Cannot divide by zero";
                             }
                         else
                             _answer =
@@ -179,9 +175,9 @@ namespace Calculator
 
         private string MakeFirstNumberNegativeIfMinusEnteredFirst()
         {
-            if ((_clearWasJustPressed) && (_firstEntryInNewCalculationIsMinusSign))
+            if ((_clearWasJustPressed) && (_firstEntryIsMinusSign))
             {
-                _parseOfFirstNumberEntered = 0 - double.Parse(_firstNumberEntered); // Change number value to negative
+                _parseOfFirstNumberEntered = (0.0  - double.Parse(_firstNumberEntered)); // Change number value to negative
                 _firstNumberEntered = "-" + _firstNumberEntered; // Change string to dispaly minus sign
                 return _firstNumberEntered;
 
