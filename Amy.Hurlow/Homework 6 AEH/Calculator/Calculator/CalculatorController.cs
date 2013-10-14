@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Windows.Forms;
 
 namespace Calculator
 {
@@ -15,20 +16,12 @@ namespace Calculator
 
         private string _firstNumberEntered; // The first number in the calculation (before the first operator)
         private string _secondNumberEntered; // The number after the first operator
-        private string _thirdNumberEntered; // TODO: But what if the user wants to enter many operations and numbers (more than 3)?
         private string _firstValidOperator; // "valid" if it's the last operator in a sequence of operators entered (first operation)
-        private string _secondValidOperator; // after second number 
         private string _answer; // The result of doing the math on "equals"
         private string _display;
-
-        private double _parseOfFirstNumberEntered;
-
         private bool _digitsEnteredShouldGoIntoFirstNumber; // True if we're entering the first number, false if we're entering the second or third.
         private bool _digitsEnteredShouldGoIntoSecondNumber;
-        private bool _digitsEnteredShouldGoIntoThirdNumber; 
-       // private bool _operatorIsEnteredAfterSecondNumber; // True if user enters three numbers and tries multiple operations before equals
-        private bool _firstEntryIsMinusSign;
-        private bool _clearWasJustPressed = false;
+        private bool _justCleared = false;
 
         // Static variables are shared by all instances of the class, and are only initialized once, 
         // when the class is first loaded. 
@@ -64,19 +57,15 @@ namespace Calculator
             _firstNumberEntered = "0";
             _secondNumberEntered = String.Empty;
             _firstValidOperator = String.Empty;
-            _secondValidOperator = String.Empty;
             _display = "0";
             _answer = String.Empty;
-   //         _parseOfFirstNumberEntered = 0;
             _digitsEnteredShouldGoIntoFirstNumber = true;
             _digitsEnteredShouldGoIntoSecondNumber = true;
-            _digitsEnteredShouldGoIntoThirdNumber = true;// todo: I might not need a variable if should go into 3rd number
-        //    _operatorIsEnteredAfterSecondNumber = false;
-            _firstEntryIsMinusSign = false;
+            _justCleared = true;
 
 
         }
-        
+
 
         public void AcceptCharacter(char inputChar)
         {
@@ -85,12 +74,14 @@ namespace Calculator
 
             if (input == "c")
             {
-                _clearWasJustPressed = true;
                 Clear();
-                MakeFirstNumberNegativeIfMinusEnteredFirst();
             }
 
-
+            if ((_justCleared) && input == "-")
+                MakeFirstNumberNegative();
+            else
+            {
+                _justCleared = false;
 
                 if (Digits.Contains(input))
                     // TODO: CHANGE THIS SO IT CAN TAKE AN INFINITE NUMBER OF OPERATIONS AND NUMBERS? DEPENDS ON IF I CAN USE THE VALUE OF A VAR IN THE NAME OF ANOTHER VAR.
@@ -105,11 +96,7 @@ namespace Calculator
                         _secondNumberEntered = AppendDigit(_secondNumberEntered, input);
                         _display = _secondNumberEntered;
                     }
-                    else if (_digitsEnteredShouldGoIntoThirdNumber)
-                    {
-                        _thirdNumberEntered = AppendDigit(_thirdNumberEntered, input);
-                        _display = _thirdNumberEntered;
-                    }
+
                 }
                 else if (Operators.Contains(input))
                     //TODO SAME QUESTION AS FOR DIGITS.  WANT TO ALLOW AN INFINITE NUMBER OF numbers and operators.
@@ -119,32 +106,27 @@ namespace Calculator
                         _firstValidOperator = input;
                         _digitsEnteredShouldGoIntoFirstNumber = false;
                     }
-                    if (_secondValidOperator == String.Empty)
-                    {
-                        _secondValidOperator = input;
-                        _digitsEnteredShouldGoIntoSecondNumber = false;
-                    }
+
                 }
                 else if (input == "=")
                 {
                     if (_firstValidOperator == "+")
                     {
                         _answer =
-                            (_parseOfFirstNumberEntered + double.Parse(_secondNumberEntered)).ToString();
+                            (double.Parse(_firstNumberEntered) + double.Parse(_secondNumberEntered)).ToString();
                     }
                     else if (_firstValidOperator == "-")
                     {
                         _answer =
-                            (_parseOfFirstNumberEntered - double.Parse(_secondNumberEntered)).ToString();
+                            (double.Parse(_firstNumberEntered) - double.Parse(_secondNumberEntered)).ToString();
                     }
                     else if (_firstValidOperator == "*")
                     {
-                        _answer = (_parseOfFirstNumberEntered * double.Parse(_secondNumberEntered)).ToString();
+                        _answer = (double.Parse(_firstNumberEntered)*double.Parse(_secondNumberEntered)).ToString();
                     }
                     else if (_firstValidOperator == "/")
-                    {
                         if (_secondNumberEntered == "0")
-                            if (_parseOfFirstNumberEntered == 0.0)
+                            if (double.Parse(_firstNumberEntered) == 0.0)
                             {
                                 _answer = "Result is undefined";
                             }
@@ -154,11 +136,11 @@ namespace Calculator
                             }
                         else
                             _answer =
-                                (_parseOfFirstNumberEntered / double.Parse(_secondNumberEntered)).ToString();
-                    }
+                                (double.Parse(_firstNumberEntered)/double.Parse(_secondNumberEntered)).ToString();
                 }
             }
-        
+        }
+
 
         private string AppendDigit(string existingNumber, string digit)
         {
@@ -173,22 +155,12 @@ namespace Calculator
             return existingNumber + digit;
         }
 
-        private string MakeFirstNumberNegativeIfMinusEnteredFirst()
-        {
-            if ((_clearWasJustPressed) && (_firstEntryIsMinusSign))
+        private string MakeFirstNumberNegative()
             {
-                _parseOfFirstNumberEntered = (0.0  - double.Parse(_firstNumberEntered)); // Change number value to negative
-                _firstNumberEntered = "-" + _firstNumberEntered; // Change string to dispaly minus sign
-                return _firstNumberEntered;
-
-            }
-            else
-            {
-                _parseOfFirstNumberEntered = double.Parse(_firstNumberEntered);
+                _firstNumberEntered = "-" + _firstNumberEntered; 
                 return _firstNumberEntered;
             }
 
-        }
 
         public string GetOutput()
         {
